@@ -1,18 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createBrowserHistory } from 'history';
 import {Provider} from 'react-redux';
+import { createBrowserHistory } from 'history';
 import store from "./store/store";
-import {Button} from "antd";
+import {Router, Route, Switch, Redirect} from 'react-router-dom';
 
+import DefaultLayout from "./components/DefaultLayout";
 
 const history = createBrowserHistory();
-const rootElement = document.getElementById('root')
+const rootElement = document.getElementById('root');
 
 const App = () => {
   return (
     <Provider store={store}>
-      <Button type="primary">Example button</Button>
+      <Router history={history}>
+        <Switch>
+          <Route exact path="/" name="Home" component={DefaultLayout}/>
+        </Switch>
+      </Router>
     </Provider>
   )
 };

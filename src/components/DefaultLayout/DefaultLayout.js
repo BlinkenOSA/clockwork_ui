@@ -16,7 +16,8 @@ export const DefaultLayout = () => {
         collapsible
         collapsed={collapsed}
         onCollapse={() => setCollapsed(!collapsed)}
-        width={300}>
+        width={300}
+      >
         <SideMenu collapsed={collapsed} />
       </Sider>
       <Layout>

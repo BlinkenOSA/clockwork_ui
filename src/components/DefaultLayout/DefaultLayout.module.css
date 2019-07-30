@@ -1,6 +1,7 @@
 .Footer {
-    padding: 14px;
+    padding: 0;
     background-color: #EEEEEE;
     height: 48px;
+    line-height: 48px;
     border-top: 1px solid #CCCCCC;
 }

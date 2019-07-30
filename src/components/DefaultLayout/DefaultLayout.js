@@ -12,8 +12,12 @@ export const DefaultLayout = () => {
 
   return(
     <Layout style={{ minHeight: '100vh' }}>
-      <Sider collapsible collapsed={collapsed} onCollapse={() => setCollapsed(!collapsed)}>
-        <SideMenu />
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={() => setCollapsed(!collapsed)}
+        width={300}>
+        <SideMenu collapsed={collapsed} />
       </Sider>
       <Layout>
         <TopHeader />

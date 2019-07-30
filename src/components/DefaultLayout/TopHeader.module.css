@@ -1,5 +1,15 @@
 .Header {
     height: 48px;
+    line-height: 48px;
     background: #002140;
     padding: 0;
+}
+
+.Profile {
+    margin-right: 20px;
+}
+
+.ProfileText {
+    color: #EEEEEE;
+    margin-left: 10px;
 }

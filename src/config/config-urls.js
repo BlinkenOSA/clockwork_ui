@@ -1,0 +1,1 @@
+export const ACCESSION_LIST = '/accession';

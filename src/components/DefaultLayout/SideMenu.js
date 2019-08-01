@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {Icon, Menu} from "antd";
 import style from './SideMenu.module.css';
 import configMenu from '../../config/config-menu';
+import {Link} from "react-router-dom";
 
 const { SubMenu } = Menu;
 
@@ -16,7 +17,7 @@ const SideMenu = ({collapsed, ...props}) => {
         key={menu.name}
         title={
           <span>
-          {menu.icon ? <Icon type={menu.icon} /> : null}
+            {menu.icon ? <Icon type={menu.icon} /> : null}
             <span>{menu.name}</span>
         </span>
         }
@@ -31,6 +32,7 @@ const SideMenu = ({collapsed, ...props}) => {
               <Menu.Item key={submenu.name}>
                 {submenu.icon ? <Icon type={submenu.icon} /> : null}
                 <span>{submenu.name}</span>
+                {submenu.link ? <Link to={submenu.link} /> : null}
               </Menu.Item>
             )
           }})
@@ -69,6 +71,7 @@ const SideMenu = ({collapsed, ...props}) => {
                 <Menu.Item key={menu.name}>
                   <Icon type={menu.icon} />
                   <span>{menu.name}</span>
+                  {menu.link ? <Link to={menu.link} /> : null}
                 </Menu.Item>
               )
             }

@@ -1,3 +1,3 @@
-import { AccessionList } from './AccessionList';
+import AccessionList from './AccessionList';
 
 export default AccessionList;

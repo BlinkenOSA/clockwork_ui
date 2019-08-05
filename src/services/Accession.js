@@ -2,8 +2,8 @@ import axios from 'axios';
 import {ACCESSION_BASE} from '../config/config-api';
 
 class Accession {
-  list = () => {
-    return axios.get(ACCESSION_BASE);
+  list = (params) => {
+    return axios.get(ACCESSION_BASE, {params: params});
   };
 }
 

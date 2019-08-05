@@ -1,11 +1,11 @@
 import React, {Suspense, useState} from 'react';
 import { Layout } from 'antd';
-import BreadcrumbMenu from './BreadcrumbMenu'
 import SideMenu from './SideMenu';
 import style from './DefaultLayout.module.css';
 import TopHeader from "./TopHeader";
 import {Route, Switch} from "react-router-dom";
 import routes from '../../config/config-routes';
+import {BreadcrumbMenu} from "../BreadcrumbMenu/BreadcrumbMenu";
 
 const { Content, Footer, Sider } = Layout;
 
@@ -27,8 +27,8 @@ export const DefaultLayout = () => {
       <Layout>
         <TopHeader />
         <Content style={{ margin: '0 30px' }}>
-          <BreadcrumbMenu />
           <Suspense fallback={loading()}>
+            <BreadcrumbMenu />
             <Switch>
               {routes.map((route, idx) => (
                 route.component ?

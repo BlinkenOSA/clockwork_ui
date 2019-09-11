@@ -1,7 +1,7 @@
 import {ACCESSION_LIST} from "./config-urls";
 
 const configMenu = [
-  {name: 'Dashboard', icon: 'dashboard'},
+  {name: 'Dashboard', icon: 'dashboard', link: '/'},
   {name: 'Accession', icon: 'swap', submenu: [
       {name: 'Accession Records', link: ACCESSION_LIST},
       {name: 'Donors'},

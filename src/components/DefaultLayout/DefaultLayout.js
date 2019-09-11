@@ -1,15 +1,14 @@
 import React, {Suspense, useState} from 'react';
 import { Layout } from 'antd';
 import SideMenu from './SideMenu';
-import style from './DefaultLayout.module.css';
 import TopHeader from "./TopHeader";
 import {Route, Switch} from "react-router-dom";
 import routes from '../../config/config-routes';
-import {BreadcrumbMenu} from "../BreadcrumbMenu/BreadcrumbMenu";
+import BreadcrumbMenu from "../BreadcrumbMenu/BreadcrumbMenu";
 
-const { Content, Footer, Sider } = Layout;
+const { Content, Sider } = Layout;
 
-export const DefaultLayout = () => {
+const DefaultLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
 
   const loading = () => <p>Loading...</p>;
@@ -26,7 +25,7 @@ export const DefaultLayout = () => {
       </Sider>
       <Layout>
         <TopHeader />
-        <Content style={{ margin: '0 30px' }}>
+        <Content style={{ margin: '0 15px' }}>
           <Suspense fallback={loading()}>
             <BreadcrumbMenu />
             <Switch>
@@ -42,10 +41,9 @@ export const DefaultLayout = () => {
             </Switch>
           </Suspense>
         </Content>
-        <Footer className={style.Footer} align={'middle'}>
-          Clockwork Archival Management System - Blinken OSA Archivum
-        </Footer>
       </Layout>
     </Layout>
   )
 };
+
+export default DefaultLayout;

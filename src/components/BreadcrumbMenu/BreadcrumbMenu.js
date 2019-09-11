@@ -4,7 +4,7 @@ import {Link, withRouter} from "react-router-dom";
 import style from './BreadcrumbMenu.module.css';
 import breadcrumbs from '../../config/config-breadcrumbs'
 
-export const BreadcrumbMenu = withRouter((props) => {
+const BreadcrumbMenu = withRouter((props) => {
   const pathName = props.location.pathname;
   let breadcrumb = breadcrumbs.filter(b => pathName === b.path);
 
@@ -31,3 +31,5 @@ export const BreadcrumbMenu = withRouter((props) => {
     </Breadcrumb>
   )
 });
+
+export default BreadcrumbMenu;

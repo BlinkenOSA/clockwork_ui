@@ -4,8 +4,9 @@ import {Provider} from 'react-redux';
 import { createBrowserHistory } from 'history';
 import store from "./store/store";
 import {Router, Route, Switch} from 'react-router-dom';
+import "antd/dist/antd.css";
 
-import DefaultLayout from "./components/DefaultLayout";
+import DefaultLayout from "./components/DefaultLayout/DefaultLayout";
 
 const history = createBrowserHistory();
 const rootElement = document.getElementById('root');

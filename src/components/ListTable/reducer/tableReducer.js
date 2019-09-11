@@ -1,4 +1,4 @@
-import {SET_TABLE_PAGINATION, SET_TABLE_SORTER, SET_TABLE_TOTAL} from "../../../store/actionTypes";
+import {SET_TABLE_FILTER, SET_TABLE_PAGINATION, SET_TABLE_SORTER, SET_TABLE_TOTAL} from "../../../store/actionTypes";
 
 const initialState = {};
 
@@ -7,6 +7,15 @@ function tableReducer(state = initialState, action) {
     case SET_TABLE_PAGINATION: {
       const newState = Object.assign({}, state[action.payload.tableName], {
         pagination: action.payload.pagination
+      });
+      return {
+        ...state,
+        [action.payload.tableName]: newState
+      }
+    }
+    case SET_TABLE_FILTER: {
+      const newState = Object.assign({}, state[action.payload.tableName], {
+        filter: action.payload.filter
       });
       return {
         ...state,

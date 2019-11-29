@@ -1,3 +1,15 @@
+.Content {
+    margin: auto;
+    width: 1200px;
+}
+
+@media (max-width: 1530px) {
+    .Content {
+        margin: 0 15px;
+        width: unset;
+    }
+}
+
 .Footer {
     padding: 0;
     background-color: #EEEEEE;

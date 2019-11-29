@@ -4,7 +4,7 @@ import SideMenu from './SideMenu';
 import TopHeader from "./TopHeader";
 import {Route, Switch} from "react-router-dom";
 import routes from '../../config/config-routes';
-import BreadcrumbMenu from "../BreadcrumbMenu/BreadcrumbMenu";
+import style from './DefaultLayout.module.css';
 
 const { Content, Sider } = Layout;
 
@@ -25,9 +25,8 @@ const DefaultLayout = () => {
       </Sider>
       <Layout>
         <TopHeader />
-        <Content style={{ margin: '0 15px' }}>
+        <Content className={style.Content}>
           <Suspense fallback={loading()}>
-            <BreadcrumbMenu />
             <Switch>
               {routes.map((route, idx) => (
                 route.component ?
@@ -35,7 +34,7 @@ const DefaultLayout = () => {
                   key={idx}
                   path={route.path}
                   exact={route.exact}
-                  component={route.component}
+                  render={(props) => <route.component {...props} action={route.action}/>}
                 /> : null
               ))}
             </Switch>

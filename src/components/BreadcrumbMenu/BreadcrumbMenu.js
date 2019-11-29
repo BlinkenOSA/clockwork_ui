@@ -4,14 +4,22 @@ import {Link, withRouter} from "react-router-dom";
 import style from './BreadcrumbMenu.module.css';
 import breadcrumbs from '../../config/config-breadcrumbs'
 
-const BreadcrumbMenu = withRouter((props) => {
-  const pathName = props.location.pathname;
+const BreadcrumbMenu = (props) => {
+  const pathName = props.match.path;
   let breadcrumb = breadcrumbs.filter(b => pathName === b.path);
 
   if (breadcrumb.length > 0) {
     breadcrumb = breadcrumb[0].breadcrumbs
   } else {
     return null;
+  }
+
+  if (props.match.params.hasOwnProperty('action')) {
+    let lastBreadcrumb = breadcrumb.pop();
+    lastBreadcrumb['text'] = props.match.params.action === 'view' ?
+      `View ${lastBreadcrumb['text']}` :
+      `Edit ${lastBreadcrumb['text']}`;
+    breadcrumb.push(lastBreadcrumb);
   }
 
   return(
@@ -30,6 +38,6 @@ const BreadcrumbMenu = withRouter((props) => {
       })}
     </Breadcrumb>
   )
-});
+};
 
-export default BreadcrumbMenu;
+export default withRouter(BreadcrumbMenu);

@@ -1,3 +1,7 @@
-:global .ant-card-small > .ant-card-body {
-    padding-bottom: 0;
+.ActionColumn {
+    text-align: center !important;
+}
+
+.TableCard ul {
+    margin-bottom: 6px !important;
 }

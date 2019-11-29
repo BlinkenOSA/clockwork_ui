@@ -1,0 +1,20 @@
+.RightButtons {
+    text-align: right;
+}
+
+.CloseButton {
+    margin-right: 8px;
+}
+
+.Footer {
+    border-top: 0;
+    background-color: #fafafa;
+}
+
+.FooterInfo {
+    border-top: 0;
+}
+
+.FooterMargin {
+    margin-bottom: 20px;
+}

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import {Button, Card, Col, Icon, Row, Table} from "antd";
+import {Button, Card, Col, Row, Table, Tooltip} from "antd";
 import setTablePagination from './actions/setTablePagination';
 import setTableTotal from './actions/setTableTotal';
 import {connect} from "react-redux";
@@ -8,8 +8,10 @@ import setTableSorter from "./actions/setTableSorter";
 import useWindowSize from '@rehooks/window-size';
 import ListTableFilters from "./ListTableFilters";
 import useCollapse from 'react-collapsed';
+import style from './ListTable.module.css';
+import { Link } from 'react-router-dom'
 
-const ListTable = ({columnConfig, apiCall, tableName, searchable, ...props}) => {
+const ListTable = ({columnConfig, apiCall, tableName, searchable, actions, ...props}) => {
   const [data, setData] = useState([]);
   const [params, setParams] = useState({});
   const [columns, setColumnConfig] = useState([]);
@@ -36,7 +38,7 @@ const ListTable = ({columnConfig, apiCall, tableName, searchable, ...props}) => 
     } else {
       props.setTableSorter({}, tableName);
       props.setTablePagination(initPagination(), tableName);
-      setColumnConfig(columnConfig);
+      setColumnConfig(loadActionColumns(columnConfig));
       fetchData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -99,6 +101,46 @@ const ListTable = ({columnConfig, apiCall, tableName, searchable, ...props}) => 
     }
   };
 
+  const loadActionColumns = (columnConfig) => {
+    // Create action column
+    if (actions) {
+      columnConfig.push(
+        {
+          title: 'Actions',
+          width: 150,
+          className: style.ActionColumn,
+          render: renderActionButtons
+        }
+      );
+    }
+    return columnConfig
+  };
+
+  const renderActionButtons = (data) => {
+    const renderButton = (prop, tooltipText, icon) => {
+      const getLink = () => {
+        return actions[prop].replace(':id', data.id);
+      };
+
+      return (
+        actions.hasOwnProperty(prop) ?
+          <Tooltip title={tooltipText}>
+            <Link to={getLink()}><Button size="small" icon={icon} /></Link>
+          </Tooltip> :
+          null
+      )
+    };
+
+    if (actions) {
+      return(
+        <Button.Group>
+          {renderButton('view', 'View', 'eye')}
+          {renderButton('edit', 'Edit', 'edit')}
+        </Button.Group>
+      );
+    }
+  };
+
   const fetchData = params => {
     apiCall(params).then((response) => {
       props.setTableTotal(response.data.count, tableName);
@@ -142,7 +184,6 @@ const ListTable = ({columnConfig, apiCall, tableName, searchable, ...props}) => 
       <Row>
         <Col span={8}>
           <Button type={'primary'}>
-            <Icon type={'plus'}/>
             Create
           </Button>
         </Col>
@@ -152,11 +193,9 @@ const ListTable = ({columnConfig, apiCall, tableName, searchable, ...props}) => 
               onClick: () => setFilterOpen(oldOpen => !oldOpen),
             })}
             type={'default'}
-            style={{float: 'right'}}>
-            {filterIsOpen ?
-              <React.Fragment><Icon type={'caret-up'}/> Hide Filters</React.Fragment> :
-              <React.Fragment><Icon type={'caret-down'}/> Show Filters</React.Fragment>
-            }
+            style={{float: 'right'}}
+          >
+            { filterIsOpen ? 'Hide Filters' : 'Show Filters' }
           </Button>
         </Col>
       </Row>
@@ -166,7 +205,7 @@ const ListTable = ({columnConfig, apiCall, tableName, searchable, ...props}) => 
   const windowSize = useWindowSize();
 
   return(
-    <Card size="small" style={{marginBottom: 20}}>
+    <Card size="small" style={{marginBottom: 20}} className={style.TableCard}>
       {props.filterConfig ?
         <section {...getCollapseProps()}>
           <ListTableFilters
@@ -203,14 +242,15 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state, ownProps) => ({
-  tableProps: state.tableSettings[ownProps.tableName]
+  tableProps: state.tableSettings[ownProps.tableName],
 });
 
 ListTable.propTypes = {
   columnConfig: PropTypes.array.isRequired,
   filterConfig: PropTypes.array,
   apiCall: PropTypes.func.isRequired,
-  tableName: PropTypes.string.isRequired
+  tableName: PropTypes.string.isRequired,
+  actions: PropTypes.object
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListTable);

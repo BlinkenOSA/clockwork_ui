@@ -1,10 +1,10 @@
-import {ACCESSION_LIST} from "./config-urls";
+import {ACCESSION_LIST, DONOR_LIST} from "./config-urls";
 
 const configMenu = [
   {name: 'Dashboard', icon: 'dashboard', link: '/'},
   {name: 'Accession', icon: 'swap', submenu: [
       {name: 'Accession Records', link: ACCESSION_LIST},
-      {name: 'Donors'},
+      {name: 'Donors', link: DONOR_LIST},
   ]},
   {name: 'Archival Unit', icon: 'apartment'},
   {name: 'ISAAR-CPF', icon: 'user'},

@@ -1,29 +1,29 @@
 import React from 'react';
-import accession from '../../../services/Accession';
+import donor from '../../../services/Donor';
 import ListTable from "../../../components/ListTable/ListTable";
-import {ACCESSION_CREATE, ACCESSION_EDIT, ACCESSION_VIEW} from "../../../config/config-urls";
+import {DONOR_CREATE, DONOR_EDIT, DONOR_VIEW} from "../../../config/config-urls";
 import BreadcrumbMenu from "../../../components/BreadcrumbMenu/BreadcrumbMenu";
 
 import columns from './config/columns';
 import filters from './config/filters';
 
-const AccessionList = () => {
+const DonorList = () => {
   return(
     <React.Fragment>
       <BreadcrumbMenu />
       <ListTable
         columnConfig={columns}
         filterConfig={filters}
-        apiCall={accession.list}
-        tableName={'accessionList'}
+        apiCall={donor.list}
+        tableName={'donorList'}
         actions={{
-            create: ACCESSION_CREATE,
-            view: ACCESSION_VIEW,
-            edit: ACCESSION_EDIT
+            create: DONOR_CREATE,
+            view: DONOR_VIEW,
+            edit: DONOR_EDIT
         }}
       />
     </React.Fragment>
   )
 };
 
-export default AccessionList;
+export default DonorList;

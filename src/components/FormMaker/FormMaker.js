@@ -6,14 +6,13 @@ import {Form, Input} from "formik-antd";
 import {FieldArray, Formik} from "formik";
 import style from "./FormMaker.module.css";
 import getLabel from "../../utils/getLabel";
-import FormButtons from "./FormFooter";
+import FormFooter from "./FormFooter";
 import RemoteSelect from "./components/RemoteSelect";
+import RemoteSelectWithEdit from "./components/RemoteSelectWithEdit";
 
-const FormMaker = ({fieldConfig, serviceClass, action, ...props}) => {
+const FormMaker = ({fieldConfig, serviceClass, backPath, action, ...props}) => {
   const [initialData, setInitialData] = useState({});
   const readOnly = action === 'view';
-
-  const ButtonGroup = Button.Group;
 
   // componentDidMount
   useEffect(() => {
@@ -40,7 +39,7 @@ const FormMaker = ({fieldConfig, serviceClass, action, ...props}) => {
 
   const processInitialData = (initialData) => {
     const parseData = (fieldData, field) => {
-      if (field.type === 'remoteSelect') {
+      if (field.type === 'remoteSelect' || field.type === 'remoteSelectWithEdit') {
         if (fieldData) {
           return {
             key: fieldData[field.valueField],
@@ -92,6 +91,7 @@ const FormMaker = ({fieldConfig, serviceClass, action, ...props}) => {
               name={fieldConfig.name}
               disabled={fieldConfig.disabled ? fieldConfig.disabled : readOnly}
               placeholder={fieldConfig.placeholder}
+              rows={fieldConfig.rows ? fieldConfig.rows : 3}
             />
           );
         case 'remoteSelect':
@@ -103,20 +103,10 @@ const FormMaker = ({fieldConfig, serviceClass, action, ...props}) => {
           );
         case 'remoteSelectWithEdit':
           return(
-            <React.Fragment>
-              <Col span={20}>
-                <RemoteSelect
-                  fieldConfig={fieldConfig}
-                  disabled={fieldConfig.disabled ? fieldConfig.disabled : readOnly}
-                />
-              </Col>
-              <Col span={4}>
-                <ButtonGroup>
-                  <Button type={'default'} style={{ background: "#f4f4f4", borderColor: "#ddd" }}><Icon type={'edit'}/></Button>
-                  <Button type={'default'} style={{ background: "#f4f4f4", borderColor: "#ddd" }}><Icon type={'plus'}/></Button>
-                </ButtonGroup>
-              </Col>
-            </React.Fragment>
+            <RemoteSelectWithEdit
+              fieldConfig={fieldConfig}
+              disabled={fieldConfig.disabled ? fieldConfig.disabled : readOnly}
+            />
           );
         default:
           break;
@@ -124,9 +114,10 @@ const FormMaker = ({fieldConfig, serviceClass, action, ...props}) => {
     };
 
     return (
-      <Col span={fieldConfig.span ? fieldConfig.span : 24} key={key}>
+      <Col md={fieldConfig.span ? fieldConfig.span : 24} xs={24} key={key}>
         <Form.Item
           name={fieldConfig.name}
+          hasFeedback={false}
           label={renderFormLabel()}
           className={style.FormItem}
           required={fieldConfig.required}
@@ -238,7 +229,10 @@ const FormMaker = ({fieldConfig, serviceClass, action, ...props}) => {
               }
             </Row>
           </Card>
-          <FormButtons />
+          <FormFooter
+            action={action}
+            backPath={backPath}
+            values={props.values}/>
         </Form>
       )}
     </Formik>
@@ -252,6 +246,7 @@ FormMaker.defaultValues = {
 FormMaker.propTypes = {
   serviceClass: PropTypes.object.isRequired,
   fieldConfig: PropTypes.array.isRequired,
+  backPath: PropTypes.string,
   action: PropTypes.string,
 };
 

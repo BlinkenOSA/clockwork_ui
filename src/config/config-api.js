@@ -16,3 +16,6 @@ export const ARCHIVAL_UNIT_SELECT = BACKEND_DOMAIN + '/v1/archival_unit/select/'
 
 // Controlled List endpoints
 export const BUILDING_SELECT = BACKEND_DOMAIN + '/v1/controlled_list/select/building/';
+
+// Authority List endpoints
+export const COUNTRY_SELECT = BACKEND_DOMAIN + '/v1/authority/select/countries/';

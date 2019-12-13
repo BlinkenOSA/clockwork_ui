@@ -1,22 +1,22 @@
 import React from 'react';
 import FormMaker from "../../../components/FormMaker/FormMaker";
 import BreadcrumbMenu from "../../../components/BreadcrumbMenu/BreadcrumbMenu";
-import accession from "../../../services/Accession";
+import donor from "../../../services/Donor";
 import fields from './config/fields';
-import {ACCESSION_LIST} from "../../../config/config-urls";
+import {DONOR_LIST} from "../../../config/config-urls";
 
-const AccessionForm = (props) => {
+const DonorForm = (props) => {
   return(
     <React.Fragment>
       <BreadcrumbMenu />
       <FormMaker
-        serviceClass={accession}
+        serviceClass={donor}
         fieldConfig={fields}
-        backPath={ACCESSION_LIST}
+        backPath={DONOR_LIST}
         {...props}
       />
     </React.Fragment>
   )
 };
 
-export default AccessionForm;
+export default DonorForm;

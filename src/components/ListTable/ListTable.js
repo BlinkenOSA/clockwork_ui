@@ -183,9 +183,11 @@ const ListTable = ({columnConfig, apiCall, tableName, searchable, actions, ...pr
     return(
       <Row>
         <Col span={8}>
-          <Button type={'primary'}>
-            Create
-          </Button>
+          <Link to={actions.create}>
+            <Button type={'primary'}>
+              Create
+            </Button>
+          </Link>
         </Col>
         <Col span={8} offset={8}>
           <Button

@@ -1,9 +1,9 @@
 import React from "react";
-import {DONOR_CREATE, DONOR_EDIT, DONOR_LIST, DONOR_VIEW} from "../config-urls";
+import {DONOR_CREATE, DONOR_EDIT, DONOR_LIST, DONOR_VIEW} from "../../config-urls";
 
 const donorRoutes = () => {
-  const DonorList = React.lazy(() => import('../../views/donor/DonorList/DonorList'));
-  const DonorForm = React.lazy(() => import('../../views/donor/DonorForm/DonorForm'));
+  const DonorList = React.lazy(() => import('../../../views/donor/DonorList/DonorList'));
+  const DonorForm = React.lazy(() => import('../../../views/donor/DonorForm/DonorForm'));
 
   return [
     {path: DONOR_LIST, exact: true, component: DonorList},

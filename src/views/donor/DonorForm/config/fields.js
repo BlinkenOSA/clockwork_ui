@@ -10,6 +10,7 @@ const fields = [
     name: 'first_name',
     span: 8,
     type: 'input',
+    validate: ''
   }, {
     name: 'middle_name',
     span: 8,
@@ -31,6 +32,7 @@ const fields = [
     name: 'postal_code',
     span: 12,
     type: 'input',
+    required: true
   }, {
     name: 'phone',
     span: 12,
@@ -43,7 +45,8 @@ const fields = [
     selectFunction: authorityList.selectCountry,
     valueField: 'id',
     renderField: 'country',
-    search: true
+    search: true,
+    required: true
   }, {
     name: 'fax',
     span: 12,
@@ -52,6 +55,7 @@ const fields = [
     name: 'city',
     span: 12,
     type: 'input',
+    required: true
   }, {
     name: 'email',
     span: 12,
@@ -60,6 +64,7 @@ const fields = [
     name: 'address',
     span: 12,
     type: 'input',
+    required: true
   }, {
     name: 'website',
     span: 12,

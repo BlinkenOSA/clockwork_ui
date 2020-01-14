@@ -11,7 +11,7 @@ import useCollapse from 'react-collapsed';
 import style from './ListTable.module.css';
 import { Link } from 'react-router-dom'
 
-const ListTable = ({columnConfig, apiCall, tableName, searchable, actions, ...props}) => {
+const ListTable = ({columnConfig, filterConfig, apiCall, tableName, searchable, actions, formOpen='simple', ...props}) => {
   const [data, setData] = useState([]);
   const [params, setParams] = useState({});
   const [columns, setColumnConfig] = useState([]);
@@ -141,6 +141,10 @@ const ListTable = ({columnConfig, apiCall, tableName, searchable, actions, ...pr
     }
   };
 
+  const renderDrawerActionButtons = (data) => {
+
+  };
+
   const fetchData = params => {
     apiCall(params).then((response) => {
       props.setTableTotal(response.data.count, tableName);
@@ -189,17 +193,20 @@ const ListTable = ({columnConfig, apiCall, tableName, searchable, actions, ...pr
             </Button>
           </Link>
         </Col>
-        <Col span={8} offset={8}>
-          <Button
-            {...getToggleProps({
-              onClick: () => setFilterOpen(oldOpen => !oldOpen),
-            })}
-            type={'default'}
-            style={{float: 'right'}}
-          >
-            { filterIsOpen ? 'Hide Filters' : 'Show Filters' }
-          </Button>
-        </Col>
+        {
+          filterConfig &&
+            <Col span={8} offset={8}>
+              <Button
+                {...getToggleProps({
+                  onClick: () => setFilterOpen(oldOpen => !oldOpen),
+                })}
+                type={'default'}
+                style={{float: 'right'}}
+              >
+                { filterIsOpen ? 'Hide Filters' : 'Show Filters' }
+              </Button>
+            </Col>
+        }
       </Row>
     )
   };
@@ -208,11 +215,11 @@ const ListTable = ({columnConfig, apiCall, tableName, searchable, actions, ...pr
 
   return(
     <Card size="small" style={{marginBottom: 20}} className={style.TableCard}>
-      {props.filterConfig ?
+      {filterConfig ?
         <section {...getCollapseProps()}>
           <ListTableFilters
             tableName={tableName}
-            filterConfig={props.filterConfig}
+            filterConfig={filterConfig}
             onFilterChange={handleFilterChange}
           />
         </section> : null}

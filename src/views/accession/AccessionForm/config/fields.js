@@ -1,7 +1,9 @@
-import accession from '../../../../services/Accession';
-import archival_unit from '../../../../services/ArchivalUnit';
-import controlledList from "../../../../services/ControlledList";
-import donor from '../../../../services/Donor';
+import accession from '../../../../services/accession/Accession';
+import archival_unit from '../../../../services/archival_unit/ArchivalUnit';
+import building from "../../../../services/controlled_list/Building";
+import donor from '../../../../services/donor/Donor';
+import DonorFormFields from "../../../donor/DonorForm/DonorFormFields";
+import React from "react";
 
 const fields = [
   {
@@ -18,6 +20,7 @@ const fields = [
     selectFunction: donor.select,
     valueField: 'id',
     renderField: 'name',
+    formFields: DonorFormFields,
     search: true
   }, {
     name: 'archival_unit',
@@ -138,7 +141,7 @@ const fields = [
     name: 'building',
     type: 'remoteSelect',
     required: true,
-    selectFunction: controlledList.selectBuilding,
+    selectFunction: building.select,
     valueField: 'id',
     renderField: 'building',
     span: 8

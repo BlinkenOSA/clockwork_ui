@@ -1,5 +1,5 @@
 import React from 'react';
-import accession from '../../../services/Accession';
+import accession from '../../../services/accession/Accession';
 import ListTable from "../../../components/ListTable/ListTable";
 import {ACCESSION_CREATE, ACCESSION_EDIT, ACCESSION_VIEW} from "../../../config/config-urls";
 import BreadcrumbMenu from "../../../components/BreadcrumbMenu/BreadcrumbMenu";

@@ -1,4 +1,4 @@
-import {ACCESSION_LIST, DONOR_LIST} from "./config-urls";
+import {ACCESS_RIGHTS_LIST, ACCESSION_LIST, DONOR_LIST} from "./config-urls";
 
 const configMenu = [
   {name: 'Dashboard', icon: 'dashboard', link: '/'},
@@ -24,7 +24,7 @@ const configMenu = [
           {name: 'Subjects', icon: 'tag'},
       ]},
       {name: 'Controlled List', submenu: [
-          {name: 'Access Rights', icon: 'right-circle'},
+          {name: 'Access Rights', icon: 'right-circle', link: ACCESS_RIGHTS_LIST},
           {name: 'Archival Unit Themes', icon: 'right-circle'},
           {name: 'Building', icon: 'right-circle'},
           {name: 'Carrier Types', icon: 'right-circle'},

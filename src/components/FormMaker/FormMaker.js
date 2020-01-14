@@ -1,22 +1,22 @@
 import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import {Button, Card, Col, Icon, Row} from "antd";
-import {Form, Input} from "formik-antd";
-import {FieldArray, Formik} from "formik";
+import {Button, Card, Col, Icon, Row, notification} from "antd";
+import {Form, FormItem, Input} from "formik-antd";
+import {ErrorMessage, FieldArray, Formik} from "formik";
 import style from "./FormMaker.module.css";
 import getLabel from "../../utils/getLabel";
 import FormFooter from "./FormFooter";
 import RemoteSelect from "./components/RemoteSelect";
 import RemoteSelectWithEdit from "./components/RemoteSelectWithEdit";
 
-const FormMaker = ({fieldConfig, serviceClass, backPath, action, ...props}) => {
+const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifier, recordName, type='simple', validation, ...props}) => {
   const [initialData, setInitialData] = useState({});
   const readOnly = action === 'view';
 
   // componentDidMount
   useEffect(() => {
-    const recordID = props.match.params.id;
+    const recordID = recordIdentifier ? recordIdentifier : props.match.params.id;
 
     switch (action) {
       case 'view':
@@ -31,20 +31,20 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, ...props}) => {
           setInitialData(initData);
         });
         break;
+      case 'create':
+        setInitialData({});
+        break;
       default:
         break;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [recordIdentifier]);
 
   const processInitialData = (initialData) => {
     const parseData = (fieldData, field) => {
       if (field.type === 'remoteSelect' || field.type === 'remoteSelectWithEdit') {
         if (fieldData) {
-          return {
-            key: fieldData[field.valueField],
-            label: fieldData[field.renderField]
-          };
+          return fieldData[field.valueField];
         }
       }
       return fieldData ? fieldData : undefined;
@@ -83,7 +83,8 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, ...props}) => {
             <Input
               name={fieldConfig.name}
               disabled={fieldConfig.disabled ? fieldConfig.disabled : readOnly}
-              placeholder={fieldConfig.placeholder} />
+              placeholder={fieldConfig.placeholder}
+            />
           );
         case 'textarea':
           return(
@@ -106,6 +107,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, ...props}) => {
             <RemoteSelectWithEdit
               fieldConfig={fieldConfig}
               disabled={fieldConfig.disabled ? fieldConfig.disabled : readOnly}
+              render={(props) => (fieldConfig.formFields(props))}
             />
           );
         default:
@@ -115,16 +117,18 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, ...props}) => {
 
     return (
       <Col md={fieldConfig.span ? fieldConfig.span : 24} xs={24} key={key}>
-        <Form.Item
+        <FormItem
           name={fieldConfig.name}
-          hasFeedback={false}
           label={renderFormLabel()}
           className={style.FormItem}
           required={fieldConfig.required}
           help={fieldConfig.help}
         >
           {renderFormField()}
-        </Form.Item>
+          <span className={style.ErrorMessage}>
+            <ErrorMessage name={fieldConfig.name} />
+          </span>
+        </FormItem>
       </Col>
     );
   };
@@ -201,8 +205,107 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, ...props}) => {
     )
   };
 
+  const successAlert = () => {
+    notification.success({
+      duration: 3,
+      message: 'Success!',
+      description: `${recordName} record was ${action === 'create' ? 'created' : 'updated'}!`,
+    });
+  };
+
+  const errorAlert = () => {
+    notification.error({
+      duration: 3,
+      message: 'Error!',
+      description: `There is a problem on your form!`,
+    });
+  };
+
+  const afterSubmit = (data) => {
+    const { history } = props;
+    successAlert();
+
+    if (type === 'simple') {
+      history.push(backPath);
+    }
+
+    if (type === 'select') {
+      props.onClose(data)
+    }
+  };
+
   const handleSubmit = (formValues) => {
-    console.log(formValues)
+    const recordID = recordIdentifier ? recordIdentifier : props.match.params.id;
+
+    switch (action) {
+      case 'create':
+        serviceClass.create(formValues).then((response) => {
+          afterSubmit(response.data)
+        }).catch(error => { errorAlert() });
+        break;
+      case 'edit':
+        serviceClass.update(recordID, formValues).then((response) => {
+          afterSubmit(response.data)
+        }).catch(error => { errorAlert() });
+        break;
+      default:
+        break;
+    }  };
+
+  const renderForm = (props) => {
+    return (
+      <Form layout={'vertical'}>
+        <Card size={'small'}>
+          <Row gutter={10} type="flex">
+            {
+              fieldConfig.map((field, key) => {
+                switch (field.type) {
+                  case 'column':
+                    return renderColumn(field, key);
+                  case 'many':
+                    return renderMany(field, key, props.values[field.name]);
+                  default:
+                    return renderField(field, key);
+                }
+              })
+            }
+          </Row>
+        </Card>
+        <FormFooter
+          action={action}
+          backPath={backPath}
+          values={props.values}
+        />
+      </Form>
+    )
+  };
+
+  const renderDrawerForm = (props) => {
+    return (
+      <Form layout={'vertical'}>
+        <Row gutter={10} type="flex">
+          {
+            fieldConfig.map((field, key) => {
+              switch (field.type) {
+                case 'column':
+                  return renderColumn(field, key);
+                case 'many':
+                  return renderMany(field, key, props.values[field.name]);
+                default:
+                  return renderField(field, key);
+              }
+            })
+          }
+        </Row>
+        <FormFooter
+          action={action}
+          type={type}
+          backPath={backPath}
+          values={props.values}
+          onSubmitClick={props.submitForm}
+        />
+      </Form>
+    )
   };
 
   return(
@@ -210,37 +313,26 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, ...props}) => {
       enableReinitialize={true}
       initialValues={initialData}
       onSubmit={handleSubmit}
+      validateOnBlur={false}
+      validateOnChange={false}
+      validationSchema={validation}
     >
-      {(props)=> (
-        <Form layout={'vertical'}>
-          <Card size={'small'}>
-            <Row gutter={10} type="flex">
-              {
-                fieldConfig.map((field, key) => {
-                  switch (field.type) {
-                    case 'column':
-                      return renderColumn(field, key);
-                    case 'many':
-                      return renderMany(field, key, props.values[field.name]);
-                    default:
-                      return renderField(field, key);
-                  }
-                })
-              }
-            </Row>
-          </Card>
-          <FormFooter
-            action={action}
-            backPath={backPath}
-            values={props.values}/>
-        </Form>
-      )}
+      {
+        (props) => {
+          if (type==='simple') {
+            return (renderForm(props))
+          } else {
+            return (renderDrawerForm(props))
+          }
+        }
+      }
     </Formik>
   )
 };
 
 FormMaker.defaultValues = {
   action: 'create',
+  type: 'simple'
 };
 
 FormMaker.propTypes = {
@@ -248,6 +340,7 @@ FormMaker.propTypes = {
   fieldConfig: PropTypes.array.isRequired,
   backPath: PropTypes.string,
   action: PropTypes.string,
+  type: PropTypes.string
 };
 
 export default withRouter(FormMaker);

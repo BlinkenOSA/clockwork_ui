@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {ARCHIVAL_UNIT_SELECT} from '../config/config-api';
+import {ARCHIVAL_UNIT_SELECT} from '../../config/config-api';
 
 class ArchivalUnit {
   selectFonds = (params) => {

@@ -15,7 +15,12 @@ export const DONOR_SELECT = BACKEND_DOMAIN + '/v1/donor/select/';
 export const ARCHIVAL_UNIT_SELECT = BACKEND_DOMAIN + '/v1/archival_unit/select/';
 
 // Controlled List endpoints
+// Building
 export const BUILDING_SELECT = BACKEND_DOMAIN + '/v1/controlled_list/select/building/';
+
+// Access Rights
+export const ACCESS_RIGHTS_BASE = BACKEND_DOMAIN + '/v1/controlled_list/access_rights/';
+export const ACCESS_RIGHTS_SELECT = BACKEND_DOMAIN + '/v1/controlled_list/select/access_rights/';
 
 // Authority List endpoints
 export const COUNTRY_SELECT = BACKEND_DOMAIN + '/v1/authority/select/countries/';

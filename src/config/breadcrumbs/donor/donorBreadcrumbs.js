@@ -1,6 +1,6 @@
 import {
   DONOR_CREATE, DONOR_EDIT, DONOR_LIST, DONOR_VIEW,
-} from "../config-urls";
+} from "../../config-urls";
 
 const donorBreadcrumbs = () => {
   const singularText = 'Donor Record';

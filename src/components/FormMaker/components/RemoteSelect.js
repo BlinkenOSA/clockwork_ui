@@ -35,6 +35,10 @@ const RemoteSelect = ({fieldConfig, disabled, ...props}) => {
     });
   };
 
+  const onChange = (value) => {
+    console.log(value);
+  };
+
   return (
     <Field name={name} id={name}>
       {
@@ -46,12 +50,14 @@ const RemoteSelect = ({fieldConfig, disabled, ...props}) => {
               filterOption={false}
               disabled={disabled}
               allowClear={true}
-              labelInValue={true}
               notFoundContent={loading ? <Spin size="small" /> : null}
               style={{ width: '100%' }}
               value={field.value}
               showSearch={search}
-              onChange={field.onChange}
+              onChange={(value) => {
+                field.onChange(value);
+                onChange(value)
+              }}
               onSearch={onSearch}
             >
               {

@@ -1,6 +1,6 @@
 import {
   ACCESSION_EDIT, ACCESSION_LIST, ACCESSION_VIEW, ACCESSION_CREATE
-} from "../config-urls";
+} from "../../config-urls";
 
 const accessionBreadcrumbs = () => {
   const singularText = 'Accession Record';

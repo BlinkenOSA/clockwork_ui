@@ -1,5 +1,5 @@
 import React from 'react';
-import donor from '../../../services/Donor';
+import donor from '../../../services/donor/Donor';
 import ListTable from "../../../components/ListTable/ListTable";
 import {DONOR_CREATE, DONOR_EDIT, DONOR_VIEW} from "../../../config/config-urls";
 import BreadcrumbMenu from "../../../components/BreadcrumbMenu/BreadcrumbMenu";

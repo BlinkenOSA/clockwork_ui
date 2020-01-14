@@ -1,9 +1,9 @@
 import React from "react";
-import {ACCESSION_CREATE, ACCESSION_EDIT, ACCESSION_LIST, ACCESSION_VIEW} from "../config-urls";
+import {ACCESSION_CREATE, ACCESSION_EDIT, ACCESSION_LIST, ACCESSION_VIEW} from "../../config-urls";
 
 const accessionRoutes = () => {
-  const AccessionList = React.lazy(() => import('../../views/accession/AccessionList/AccessionList'));
-  const AccessionForm = React.lazy(() => import('../../views/accession/AccessionForm/AccessionForm'));
+  const AccessionList = React.lazy(() => import('../../../views/accession/AccessionList/AccessionList'));
+  const AccessionForm = React.lazy(() => import('../../../views/accession/AccessionForm/AccessionForm'));
 
   return [
     {path: ACCESSION_LIST, exact: true, component: AccessionList},

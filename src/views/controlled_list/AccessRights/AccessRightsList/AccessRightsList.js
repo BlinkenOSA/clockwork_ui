@@ -1,10 +1,10 @@
 import React from 'react';
 import accessRights from '../../../../services/controlled_list/AccessRights';
 import ListTable from "../../../../components/ListTable/ListTable";
-import {ACCESS_RIGHTS_CREATE, ACCESS_RIGHTS_EDIT} from "../../../../config/config-urls";
 import BreadcrumbMenu from "../../../../components/BreadcrumbMenu/BreadcrumbMenu";
 
 import columns from './config/columns';
+import AccessRightsForm from "../AccessRightsForm/AccessRightsForm";
 
 const AccessRightsList = () => {
   return(
@@ -12,13 +12,11 @@ const AccessRightsList = () => {
       <BreadcrumbMenu />
       <ListTable
         columnConfig={columns}
-        apiCall={accessRights.list}
+        serviceClass={accessRights}
         tableName={'accessRights'}
         formOpen={'drawer'}
-        actions={{
-            create: ACCESS_RIGHTS_CREATE,
-            edit: ACCESS_RIGHTS_EDIT
-        }}
+        formRender={(props) => (AccessRightsForm(props))}
+        actions={{edit: ''}}
       />
     </React.Fragment>
   )

@@ -3,7 +3,6 @@ import archival_unit from '../../../../services/archival_unit/ArchivalUnit';
 import building from "../../../../services/controlled_list/Building";
 import donor from '../../../../services/donor/Donor';
 import DonorFormFields from "../../../donor/DonorForm/DonorFormFields";
-import React from "react";
 
 const fields = [
   {

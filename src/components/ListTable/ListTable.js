@@ -1,48 +1,67 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import {Button, Card, Col, Row, Table, Tooltip} from "antd";
+import {Button, Card, Col, Drawer, Modal, notification, Row, Table, Tooltip} from "antd";
 import setTablePagination from './actions/setTablePagination';
 import setTableTotal from './actions/setTableTotal';
-import {connect} from "react-redux";
+import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import setTableSorter from "./actions/setTableSorter";
 import useWindowSize from '@rehooks/window-size';
 import ListTableFilters from "./ListTableFilters";
 import useCollapse from 'react-collapsed';
 import style from './ListTable.module.css';
 import { Link } from 'react-router-dom'
+import axios from "axios";
 
-const ListTable = ({columnConfig, filterConfig, apiCall, tableName, searchable, actions, formOpen='simple', ...props}) => {
+const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searchable, actions, formOpen='simple', ...props}) => {
   const [data, setData] = useState([]);
   const [params, setParams] = useState({});
   const [columns, setColumnConfig] = useState([]);
   const [filterIsOpen, setFilterOpen] = useState(true);
+
   const {getCollapseProps, getToggleProps} = useCollapse({defaultOpen: true});
+
+  // Drawer form states
+  const [drawerShown, setDrawerShown] = useState(false);
+  const [action, setAction] = useState('create');
+  const [selectedRecord, setSelectedRecord] = useState({});
+
+  // Redux Hooks
+  const tableProps = useSelector(state => state.tableSettings[tableName], shallowEqual);
+  const dispatch = useDispatch();
 
   // componentDidMount
   useEffect(() => {
-    if (props.tableProps) {
-      let paginationParams, sorterParams;
+    const source = axios.CancelToken.source();
 
-      // Load pagination from redux
-      const pagination = props.tableProps['pagination'];
-      paginationParams = loadPagination(pagination);
-
-      // Load sorting from redux
-      const sorter = props.tableProps['sorter'];
-      sorterParams = loadSorter(sorter);
-      loadColumns(sorter);
-
-      // Load filters from redux
-      const filterParams = props.tableProps['filter'];
-      setParams(Object.assign({}, filterParams, paginationParams, sorterParams))
+    if (tableProps) {
+      fetchData(loadParamsFromRedux(tableProps), source.token);
     } else {
-      props.setTableSorter({}, tableName);
-      props.setTablePagination(initPagination(), tableName);
+      dispatch(setTableSorter({}, tableName));
+      dispatch(setTablePagination(initPagination(), tableName));
       setColumnConfig(loadActionColumns(columnConfig));
-      fetchData();
+      fetchData({}, source.token);
     }
+
+    return () => {
+      source.cancel();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const loadParamsFromRedux = (tableProps) => {
+    let paginationParams, sorterParams;
+
+    // Load pagination from redux
+    paginationParams = loadPagination(tableProps['pagination']);
+
+    // Load sorting from redux
+    sorterParams = loadSorter(tableProps['sorter']);
+    loadColumns(tableProps['sorter']);
+
+    // Load filters from redux
+    const filterParams = tableProps['filter'];
+    return Object.assign({}, filterParams, paginationParams, sorterParams);
+  };
 
   useEffect(() => {
     if (Object.entries(params).length !== 0) {
@@ -57,14 +76,15 @@ const ListTable = ({columnConfig, filterConfig, apiCall, tableName, searchable, 
       showSizeChanger: true,
       total: 0,
       pageSizeOptions: ['10', '20', '30', '50', '100'],
-      showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`
+      showTotal: (total, range) => {return `${range[0]}-${range[1]} of ${total} items`}
     }
   };
 
   const loadPagination = (pagination) => {
+    const {pageSize, current} = pagination;
     return {
-      limit: pagination.pageSize,
-      offset: (pagination.current - 1) * pagination.pageSize
+      limit: pageSize,
+      offset: (current - 1) * pageSize
     }
   };
 
@@ -90,21 +110,22 @@ const ListTable = ({columnConfig, filterConfig, apiCall, tableName, searchable, 
           }
           return conf
         });
-        setColumnConfig(newColumnConfig);
+        setColumnConfig(loadActionColumns(newColumnConfig));
       }
     } else {
       const newColumnConfig = columnConfig.map((conf) => {
         conf['sortOrder'] = false;
         return conf;
       });
-      setColumnConfig(newColumnConfig);
+      setColumnConfig(loadActionColumns(newColumnConfig));
     }
   };
 
   const loadActionColumns = (columnConfig) => {
+    const c = [...columnConfig];
     // Create action column
     if (actions) {
-      columnConfig.push(
+      c.push(
         {
           title: 'Actions',
           width: 150,
@@ -113,7 +134,43 @@ const ListTable = ({columnConfig, filterConfig, apiCall, tableName, searchable, 
         }
       );
     }
-    return columnConfig
+    return c
+  };
+
+  const onClose = () => {
+    fetchData(params);
+    setDrawerShown(false);
+  };
+
+  const openForm = (action, value) => {
+    setAction(action);
+    setSelectedRecord(value);
+    setDrawerShown(true);
+  };
+
+  const deleteAlert = () => {
+    notification.warning({
+      duration: 3,
+      message: 'Removed!',
+      description: `Record was removed!`,
+    });
+  };
+
+  const showDeleteConfirm = (id) => {
+    const { confirm } = Modal;
+
+    confirm({
+      title: 'Are you sure you would like to delete this record?',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        serviceClass.delete(id).then(() => {
+          onClose();
+          deleteAlert();
+        })
+      },
+    });
   };
 
   const renderActionButtons = (data) => {
@@ -122,13 +179,33 @@ const ListTable = ({columnConfig, filterConfig, apiCall, tableName, searchable, 
         return actions[prop].replace(':id', data.id);
       };
 
-      return (
-        actions.hasOwnProperty(prop) ?
-          <Tooltip title={tooltipText}>
-            <Link to={getLink()}><Button size="small" icon={icon} /></Link>
-          </Tooltip> :
-          null
-      )
+      if (formOpen === 'simple') {
+        return (
+          actions.hasOwnProperty(prop) ?
+            <Tooltip title={tooltipText}>
+              <Link to={getLink()}><Button size="small" icon={icon} /></Link>
+            </Tooltip> :
+            null
+        )
+      } else {
+         return (
+           actions.hasOwnProperty(prop) ?
+             <Tooltip title={tooltipText}>
+               <Button size="small" icon={icon} onClick={() => openForm(prop, data.id)}/>
+             </Tooltip> :
+             null
+         )
+      }
+    };
+
+    const renderDeleteButton = () => {
+      if (data.is_removable) {
+        return(
+          <Tooltip title={'Delete'}>
+            <Button size="small" icon={'delete'} onClick={() => showDeleteConfirm(data.id)}/>
+          </Tooltip>
+        )
+      }
     };
 
     if (actions) {
@@ -136,18 +213,15 @@ const ListTable = ({columnConfig, filterConfig, apiCall, tableName, searchable, 
         <Button.Group>
           {renderButton('view', 'View', 'eye')}
           {renderButton('edit', 'Edit', 'edit')}
+          {renderDeleteButton()}
         </Button.Group>
       );
     }
   };
 
-  const renderDrawerActionButtons = (data) => {
-
-  };
-
-  const fetchData = params => {
-    apiCall(params).then((response) => {
-      props.setTableTotal(response.data.count, tableName);
+  const fetchData = (params, cancelToken) => {
+    serviceClass.list(params, cancelToken).then((response) => {
+      dispatch(setTableTotal(response.data.count, tableName));
       setData(response.data.results);
     })
   };
@@ -159,7 +233,7 @@ const ListTable = ({columnConfig, filterConfig, apiCall, tableName, searchable, 
     const {current} = pagination;
     if (current) {
       paginationParams = loadPagination(pagination);
-      props.setTablePagination(pagination, tableName);
+      dispatch(setTablePagination(pagination, tableName));
     }
 
     // Sorting
@@ -168,10 +242,10 @@ const ListTable = ({columnConfig, filterConfig, apiCall, tableName, searchable, 
       const {columnKey} = sorter;
       if (columnKey) {
         sorterParams = loadSorter(sorter);
-        props.setTableSorter(sorter, tableName);
+        dispatch(setTableSorter(sorter, tableName));
       }
     } else {
-      props.setTableSorter({}, tableName);
+      dispatch(setTableSorter({}, tableName));
     }
 
     setParams(Object.assign({}, params, paginationParams, sorterParams))
@@ -183,15 +257,29 @@ const ListTable = ({columnConfig, filterConfig, apiCall, tableName, searchable, 
     }
   };
 
+  const getCreateButton = () => {
+    if (formOpen === 'simple') {
+      return (
+        <Link to={actions.create}>
+          <Button type={'primary'}>
+            Create
+          </Button>
+        </Link>
+      )
+    } else {
+      return (
+        <Button type={'primary'} onClick={() => openForm('create', 0)}>
+          Create
+        </Button>
+      )
+    }
+  };
+
   const getFooter = () => {
     return(
       <Row>
         <Col span={8}>
-          <Link to={actions.create}>
-            <Button type={'primary'}>
-              Create
-            </Button>
-          </Link>
+          {getCreateButton()}
         </Col>
         {
           filterConfig &&
@@ -229,37 +317,39 @@ const ListTable = ({columnConfig, filterConfig, apiCall, tableName, searchable, 
         dataSource={data}
         columns={columns}
         size={'middle'}
-        pagination={props.tableProps ? props.tableProps['pagination'] : {}}
+        pagination={tableProps ? tableProps['pagination'] : {}}
         onChange={handleTableChange}
         footer={() => getFooter()}
-        scroll={{ y: windowSize.innerHeight - 340 }}
+        // scroll={{ y: windowSize.innerHeight - 340 }}
       />
+      { formOpen === 'drawer' &&
+        <Row>
+          <Drawer
+            title={action.charAt(0).toUpperCase() + action.slice(1)}
+            width={'50%'}
+            onClose={(e) => onClose()}
+            visible={drawerShown}
+          >
+            {props.formRender({
+              action: action,
+              recordIdentifier: selectedRecord,
+              onClose: (e) => onClose(),
+              type: 'select'
+            })}
+          </Drawer>
+        </Row>
+      }
     </Card>
   )
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  setTablePagination: (pagination, tableName) => {
-    dispatch(setTablePagination(pagination, tableName))
-  },
-  setTableSorter: (sorter, tableName) => {
-    dispatch(setTableSorter(sorter, tableName))
-  },
-  setTableTotal: (total, tableName) => {
-    dispatch(setTableTotal(total, tableName))
-  }
-});
-
-const mapStateToProps = (state, ownProps) => ({
-  tableProps: state.tableSettings[ownProps.tableName],
-});
-
 ListTable.propTypes = {
   columnConfig: PropTypes.array.isRequired,
   filterConfig: PropTypes.array,
-  apiCall: PropTypes.func.isRequired,
+  serviceClass: PropTypes.object.isRequired,
   tableName: PropTypes.string.isRequired,
+  formOpen: PropTypes.string,
   actions: PropTypes.object
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListTable);
+export default ListTable;

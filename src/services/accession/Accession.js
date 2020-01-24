@@ -2,8 +2,8 @@ import axios from 'axios';
 import {ACCESSION_BASE, ACCESSION_COPYRIGHT_STATUS_SELECT, ACCESSION_METHOD_SELECT} from '../../config/config-api';
 
 class Accession {
-  list = (params) => {
-    return axios.get(ACCESSION_BASE, {params: params});
+  list = (params, cancelToken) => {
+    return axios.get(ACCESSION_BASE, {params: params, cancelToken: cancelToken});
   };
 
   selectCopyrightStatus = (params) => {

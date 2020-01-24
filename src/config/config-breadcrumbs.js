@@ -1,11 +1,11 @@
 import accessionBreadcrumbs from "./breadcrumbs/accession/accessionBreadcrumbs";
 import donorBreadcrumbs from "./breadcrumbs/donor/donorBreadcrumbs";
-import accessRightsBreadcrumbs from "./breadcrumbs/controlled_list/accessRightsBreadcrumbs";
+import controlledListBreadcrumbs from "./breadcrumbs/controlled_list/controlledListBreadcrumbs";
 
 const breadcrumbs = [
   ...accessionBreadcrumbs(),
   ...donorBreadcrumbs(),
-  ...accessRightsBreadcrumbs()
+  ...controlledListBreadcrumbs()
 ];
 
 export default breadcrumbs;

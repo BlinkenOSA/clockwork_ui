@@ -9,24 +9,26 @@ import getLabel from "../../utils/getLabel";
 import FormFooter from "./FormFooter";
 import RemoteSelect from "./components/RemoteSelect";
 import RemoteSelectWithEdit from "./components/RemoteSelectWithEdit";
+import axios from 'axios';
 
-const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifier, recordName, type='simple', validation, ...props}) => {
+const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifier, recordName, type='simple', validation, info, ...props}) => {
   const [initialData, setInitialData] = useState({});
   const readOnly = action === 'view';
 
   // componentDidMount
   useEffect(() => {
+    const source = axios.CancelToken.source();
     const recordID = recordIdentifier ? recordIdentifier : props.match.params.id;
 
     switch (action) {
       case 'view':
-        serviceClass.read(recordID).then((response) => {
+        serviceClass.read(recordID, source).then((response) => {
           const initData = processInitialData(response.data);
           setInitialData(initData);
         });
         break;
       case 'edit':
-        serviceClass.read(recordID).then((response) => {
+        serviceClass.read(recordID, source).then((response) => {
           const initData = processInitialData(response.data);
           setInitialData(initData);
         });
@@ -37,6 +39,10 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
       default:
         break;
     }
+
+    return () => {
+      source.cancel();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recordIdentifier]);
 
@@ -275,6 +281,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
           action={action}
           backPath={backPath}
           values={props.values}
+          info={info}
         />
       </Form>
     )
@@ -302,6 +309,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
           type={type}
           backPath={backPath}
           values={props.values}
+          info={info}
           onSubmitClick={props.submitForm}
         />
       </Form>
@@ -332,7 +340,8 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
 
 FormMaker.defaultValues = {
   action: 'create',
-  type: 'simple'
+  type: 'simple',
+  info: true
 };
 
 FormMaker.propTypes = {

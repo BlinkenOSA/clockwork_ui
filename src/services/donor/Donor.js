@@ -2,8 +2,8 @@ import axios from 'axios';
 import {DONOR_BASE, DONOR_SELECT} from '../../config/config-api';
 
 class Donor {
-  list = (params) => {
-    return axios.get(DONOR_BASE, {params: params});
+  list = (params, cancelToken) => {
+    return axios.get(DONOR_BASE, {params: params, cancelToken: cancelToken});
   };
 
   create = (formValues) => {

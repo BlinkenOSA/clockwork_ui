@@ -1,15 +1,49 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Icon, Menu} from "antd";
 import style from './SideMenu.module.css';
 import configMenu from '../../config/config-menu';
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 
 const { SubMenu } = Menu;
 
-const SideMenu = ({collapsed, ...props}) => {
+const SideMenu = ({collapsed, location, ...props}) => {
   const [openKeys, setOpenKeys] = useState([]);
+  const [selectedKeys, setSelectedKeys] = useState([]);
 
   const rootSubmenuKeys = configMenu.filter(m => m.hasOwnProperty('submenu')).map(e => e.name);
+
+  useEffect(() => {
+    openSelectedMenu()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const openSelectedMenu = () => {
+    let menuState;
+    configMenu.forEach(m => {
+      menuState = [];
+      getSelectedKeys(m, menuState)
+    })
+  };
+
+  const getSelectedKeys = (menu, menuState) => {
+    const mn = Array.isArray(menu) ? menu : [menu];
+
+    mn.forEach(m => {
+      if (!m.hasOwnProperty('link')) {
+        if (menuState.length > 1) { menuState.pop() }
+        menuState.push(m.name);
+      }
+
+      if (m.hasOwnProperty('submenu')) {
+        getSelectedKeys(m.submenu, menuState)
+      } else {
+        if (m.link === location.pathname) {
+          setOpenKeys(menuState);
+          setSelectedKeys([m.name]);
+        }
+      }
+    });
+  };
 
   const getSubmenus = (menu, idx) => {
     return(
@@ -19,7 +53,7 @@ const SideMenu = ({collapsed, ...props}) => {
           <span>
             {menu.icon ? <Icon type={menu.icon} /> : null}
             <span>{menu.name}</span>
-        </span>
+          </span>
         }
       >
         {menu.submenu.map((submenu, idx) => {
@@ -60,6 +94,8 @@ const SideMenu = ({collapsed, ...props}) => {
         theme="dark"
         openKeys={openKeys}
         onOpenChange={onOpenChange}
+        selectedKeys={selectedKeys}
+        onSelect={({key}) => setSelectedKeys([key])}
         mode="inline"
       >
         {
@@ -82,4 +118,4 @@ const SideMenu = ({collapsed, ...props}) => {
   )
 };
 
-export default SideMenu;
+export default withRouter(SideMenu);

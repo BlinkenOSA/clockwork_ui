@@ -14,7 +14,7 @@ const DonorList = () => {
       <ListTable
         columnConfig={columns}
         filterConfig={filters}
-        apiCall={donor.list}
+        serviceClass={donor}
         tableName={'donorList'}
         actions={{
             create: DONOR_CREATE,

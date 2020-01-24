@@ -1,18 +1,17 @@
 import React from "react";
-import FormMaker from "../../../components/FormMaker/FormMaker";
-import donor from "../../../services/donor/Donor";
+import FormMaker from "../../../../components/FormMaker/FormMaker";
+import access_rights from "../../../../services/controlled_list/AccessRights";
 import fields from "./config/fields";
-import {DONOR_LIST} from "../../../config/config-urls";
 import validation from "./config/validation";
 
 const AccessRightsForm = (props) => {
   return(
     <FormMaker
-      serviceClass={donor}
+      serviceClass={access_rights}
       fieldConfig={fields}
-      backPath={DONOR_LIST}
-      recordName={'Donor'}
+      recordName={'Access rights'}
       validation={validation}
+      info={false}
       {...props}
     />
   )

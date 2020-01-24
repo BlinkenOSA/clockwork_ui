@@ -1,4 +1,9 @@
-import {SET_TABLE_FILTER, SET_TABLE_PAGINATION, SET_TABLE_SORTER, SET_TABLE_TOTAL} from "../../../store/actionTypes";
+import {
+  SET_TABLE_FILTER,
+  SET_TABLE_PAGINATION,
+  SET_TABLE_SORTER,
+  SET_TABLE_TOTAL
+} from "../../../store/actionTypes";
 
 const initialState = {};
 

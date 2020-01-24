@@ -5,7 +5,7 @@ import useCollapse from "react-collapsed";
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
 
-const FormFooter = ({action, type='simple', backPath, onSubmitClick, values, ...props}) => {
+const FormFooter = ({action, type='simple', backPath, onSubmitClick, values, info, ...props}) => {
   const [infoIsOpen, setInfoOpen] = useState(false);
   const {getCollapseProps, getToggleProps} = useCollapse({defaultOpen: false});
 
@@ -32,24 +32,26 @@ const FormFooter = ({action, type='simple', backPath, onSubmitClick, values, ...
             </Col>
           </Row>
         </Card>
-        <section {...getCollapseProps()}>
-          <Card size={'small'} className={style.FooterInfo}>
-            <Row gutter={10} type="flex">
-              <Col>
-                <p>
-                  <strong>Record created: </strong>
-                  {values.date_created ? values.date_created : ''}
-                  {values.user_created ? ` by '${values.user_created}'` : ''}
-                </p>
-                <p>
-                  <strong>Record updated: </strong>
-                  {values.date_updated ? values.date_updated : ''}
-                  {values.user_updated ? ` by '${values.user_updated}'` : ''}
-                </p>
-              </Col>
-            </Row>
-          </Card>
-        </section>
+        { info &&
+          <section {...getCollapseProps()}>
+            <Card size={'small'} className={style.FooterInfo}>
+              <Row gutter={10} type="flex">
+                <Col>
+                  <p>
+                    <strong>Record created: </strong>
+                    {values.date_created ? values.date_created : ''}
+                    {values.user_created ? ` by '${values.user_created}'` : ''}
+                  </p>
+                  <p>
+                    <strong>Record updated: </strong>
+                    {values.date_updated ? values.date_updated : ''}
+                    {values.user_updated ? ` by '${values.user_updated}'` : ''}
+                  </p>
+                </Col>
+              </Row>
+            </Card>
+          </section>
+        }
         <div className={style.FooterMargin}/>
       </React.Fragment>
     )
@@ -65,7 +67,7 @@ const FormFooter = ({action, type='simple', backPath, onSubmitClick, values, ...
             </Col>
           </Row>
         </div>
-        { action === 'edit' &&
+        { info &&
           <div className={style.DrawerFooterInfo}>
             <Row gutter={10} type="flex">
               <Col>

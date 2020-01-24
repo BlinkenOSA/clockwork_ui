@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Col, Drawer, Icon, Row, Spin} from "antd";
 import style from "./RemoteSelectWithEdit.module.css"
-import DonorFormFields from "../../../views/donor/DonorForm/DonorFormFields";
 import {Select} from "formik-antd";
 import {Field} from "formik";
 import getLabel from "../../../utils/getLabel";

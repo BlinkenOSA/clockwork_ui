@@ -1,11 +1,11 @@
 import accessionRoutes from "./routes/accession/accessionRoutes";
 import donorRoutes from "./routes/donor/donorRoutes";
-import accessRightsRoutes from "./routes/controlled_list/accessRightsRoutes";
+import controlledListRoutes from "./routes/controlled_list/controlledListRoutes";
 
 const routes = [
   ...accessionRoutes(),
   ...donorRoutes(),
-  ...accessRightsRoutes()
+  ...controlledListRoutes()
 ];
 
 export default routes;

@@ -14,7 +14,7 @@ const AccessionList = () => {
       <ListTable
         columnConfig={columns}
         filterConfig={filters}
-        apiCall={accession.list}
+        serviceClass={accession}
         tableName={'accessionList'}
         actions={{
             create: ACCESSION_CREATE,

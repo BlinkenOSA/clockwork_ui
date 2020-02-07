@@ -3,7 +3,7 @@ import {
   ACCESSION_LIST,
   ARCHIVAL_UNIT_THEME_LIST,
   BUILDING_LIST,
-  CARRIER_TYPE_LIST,
+  CARRIER_TYPE_LIST, CORPORATION_LIST,
   CORPORATION_ROLE_LIST,
   DATE_TYPE_LIST,
   DONOR_LIST,
@@ -30,7 +30,7 @@ const configMenu = [
   ]},
   {name: 'Lists', icon: 'unordered-list', submenu: [
       {name: 'Authority List', submenu: [
-          {name: 'Corporations', icon: 'bank', link: '/'},
+          {name: 'Corporations', icon: 'bank', link: CORPORATION_LIST},
           {name: 'Countries', icon: 'flag', link: '/'},
           {name: 'Genres', icon: 'deployment-unit', link: '/'},
           {name: 'Languages', icon: 'global', link: '/'},

@@ -14,7 +14,16 @@ export const DONOR_SELECT = BACKEND_DOMAIN + '/v1/donor/select/';
 // Archival Unit endpoints
 export const ARCHIVAL_UNIT_SELECT = BACKEND_DOMAIN + '/v1/archival_unit/select/';
 
-// Controlled List endpoints
+// CONTROLLED LIST endpoints
+// Corporation
+export const CORPORATION_BASE = BACKEND_DOMAIN + '/v1/authority_list/corporations/';
+export const CORPORATION_SELECT = BACKEND_DOMAIN + '/v1/authority_list/select/corporations/';
+
+// Language
+export const LANGUAGE_BASE = BACKEND_DOMAIN + '/v1/authority_list/languages/';
+export const LANGUAGE_SELECT = BACKEND_DOMAIN + '/v1/authority_list/select/languages/';
+
+// CONTROLLED LIST endpoints
 // Access Rights
 export const ACCESS_RIGHTS_BASE = BACKEND_DOMAIN + '/v1/controlled_list/access_rights/';
 export const ACCESS_RIGHTS_SELECT = BACKEND_DOMAIN + '/v1/controlled_list/select/access_rights/';

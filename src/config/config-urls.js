@@ -10,19 +10,23 @@ export const DONOR_CREATE = '/donor/create';
 export const DONOR_VIEW = '/donor/view/:id';
 export const DONOR_EDIT = '/donor/edit/:id';
 
+// Authority List
+export const CORPORATION_LIST = '/authority_list/corporation';
+
+
 // Controlled List
-export const ACCESS_RIGHTS_LIST = '/access_right';
-export const ARCHIVAL_UNIT_THEME_LIST = '/archival_unit_theme';
-export const BUILDING_LIST = '/building';
-export const CARRIER_TYPE_LIST = '/carrier_type';
-export const CORPORATION_ROLE_LIST = '/corporation_role';
-export const DATE_TYPE_LIST = '/date_type';
-export const EXTENT_UNIT_LIST = '/extent_unit';
-export const GEO_ROLE_LIST = '/geo_role';
-export const KEYWORD_LIST = '/keyword';
-export const LANGUAGE_USAGE_LIST = '/language_usage';
-export const PERSON_ROLE_LIST = '/person_role';
-export const PRIMARY_TYPE_LIST = '/primary_type';
-export const REPRODUCTION_RIGHT_LIST = '/reproduction_right';
-export const RESTRICTION_REASON_LIST = '/restriction_reason';
+export const ACCESS_RIGHTS_LIST = '/controlled_list/access_right';
+export const ARCHIVAL_UNIT_THEME_LIST = '/controlled_list/archival_unit_theme';
+export const BUILDING_LIST = '/controlled_list/building';
+export const CARRIER_TYPE_LIST = '/controlled_list/carrier_type';
+export const CORPORATION_ROLE_LIST = '/controlled_list/corporation_role';
+export const DATE_TYPE_LIST = '/controlled_list/date_type';
+export const EXTENT_UNIT_LIST = '/controlled_list/extent_unit';
+export const GEO_ROLE_LIST = '/controlled_list/geo_role';
+export const KEYWORD_LIST = '/controlled_list/keyword';
+export const LANGUAGE_USAGE_LIST = '/controlled_list/language_usage';
+export const PERSON_ROLE_LIST = '/controlled_list/person_role';
+export const PRIMARY_TYPE_LIST = '/controlled_list/primary_type';
+export const REPRODUCTION_RIGHT_LIST = '/controlled_list/reproduction_right';
+export const RESTRICTION_REASON_LIST = '/controlled_list/restriction_reason';
 

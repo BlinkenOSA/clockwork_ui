@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import {Button, Card, Col, Icon, Row, notification} from "antd";
+import {Button, Card, Col, Icon, Row, Tabs, notification} from "antd";
 import {Form, FormItem, Input} from "formik-antd";
 import {ErrorMessage, FieldArray, Formik} from "formik";
 import style from "./FormMaker.module.css";
@@ -14,6 +14,7 @@ import axios from 'axios';
 const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifier, recordName, type='simple', validation, info, ...props}) => {
   const [initialData, setInitialData] = useState({});
   const readOnly = action === 'view';
+  const { TabPane } = Tabs;
 
   // componentDidMount
   useEffect(() => {
@@ -154,7 +155,8 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
   };
 
   const renderMany = (manyField, key, values) => {
-    const manyFieldValues = values ? values : [];
+    let manyFieldValues = values ? values : [];
+    manyFieldValues = manyFieldValues.length === 0 ? [''] : manyFieldValues;
 
     return(
       <React.Fragment key={key}>
@@ -211,6 +213,28 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
     )
   };
 
+  const renderTab = (fieldConfig, key, values) => {
+    return(
+      <Col span={24} key={key}>
+        <Tabs type="card" className={style.Tab}>
+          {
+            fieldConfig.elements.map((field, idx) => {
+              return (
+                <TabPane key={idx} tab={field.title}>
+                  {
+                    field.elements.map((f, k) => {
+                      return chooseRender(f, k, values)
+                    })
+                  }
+                </TabPane>
+              )
+            })
+          }
+        </Tabs>
+      </Col>
+    );
+  };
+
   const successAlert = () => {
     notification.success({
       duration: 3,
@@ -256,7 +280,21 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
         break;
       default:
         break;
-    }  };
+    }
+  };
+
+  const chooseRender = (field, key, values) => {
+    switch (field.type) {
+      case 'column':
+        return renderColumn(field, key);
+      case 'many':
+        return renderMany(field, key, values[field.name]);
+      case 'tabs':
+        return renderTab(field, key, values);
+      default:
+        return renderField(field, key);
+    }
+  };
 
   const renderForm = (props) => {
     return (
@@ -265,14 +303,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
           <Row gutter={10} type="flex">
             {
               fieldConfig.map((field, key) => {
-                switch (field.type) {
-                  case 'column':
-                    return renderColumn(field, key);
-                  case 'many':
-                    return renderMany(field, key, props.values[field.name]);
-                  default:
-                    return renderField(field, key);
-                }
+                return chooseRender(field, key, props.values)
               })
             }
           </Row>
@@ -293,14 +324,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
         <Row gutter={10} type="flex">
           {
             fieldConfig.map((field, key) => {
-              switch (field.type) {
-                case 'column':
-                  return renderColumn(field, key);
-                case 'many':
-                  return renderMany(field, key, props.values[field.name]);
-                default:
-                  return renderField(field, key);
-              }
+              return chooseRender(field, key, props.values)
             })
           }
         </Row>

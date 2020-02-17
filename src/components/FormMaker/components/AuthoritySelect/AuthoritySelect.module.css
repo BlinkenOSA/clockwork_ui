@@ -1,0 +1,14 @@
+.AuthorityTable {
+    margin-top: 15px;
+}
+
+.SearchButton {
+    background: #f4f4f4;
+    border-color: #ddd;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+}
+
+.ActionColumn {
+    text-align: center !important;
+}

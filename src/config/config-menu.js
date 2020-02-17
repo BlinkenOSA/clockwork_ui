@@ -4,15 +4,15 @@ import {
   ARCHIVAL_UNIT_THEME_LIST,
   BUILDING_LIST,
   CARRIER_TYPE_LIST, CORPORATION_LIST,
-  CORPORATION_ROLE_LIST,
+  CORPORATION_ROLE_LIST, COUNTRY_LIST,
   DATE_TYPE_LIST,
   DONOR_LIST,
-  EXTENT_UNIT_LIST,
+  EXTENT_UNIT_LIST, GENRE_LIST,
   GEO_ROLE_LIST,
-  KEYWORD_LIST,
-  LANGUAGE_USAGE_LIST,
-  PERSON_ROLE_LIST,
-  PRIMARY_TYPE_LIST, REPRODUCTION_RIGHT_LIST, RESTRICTION_REASON_LIST
+  KEYWORD_LIST, LANGUAGE_LIST,
+  LANGUAGE_USAGE_LIST, PERSON_LIST,
+  PERSON_ROLE_LIST, PLACE_LIST,
+  PRIMARY_TYPE_LIST, REPRODUCTION_RIGHT_LIST, RESTRICTION_REASON_LIST, SUBJECT_LIST
 } from "./config-urls";
 
 const configMenu = [
@@ -31,12 +31,12 @@ const configMenu = [
   {name: 'Lists', icon: 'unordered-list', submenu: [
       {name: 'Authority List', submenu: [
           {name: 'Corporations', icon: 'bank', link: CORPORATION_LIST},
-          {name: 'Countries', icon: 'flag', link: '/'},
-          {name: 'Genres', icon: 'deployment-unit', link: '/'},
-          {name: 'Languages', icon: 'global', link: '/'},
-          {name: 'People', icon: 'team', link: '/'},
-          {name: 'Places', icon: 'environment', link: '/'},
-          {name: 'Subjects', icon: 'tag', link: '/'},
+          {name: 'Countries', icon: 'flag', link: COUNTRY_LIST},
+          {name: 'Genres', icon: 'deployment-unit', link: GENRE_LIST},
+          {name: 'Languages', icon: 'global', link: LANGUAGE_LIST},
+          {name: 'People', icon: 'team', link: PERSON_LIST},
+          {name: 'Places', icon: 'environment', link: PLACE_LIST},
+          {name: 'Subjects', icon: 'tag', link: SUBJECT_LIST},
       ]},
       {name: 'Controlled List', submenu: [
           {name: 'Access Rights', icon: 'right-circle', link: ACCESS_RIGHTS_LIST},

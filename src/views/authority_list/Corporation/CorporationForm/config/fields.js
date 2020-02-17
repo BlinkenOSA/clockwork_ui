@@ -1,4 +1,5 @@
 import language from "../../../../../services/authority_list/Language";
+import authorityList from "../../../../../services/authority_list/AuthorityList";
 
 const fields = [
   {
@@ -8,6 +9,7 @@ const fields = [
     required: true
   }, {
     name: 'other_url',
+    label: 'Other URL',
     span: 24,
     type: 'input',
     required: true
@@ -34,7 +36,7 @@ const fields = [
                 renderField: 'language',
                 placeholder: '- Select Language -',
                 label: 'disabled',
-                required: true,
+                required: true
               }, {
                 name: 'name',
                 span: 14,
@@ -49,11 +51,28 @@ const fields = [
       }, {
         title: 'Authority Link (VIAF)',
         type: 'tab',
-        elements: []
+        elements: [{
+          type: 'authority',
+          label: 'Authority URL',
+          name: 'authority_url',
+          api: authorityList.viaf,
+          tableColumnTitle: 'VIAF ID',
+          tableColumnField: 'viaf_id',
+          searchValue: 'name',
+          searchParam: 'corporation'
+        }]
       }, {
         title: 'Wikipedia Link',
         type: 'tab',
-        elements: []
+        elements: [{
+          type: 'authority',
+          label: 'Wikipedia URL',
+          name: 'wiki_url',
+          api: authorityList.wikipedia,
+          tableColumnTitle: 'Wikipedia URL',
+          tableColumnField: 'url',
+          searchValue: 'name'
+        }]
       }
     ]
   }

@@ -1,6 +1,5 @@
 import axios from 'axios';
-import {PERSON_ROLE_SELECT, PRIMARY_TYPE_BASE, PRIMARY_TYPE_SELECT} from "../../config/config-api";
-import {PERSON_ROLE_BASE} from "../../config/config-api";
+import {PRIMARY_TYPE_BASE, PRIMARY_TYPE_SELECT} from "../../config/config-api";
 
 class PrimaryType {
   select = (params) => {

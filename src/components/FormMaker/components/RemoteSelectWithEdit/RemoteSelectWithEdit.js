@@ -3,7 +3,7 @@ import {Button, Col, Drawer, Icon, Row, Spin} from "antd";
 import style from "./RemoteSelectWithEdit.module.css"
 import {Select} from "formik-antd";
 import {Field} from "formik";
-import getLabel from "../../../utils/getLabel";
+import getLabel from "../../../../utils/getLabel";
 
 const RemoteSelectWithEdit = ({fieldConfig, disabled, ...props}) => {
   const ButtonGroup = Button.Group;
@@ -124,7 +124,6 @@ const RemoteSelectWithEdit = ({fieldConfig, disabled, ...props}) => {
             )
           }
         }
-
       </Field>
     </React.Fragment>
   );

@@ -299,7 +299,7 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
     )
   };
 
-  const windowSize = useWindowSize();
+  // const windowSize = useWindowSize();
 
   return(
     <Card size="small" style={{marginBottom: 20}} className={style.TableCard}>

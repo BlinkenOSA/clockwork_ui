@@ -12,7 +12,12 @@ export const DONOR_EDIT = '/donor/edit/:id';
 
 // Authority List
 export const CORPORATION_LIST = '/authority_list/corporation';
-
+export const COUNTRY_LIST = '/authority_list/country';
+export const GENRE_LIST = '/authority_list/genre';
+export const LANGUAGE_LIST = '/authority_list/language';
+export const PERSON_LIST = '/authority_list/people';
+export const PLACE_LIST = '/authority_list/place';
+export const SUBJECT_LIST = '/authority_list/subject';
 
 // Controlled List
 export const ACCESS_RIGHTS_LIST = '/controlled_list/access_right';

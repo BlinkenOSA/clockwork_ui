@@ -14,14 +14,41 @@ export const DONOR_SELECT = BACKEND_DOMAIN + '/v1/donor/select/';
 // Archival Unit endpoints
 export const ARCHIVAL_UNIT_SELECT = BACKEND_DOMAIN + '/v1/archival_unit/select/';
 
-// CONTROLLED LIST endpoints
+
+// AUTHORITY LIST endpoints
+// Authority list services
+export const WIKIPEDIA_BASE = BACKEND_DOMAIN + '/v1/authority_list/wikipedia/';
+export const VIAF_BASE = BACKEND_DOMAIN + '/v1/authority_list/viaf/';
+export const LCSH_BASE = BACKEND_DOMAIN + '/v1/authority_list/lcsh/';
+
 // Corporation
 export const CORPORATION_BASE = BACKEND_DOMAIN + '/v1/authority_list/corporations/';
 export const CORPORATION_SELECT = BACKEND_DOMAIN + '/v1/authority_list/select/corporations/';
 
+// Country
+export const COUNTRY_BASE = BACKEND_DOMAIN + '/v1/authority_list/countries/';
+export const COUNTRY_SELECT = BACKEND_DOMAIN + '/v1/authority_list/select/countries/';
+
+// Genres
+export const GENRE_BASE = BACKEND_DOMAIN + '/v1/authority_list/genres/';
+export const GENRE_SELECT = BACKEND_DOMAIN + '/v1/authority_list/select/genres/';
+
 // Language
 export const LANGUAGE_BASE = BACKEND_DOMAIN + '/v1/authority_list/languages/';
 export const LANGUAGE_SELECT = BACKEND_DOMAIN + '/v1/authority_list/select/languages/';
+
+// Person
+export const PERSON_BASE = BACKEND_DOMAIN + '/v1/authority_list/people/';
+export const PERSON_SELECT = BACKEND_DOMAIN + '/v1/authority_list/select/people/';
+
+// Places
+export const PLACE_BASE = BACKEND_DOMAIN + '/v1/authority_list/places/';
+export const PLACE_SELECT = BACKEND_DOMAIN + '/v1/authority_list/select/places/';
+
+// Places
+export const SUBJECT_BASE = BACKEND_DOMAIN + '/v1/authority_list/subjects/';
+export const SUBJECT_SELECT = BACKEND_DOMAIN + '/v1/authority_list/select/subjects/';
+
 
 // CONTROLLED LIST endpoints
 // Access Rights
@@ -80,5 +107,3 @@ export const REPRODUCTION_RIGHTS_SELECT = BACKEND_DOMAIN + '/v1/controlled_list/
 export const RESTRICTION_REASON_BASE = BACKEND_DOMAIN + '/v1/controlled_list/rights_restriction/';
 export const RESTRICTION_REASON_SELECT = BACKEND_DOMAIN + '/v1/controlled_list/select/rights_restriction/';
 
-// Authority List endpoints
-export const COUNTRY_SELECT = BACKEND_DOMAIN + '/v1/authority/select/countries/';

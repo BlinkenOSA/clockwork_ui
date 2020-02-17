@@ -5,7 +5,7 @@ import useCollapse from "react-collapsed";
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
 
-const FormFooter = ({action, type='simple', backPath, onSubmitClick, values, info, ...props}) => {
+const FormFooter = ({action, type='simple', backPath, onSubmitClick, values, loading, info, ...props}) => {
   const [infoIsOpen, setInfoOpen] = useState(false);
   const {getCollapseProps, getToggleProps} = useCollapse({defaultOpen: false});
 
@@ -15,7 +15,7 @@ const FormFooter = ({action, type='simple', backPath, onSubmitClick, values, inf
         <Card size={'small'} className={style.Footer}>
           <Row gutter={10} type="flex">
             <Col span={4}>
-              { action !== 'view' && <Button type={'primary'} htmlType={'submit'}>Submit</Button>}
+              { action !== 'view' && <Button type={'primary'} htmlType={'submit'} loading={loading}>Submit</Button>}
             </Col>
             <Col span={8} offset={12} className={style.RightButtons}>
               <Link to={backPath}>
@@ -63,7 +63,7 @@ const FormFooter = ({action, type='simple', backPath, onSubmitClick, values, inf
         <div className={style.DrawerFooter}>
           <Row gutter={10} type="flex">
             <Col span={4}>
-              { action !== 'view' && <Button type={'primary'} htmlType={'button'} onClick={onSubmitClick}>Submit</Button>}
+              { action !== 'view' && <Button type={'primary'} htmlType={'button'} onClick={onSubmitClick} loading={loading}>Submit</Button>}
             </Col>
           </Row>
         </div>

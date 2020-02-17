@@ -20,7 +20,7 @@ class Corporation {
 
   delete = (identifier) => {
     return axios.delete(`${CORPORATION_BASE}${identifier}/`);
-  }
+  };
 }
 
 

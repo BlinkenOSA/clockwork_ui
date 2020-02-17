@@ -1,13 +1,17 @@
+import urlRender from "../../../../../utils/urlRender";
+
 const columns = [
   {
     title: 'Corporation Name',
     dataIndex: 'name',
     key: 'name',
-    sorter: true,
+    width: '50%',
+    sorter: true
   }, {
     title: 'Authority URL',
     dataIndex: 'authority_url',
     key: 'authority_url',
+    render: urlRender,
     sorter: false
   }
 ];

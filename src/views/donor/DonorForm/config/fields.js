@@ -1,4 +1,4 @@
-import authorityList from "../../../../services/AuthorityList";
+import country from "../../../../services/authority_list/Country";
 
 const fields = [
   {
@@ -42,7 +42,7 @@ const fields = [
     span: 12,
     type: 'remoteSelect',
     placeholder: '- Select Country -',
-    selectFunction: authorityList.selectCountry,
+    selectFunction: country.select,
     valueField: 'id',
     renderField: 'country',
     search: true,

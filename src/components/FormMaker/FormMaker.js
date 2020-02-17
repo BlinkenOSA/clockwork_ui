@@ -7,12 +7,15 @@ import {ErrorMessage, FieldArray, Formik} from "formik";
 import style from "./FormMaker.module.css";
 import getLabel from "../../utils/getLabel";
 import FormFooter from "./FormFooter";
-import RemoteSelect from "./components/RemoteSelect";
-import RemoteSelectWithEdit from "./components/RemoteSelectWithEdit";
+import RemoteSelect from "./components/RemoteSelect/RemoteSelect";
+import RemoteSelectWithEdit from "./components/RemoteSelectWithEdit/RemoteSelectWithEdit";
 import axios from 'axios';
+import AuthoritySelect from "./components/AuthoritySelect/AuthoritySelect";
 
 const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifier, recordName, type='simple', validation, info, ...props}) => {
+  const [loading, setLoading] = useState(false);
   const [initialData, setInitialData] = useState({});
+
   const readOnly = action === 'view';
   const { TabPane } = Tabs;
 
@@ -71,7 +74,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
     return initialData
   };
 
-  const renderField = (fieldConfig, key) => {
+  const renderField = (fieldConfig, key, values) => {
     const renderFormLabel = () => {
       if (fieldConfig.label) {
         if (fieldConfig.label === 'disabled') {
@@ -117,6 +120,14 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
               render={(props) => (fieldConfig.formFields(props))}
             />
           );
+        case 'authority':
+          return(
+            <AuthoritySelect
+              values={values}
+              fieldConfig={fieldConfig}
+              readOnly={readOnly}
+            />
+          );
         default:
           break;
       }
@@ -140,13 +151,13 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
     );
   };
 
-  const renderColumn = (field, key) => {
+  const renderColumn = (field, key, values) => {
     return(
       <Col span={field.span ? field.span : 24} key={key}>
         <Row gutter={10} type="flex">
           {
             field.elements.map((f, key) => {
-              return(renderField(f, key))
+              return(renderField(f, key, values))
             })
           }
         </Row>
@@ -256,27 +267,36 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
     successAlert();
 
     if (type === 'simple') {
+      setLoading(false);
       history.push(backPath);
     }
 
     if (type === 'select') {
+      setLoading(false);
       props.onClose(data)
     }
   };
 
   const handleSubmit = (formValues) => {
     const recordID = recordIdentifier ? recordIdentifier : props.match.params.id;
+    setLoading(true);
 
     switch (action) {
       case 'create':
         serviceClass.create(formValues).then((response) => {
           afterSubmit(response.data)
-        }).catch(error => { errorAlert() });
+        }).catch(error => {
+          setLoading(false);
+          errorAlert()
+        });
         break;
       case 'edit':
         serviceClass.update(recordID, formValues).then((response) => {
           afterSubmit(response.data)
-        }).catch(error => { errorAlert() });
+        }).catch(error => {
+          setLoading(false);
+          errorAlert()
+        });
         break;
       default:
         break;
@@ -286,13 +306,13 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
   const chooseRender = (field, key, values) => {
     switch (field.type) {
       case 'column':
-        return renderColumn(field, key);
+        return renderColumn(field, key, values);
       case 'many':
         return renderMany(field, key, values[field.name]);
       case 'tabs':
         return renderTab(field, key, values);
       default:
-        return renderField(field, key);
+        return renderField(field, key, values);
     }
   };
 
@@ -310,6 +330,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
         </Card>
         <FormFooter
           action={action}
+          loading={loading}
           backPath={backPath}
           values={props.values}
           info={info}
@@ -330,6 +351,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
         </Row>
         <FormFooter
           action={action}
+          loading={loading}
           type={type}
           backPath={backPath}
           values={props.values}

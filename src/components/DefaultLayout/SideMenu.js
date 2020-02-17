@@ -27,18 +27,19 @@ const SideMenu = ({collapsed, location, ...props}) => {
 
   const getSelectedKeys = (menu, menuState) => {
     const mn = Array.isArray(menu) ? menu : [menu];
+    let mState = [...menuState];
 
     mn.forEach(m => {
       if (!m.hasOwnProperty('link')) {
-        if (menuState.length > 1) { menuState.pop() }
-        menuState.push(m.name);
+        if (mState.length > 1) { mState.pop() }
+        mState.push(m.name);
       }
 
       if (m.hasOwnProperty('submenu')) {
-        getSelectedKeys(m.submenu, menuState)
+        getSelectedKeys(m.submenu, mState)
       } else {
         if (m.link === location.pathname) {
-          setOpenKeys(menuState);
+          setOpenKeys(mState);
           setSelectedKeys([m.name]);
         }
       }

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Field} from "formik";
-import getLabel from "../../../utils/getLabel";
+import getLabel from "../../../../utils/getLabel";
 import {Select} from "formik-antd";
 import {Spin} from "antd";
 
@@ -35,10 +35,6 @@ const RemoteSelect = ({fieldConfig, disabled, ...props}) => {
     });
   };
 
-  const onChange = (value) => {
-    console.log(value);
-  };
-
   return (
     <Field name={name} id={name}>
       {
@@ -56,7 +52,6 @@ const RemoteSelect = ({fieldConfig, disabled, ...props}) => {
               showSearch={search}
               onChange={(value) => {
                 field.onChange(value);
-                onChange(value)
               }}
               onSearch={onSearch}
             >

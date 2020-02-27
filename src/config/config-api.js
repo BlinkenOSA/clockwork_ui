@@ -12,8 +12,11 @@ export const DONOR_BASE = BACKEND_DOMAIN + '/v1/donor/';
 export const DONOR_SELECT = BACKEND_DOMAIN + '/v1/donor/select/';
 
 // Archival Unit endpoints
+export const ARCHIVAL_UNIT_BASE = BACKEND_DOMAIN + '/v1/archival_unit/';
+export const ARCHIVAL_UNIT_FONDS = BACKEND_DOMAIN + '/v1/archival_unit/fonds/';
+export const ARCHIVAL_UNIT_SUBFONDS = BACKEND_DOMAIN + '/v1/archival_unit/subfonds/';
+export const ARCHIVAL_UNIT_SERIES = BACKEND_DOMAIN + '/v1/archival_unit/series/';
 export const ARCHIVAL_UNIT_SELECT = BACKEND_DOMAIN + '/v1/archival_unit/select/';
-
 
 // AUTHORITY LIST endpoints
 // Authority list services
@@ -90,6 +93,10 @@ export const KEYWORD_SELECT = BACKEND_DOMAIN + '/v1/controlled_list/select/keywo
 // Language Usage
 export const LANGUAGE_USAGE_BASE = BACKEND_DOMAIN + '/v1/controlled_list/language_usages/';
 export const LANGUAGE_USAGE_SELECT = BACKEND_DOMAIN + '/v1/controlled_list/select/language_usages/';
+
+// Keyword
+export const LOCALE_BASE = BACKEND_DOMAIN + '/v1/controlled_list/locales/';
+export const LOCALE_SELECT = BACKEND_DOMAIN + '/v1/controlled_list/select/locales/';
 
 // Person Role
 export const PERSON_ROLE_BASE = BACKEND_DOMAIN + '/v1/controlled_list/person_roles/';

@@ -10,6 +10,9 @@ export const DONOR_CREATE = '/donor/create';
 export const DONOR_VIEW = '/donor/view/:id';
 export const DONOR_EDIT = '/donor/edit/:id';
 
+// Archival Unit
+export const ARCHIVAL_UNIT_LIST = '/archival_unit';
+
 // Authority List
 export const CORPORATION_LIST = '/authority_list/corporation';
 export const COUNTRY_LIST = '/authority_list/country';

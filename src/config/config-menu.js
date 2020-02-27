@@ -1,6 +1,6 @@
 import {
   ACCESS_RIGHTS_LIST,
-  ACCESSION_LIST,
+  ACCESSION_LIST, ARCHIVAL_UNIT_LIST,
   ARCHIVAL_UNIT_THEME_LIST,
   BUILDING_LIST,
   CARRIER_TYPE_LIST, CORPORATION_LIST,
@@ -21,7 +21,7 @@ const configMenu = [
       {name: 'Accession Records', link: ACCESSION_LIST},
       {name: 'Donors', link: DONOR_LIST},
   ]},
-  {name: 'Archival Unit', icon: 'apartment', link: '/'},
+  {name: 'Archival Unit', icon: 'apartment', link: ARCHIVAL_UNIT_LIST},
   {name: 'ISAAR-CPF', icon: 'user', link: '/'},
   {name: 'ISAD(G)', icon: 'profile', link: '/'},
   {name: 'Finding Aids', icon: 'file', submenu: [

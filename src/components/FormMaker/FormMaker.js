@@ -54,7 +54,11 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
     const parseData = (fieldData, field) => {
       if (field.type === 'remoteSelect' || field.type === 'remoteSelectWithEdit') {
         if (fieldData) {
-          return fieldData[field.valueField];
+          if (field.mode === 'multiple') {
+            return fieldData.map((data) => data[field.valueField]);
+          } else {
+            return fieldData[field.valueField];
+          }
         }
       }
       return fieldData ? fieldData : undefined;
@@ -92,6 +96,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
           return(
             <Input
               name={fieldConfig.name}
+              hidden={fieldConfig.hidden}
               disabled={fieldConfig.disabled ? fieldConfig.disabled : readOnly}
               placeholder={fieldConfig.placeholder}
             />
@@ -100,6 +105,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
           return(
             <Input.TextArea
               name={fieldConfig.name}
+              hidden={fieldConfig.hidden}
               disabled={fieldConfig.disabled ? fieldConfig.disabled : readOnly}
               placeholder={fieldConfig.placeholder}
               rows={fieldConfig.rows ? fieldConfig.rows : 3}

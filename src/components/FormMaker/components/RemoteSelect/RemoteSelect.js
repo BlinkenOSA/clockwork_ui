@@ -5,7 +5,7 @@ import {Select} from "formik-antd";
 import {Spin} from "antd";
 
 const RemoteSelect = ({fieldConfig, disabled, ...props}) => {
-  const {name, selectFunction, renderField, valueField, placeholder, search} = fieldConfig;
+  const {name, selectFunction, renderField, valueField, placeholder, search, mode} = fieldConfig;
 
   const [data, setData] = useState([{value: 'value', text: 'text'}]);
   const [loading, setLoading] = useState(false);
@@ -41,6 +41,7 @@ const RemoteSelect = ({fieldConfig, disabled, ...props}) => {
         ({ field, form, meta }) => {
           return(
             <Select
+              mode={mode ? mode : 'default'}
               name={name}
               placeholder={placeholder ? placeholder : `- Select ${getLabel(name)} -`}
               filterOption={false}

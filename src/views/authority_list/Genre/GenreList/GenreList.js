@@ -19,7 +19,7 @@ const AccessRightsList = () => {
         tableName={'corporation'}
         formOpen={'drawer'}
         formRender={(props) => (GenreForm(props))}
-        actions={{edit: ''}}
+        actions={{edit: {}}}
       />
     </React.Fragment>
   )

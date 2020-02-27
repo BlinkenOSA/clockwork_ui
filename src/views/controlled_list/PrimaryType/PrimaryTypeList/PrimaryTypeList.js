@@ -15,8 +15,8 @@ const PrimaryTypeList = () => {
         serviceClass={primary_type}
         tableName={'primaryType'}
         formOpen={'drawer'}
-        actions={{edit: ''}}
         formRender={(props) => (PrimaryTypeForm(props))}
+        actions={{edit: {}}}
       />
     </React.Fragment>
   )

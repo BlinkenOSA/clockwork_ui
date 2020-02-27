@@ -15,8 +15,8 @@ const RestrictionReasonList = () => {
         serviceClass={restriction_reason}
         tableName={'restrictionReason'}
         formOpen={'drawer'}
-        actions={{edit: ''}}
         formRender={(props) => (RestrictionReasonForm(props))}
+        actions={{edit: {}}}
       />
     </React.Fragment>
   )

@@ -15,8 +15,8 @@ const LanguageUsageList = () => {
         serviceClass={language_usage}
         tableName={'languageUsage'}
         formOpen={'drawer'}
-        actions={{edit: ''}}
         formRender={(props) => (LanguageUsageForm(props))}
+        actions={{edit: {}}}
       />
     </React.Fragment>
   )

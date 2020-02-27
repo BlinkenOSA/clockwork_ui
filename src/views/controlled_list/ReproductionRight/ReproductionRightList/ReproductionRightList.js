@@ -15,8 +15,8 @@ const ReproductionRightList = () => {
         serviceClass={reproduction_rights}
         tableName={'reproductionRights'}
         formOpen={'drawer'}
-        actions={{edit: ''}}
         formRender={(props) => (ReproductionRightForm(props))}
+        actions={{edit: {}}}
       />
     </React.Fragment>
   )

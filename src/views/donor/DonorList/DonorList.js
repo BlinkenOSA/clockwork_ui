@@ -17,9 +17,16 @@ const DonorList = () => {
         serviceClass={donor}
         tableName={'donorList'}
         actions={{
-            create: DONOR_CREATE,
-            view: DONOR_VIEW,
-            edit: DONOR_EDIT
+            create: {
+              text: 'New Donor',
+              link: DONOR_CREATE
+            },
+            view: {
+              link: DONOR_VIEW
+            },
+            edit: {
+              link: DONOR_EDIT
+            }
         }}
       />
     </React.Fragment>

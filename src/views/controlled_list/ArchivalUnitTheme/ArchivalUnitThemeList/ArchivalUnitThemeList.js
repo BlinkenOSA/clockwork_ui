@@ -16,7 +16,7 @@ const ArchivalUnitThemeList = () => {
         tableName={'archivalUnitTheme'}
         formOpen={'drawer'}
         formRender={(props) => (ArchivalUnitThemeForm(props))}
-        actions={{edit: ''}}
+        actions={{edit: {}}}
       />
     </React.Fragment>
   )

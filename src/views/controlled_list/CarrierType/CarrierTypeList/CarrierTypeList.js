@@ -15,8 +15,8 @@ const CarrierTypeList = () => {
         serviceClass={carrier_type}
         tableName={'carrier_type'}
         formOpen={'drawer'}
-        actions={{edit: ''}}
         formRender={(props) => (CarrierTypeForm(props))}
+        actions={{edit: {}}}
       />
     </React.Fragment>
   )

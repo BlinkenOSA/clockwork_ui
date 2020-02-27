@@ -15,8 +15,8 @@ const CorporationRoleList = () => {
         serviceClass={corporation_role}
         tableName={'corporationRole'}
         formOpen={'drawer'}
-        actions={{edit: ''}}
         formRender={(props) => (CorporationRoleForm(props))}
+        actions={{edit: {}}}
       />
     </React.Fragment>
   )

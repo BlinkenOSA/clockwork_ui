@@ -15,8 +15,8 @@ const ExtentUnitList = () => {
         serviceClass={extent_unit}
         tableName={'extentUnit'}
         formOpen={'drawer'}
-        actions={{edit: ''}}
         formRender={(props) => (ExtentUnitForm(props))}
+        actions={{edit: {}}}
       />
     </React.Fragment>
   )

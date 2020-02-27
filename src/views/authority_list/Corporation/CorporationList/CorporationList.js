@@ -18,7 +18,9 @@ const CorporationList = () => {
         tableName={'corporation'}
         formOpen={'drawer'}
         formRender={(props) => (CorporationForm(props))}
-        actions={{edit: ''}}
+        actions={{
+          edit: {}
+        }}
       />
     </React.Fragment>
   )

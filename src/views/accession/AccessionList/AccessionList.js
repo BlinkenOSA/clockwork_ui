@@ -17,9 +17,16 @@ const AccessionList = () => {
         serviceClass={accession}
         tableName={'accessionList'}
         actions={{
-            create: ACCESSION_CREATE,
-            view: ACCESSION_VIEW,
-            edit: ACCESSION_EDIT
+            create: {
+              text: 'New Accession',
+              link: ACCESSION_CREATE
+            },
+            view: {
+              link: ACCESSION_VIEW
+            },
+            edit: {
+              link: ACCESSION_EDIT
+            }
         }}
       />
     </React.Fragment>

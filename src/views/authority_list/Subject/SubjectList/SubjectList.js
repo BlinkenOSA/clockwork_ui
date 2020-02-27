@@ -18,7 +18,7 @@ const SubjectList = () => {
         tableName={'subject'}
         formOpen={'drawer'}
         formRender={(props) => (SubjectForm(props))}
-        actions={{edit: ''}}
+        actions={{edit: {}}}
       />
     </React.Fragment>
   )

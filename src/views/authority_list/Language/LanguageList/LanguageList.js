@@ -18,7 +18,7 @@ const AccessRightsList = () => {
         tableName={'language'}
         formOpen={'drawer'}
         formRender={(props) => (LanguageForm(props))}
-        actions={{edit: ''}}
+        actions={{edit: {}}}
       />
     </React.Fragment>
   )

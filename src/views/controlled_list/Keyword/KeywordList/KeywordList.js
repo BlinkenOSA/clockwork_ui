@@ -15,8 +15,8 @@ const KeywordList = () => {
         serviceClass={keyword}
         tableName={'keyword'}
         formOpen={'drawer'}
-        actions={{edit: ''}}
         formRender={(props) => (KeywordForm(props))}
+        actions={{edit: {}}}
       />
     </React.Fragment>
   )

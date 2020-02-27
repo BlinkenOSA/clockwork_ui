@@ -15,8 +15,8 @@ const GeoRoleList = () => {
         serviceClass={geo_role}
         tableName={'geoRole'}
         formOpen={'drawer'}
-        actions={{edit: ''}}
         formRender={(props) => (GeoRoleForm(props))}
+        actions={{edit: {}}}
       />
     </React.Fragment>
   )

@@ -15,8 +15,8 @@ const BuildingList = () => {
         serviceClass={building}
         tableName={'building'}
         formOpen={'drawer'}
-        actions={{edit: ''}}
         formRender={(props) => (BuildingForm(props))}
+        actions={{edit: {}}}
       />
     </React.Fragment>
   )

@@ -18,7 +18,7 @@ const CountryList = () => {
         tableName={'country'}
         formOpen={'drawer'}
         formRender={(props) => (CountryForm(props))}
-        actions={{edit: ''}}
+        actions={{edit: {}}}
       />
     </React.Fragment>
   )

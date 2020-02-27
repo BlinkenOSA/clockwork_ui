@@ -15,8 +15,8 @@ const DateTypeList = () => {
         serviceClass={date_type}
         tableName={'dateTypes'}
         formOpen={'drawer'}
-        actions={{edit: ''}}
         formRender={(props) => (DateTypeForm(props))}
+        actions={{edit: {}}}
       />
     </React.Fragment>
   )

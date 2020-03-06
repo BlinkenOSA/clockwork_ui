@@ -10,7 +10,9 @@ import useCollapse from 'react-collapsed';
 import style from './ListTable.module.css';
 import { Link } from 'react-router-dom'
 import axios from "axios";
+import addTableExpandedRow from "./actions/addTableExpandedRow";
 import setTableExpandedRow from "./actions/setTableExpandedRow";
+
 
 const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searchable, actions, dependentAddButtons, tableType='simple', formOpen='simple', ...props}) => {
   const [data, setData] = useState([]);
@@ -23,6 +25,7 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
   // Drawer form states
   const [drawerShown, setDrawerShown] = useState(false);
   const [action, setAction] = useState('create');
+  const [initialData, setInitialData] = useState({});
   const [selectedRecord, setSelectedRecord] = useState({});
 
   // Redux Hooks
@@ -65,9 +68,15 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
   };
 
   useEffect(() => {
+    const source = axios.CancelToken.source();
+
     if (Object.entries(params).length !== 0) {
-      fetchData(params);
+      fetchData(params, source.token);
     }
+
+    return () => {
+      source.cancel();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
 
@@ -149,6 +158,11 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
     setAction(action);
     setSelectedRecord(data);
     setDrawerShown(true);
+
+    // Custom code
+    if (tableName==='archivalUnit') {
+      setInitialData({level: 'F'})
+    }
   };
 
   const deleteAlert = () => {
@@ -169,7 +183,7 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
       cancelText: 'No',
       onOk() {
         serviceClass.delete(id).then(() => {
-          onClose();
+          onClose(true);
           deleteAlert();
         })
       },
@@ -204,6 +218,46 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
     };
 
     // CUSTOM CODE START
+    const openArchivalUnitForm = (action, data) => {
+      setAction(action);
+      dispatch(addTableExpandedRow(data.id, tableName));
+
+      if (action === 'create') {
+        serviceClass.read(data.id).then((response) => {
+          let initialData = {};
+
+          switch (data.level) {
+            case 'F':
+              initialData['parent'] = data.id;
+              initialData['level'] = 'SF';
+              initialData['fonds'] = response.data['fonds'];
+              initialData['fonds_title'] = response.data['title'];
+              initialData['fonds_acronym'] = response.data['acronym'];
+              break;
+            case 'SF':
+              initialData['parent'] = data.id;
+              initialData['level'] = 'S';
+              initialData['fonds'] = response.data['fonds'];
+              initialData['fonds_title'] = response.data['fonds_title'];
+              initialData['fonds_acronym'] = response.data['fonds_acronym'];
+              initialData['subfonds'] = response.data['subfonds'];
+              initialData['subfonds_title'] = response.data['title'];
+              initialData['subfonds_acronym'] = response.data['acronym'];
+              break;
+            default:
+              initialData['level'] = 'F';
+              break;
+          }
+
+          setInitialData(initialData);
+          setDrawerShown(true);
+        });
+      } else {
+        setSelectedRecord(data);
+        setDrawerShown(true);
+      }
+    };
+
     const renderArchivalUnitAddButtons = () => {
       let tooltipText;
       switch (data.level) {
@@ -219,7 +273,7 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
 
       return (
         <Tooltip title={tooltipText}>
-          <Button size="small" icon={'plus'} onClick={() => openForm('create', {})}/>
+          <Button size="small" icon={'plus'} onClick={() => openArchivalUnitForm('create', data)}/>
         </Tooltip>
       )
     };
@@ -257,7 +311,7 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
     serviceClass.list(params, cancelToken).then((response) => {
       dispatch(setTableTotal(response.data.count, tableName));
       setData(response.data.results);
-    })
+    }).catch((error) => {});
   };
 
   const handleExpand = (expanded, record) => {
@@ -301,7 +355,10 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
 
   const handleFilterChange = (filterValues) => {
     if (Object.entries(filterValues).length > 0) {
-      setParams(Object.assign({}, params, filterValues))
+      const pagination = initPagination();
+      pagination['current'] = 1;
+      dispatch(setTablePagination(pagination, tableName));
+      setParams(Object.assign({}, filterValues))
     }
   };
 
@@ -381,6 +438,7 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
           >
             {props.formRender({
               action: action,
+              formData: initialData,
               selectedRecord: selectedRecord,
               recordIdentifier: selectedRecord.id,
               onClose: (e) => onClose(true),

@@ -1,4 +1,5 @@
 import {
+  ADD_TABLE_EXPANDED_ROW,
   SET_TABLE_EXPANDED_ROW,
   SET_TABLE_FILTER,
   SET_TABLE_PAGINATION,
@@ -31,6 +32,15 @@ function tableReducer(state = initialState, action) {
     case SET_TABLE_SORTER: {
       const newState = Object.assign({}, state[action.payload.tableName], {
         sorter: action.payload.sorter
+      });
+      return {
+        ...state,
+        [action.payload.tableName]: newState
+      }
+    }
+    case ADD_TABLE_EXPANDED_ROW: {
+      const newState = Object.assign({}, state[action.payload.tableName], {
+        expandedRowKeys: [...state[action.payload.tableName]['expandedRowKeys'], action.payload.expandedRowKey]
       });
       return {
         ...state,

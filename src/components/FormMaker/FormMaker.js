@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import {Button, Card, Col, Icon, Row, Tabs, notification} from "antd";
+import {Button, Card, Col, Icon, Row, Tabs, notification, Alert} from "antd";
 import {Form, FormItem, Input} from "formik-antd";
 import {ErrorMessage, FieldArray, Formik} from "formik";
 import style from "./FormMaker.module.css";
@@ -12,9 +12,10 @@ import RemoteSelectWithEdit from "./components/RemoteSelectWithEdit/RemoteSelect
 import axios from 'axios';
 import AuthoritySelect from "./components/AuthoritySelect/AuthoritySelect";
 
-const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifier, recordName, type='simple', validation, info, ...props}) => {
+const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifier, formData, recordName, type='simple', validation, info, ...props}) => {
   const [loading, setLoading] = useState(false);
   const [initialData, setInitialData] = useState({});
+  const [errors, setErrors] = useState([]);
 
   const readOnly = action === 'view';
   const { TabPane } = Tabs;
@@ -38,7 +39,8 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
         });
         break;
       case 'create':
-        setInitialData({});
+        const initData = processInitialData(formData);
+        setInitialData(initData);
         break;
       default:
         break;
@@ -48,7 +50,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
       source.cancel();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [recordIdentifier]);
+  }, [recordIdentifier, formData]);
 
   const processInitialData = (initialData) => {
     const parseData = (fieldData, field) => {
@@ -233,7 +235,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
   const renderTab = (fieldConfig, key, values) => {
     return(
       <Col span={24} key={key}>
-        <Tabs type="card" className={style.Tab}>
+        <Tabs type="card" className={style.Tab} defaultActiveKey="0">
           {
             fieldConfig.elements.map((field, idx) => {
               return (
@@ -252,19 +254,36 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
     );
   };
 
+  const renderErrors = () => {
+    const onErrorClose = () => {
+      setErrors([]);
+    };
+
+    if (errors.length > 0) {
+      const errorDisplay = errors.map((e, idx) => {
+        return (
+          <div key={idx}>{e}</div>
+        )
+      });
+
+      return (
+        <Alert
+          description={errorDisplay}
+          type="error"
+          closable
+          className={style.ErrorAlert}
+          onClose={onErrorClose}
+          message={''}
+        />
+      )
+    }
+  };
+
   const successAlert = () => {
     notification.success({
       duration: 3,
       message: 'Success!',
       description: `${recordName} record was ${action === 'create' ? 'created' : 'updated'}!`,
-    });
-  };
-
-  const errorAlert = () => {
-    notification.error({
-      duration: 3,
-      message: 'Error!',
-      description: `There is a problem on your form!`,
     });
   };
 
@@ -283,25 +302,37 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
     }
   };
 
-  const handleSubmit = (formValues) => {
+  const handleSubmit = (formValues, formik) => {
+    const handleError = (error) => {
+      const errors = error.response.data;
+      const {non_field_errors, ...field_errors} = errors;
+      if (non_field_errors) {
+        setErrors(non_field_errors);
+      }
+      if (field_errors) {
+        formik.setErrors(field_errors)
+      }
+      setLoading(false);
+    };
+
     const recordID = recordIdentifier ? recordIdentifier : props.match.params.id;
     setLoading(true);
 
     switch (action) {
       case 'create':
         serviceClass.create(formValues).then((response) => {
+          formik.resetForm();
           afterSubmit(response.data)
         }).catch(error => {
-          setLoading(false);
-          errorAlert()
+          handleError(error);
         });
         break;
       case 'edit':
         serviceClass.update(recordID, formValues).then((response) => {
+          formik.resetForm();
           afterSubmit(response.data)
         }).catch(error => {
-          setLoading(false);
-          errorAlert()
+          handleError(error)
         });
         break;
       default:
@@ -325,6 +356,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
   const renderForm = (props) => {
     return (
       <Form layout={'vertical'}>
+        {renderErrors()}
         <Card size={'small'}>
           <Row gutter={10} type="flex">
             {
@@ -348,6 +380,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
   const renderDrawerForm = (props) => {
     return (
       <Form layout={'vertical'}>
+        {renderErrors()}
         <Row gutter={10} type="flex">
           {
             fieldConfig.map((field, key) => {

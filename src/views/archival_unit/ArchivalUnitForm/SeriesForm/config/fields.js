@@ -3,6 +3,11 @@ import archivalUnitTheme from "../../../../../services/controlled_list/ArchivalU
 
 const fields = [
   {
+    name: 'parent',
+    type: 'input',
+    label: 'Parent',
+    hidden: true,
+  }, {
     name: 'fonds',
     span: 4,
     type: 'input',
@@ -39,10 +44,10 @@ const fields = [
     label: 'Subfonds Acronym',
     disabled: true,
   }, {
-    name: 'subfonds',
+    name: 'series',
     span: 4,
     type: 'input',
-    label: 'Subfonds',
+    label: 'Series',
     required: true,
   }, {
     name: 'title',

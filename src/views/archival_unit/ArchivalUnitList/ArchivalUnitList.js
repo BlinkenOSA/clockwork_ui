@@ -22,15 +22,28 @@ const ArchivalUnitList = () => {
         tableType={'tree'}
         formOpen={'drawer'}
         formRender={(props) => {
-          switch(props.selectedRecord.level) {
-            case 'F':
-              return FondsForm(props);
-            case 'SF':
-              return SubfondsForm(props);
-            case 'S':
-              return SeriesForm(props);
-            default:
-              return FondsForm(props);
+          if (props.action === 'create') {
+            switch(props.formData.level) {
+              case 'F':
+                return FondsForm(props);
+              case 'SF':
+                return SubfondsForm(props);
+              case 'S':
+                return SeriesForm(props);
+              default:
+                return FondsForm(props);
+            }
+          } else {
+            switch(props.selectedRecord.level) {
+              case 'F':
+                return FondsForm(props);
+              case 'SF':
+                return SubfondsForm(props);
+              case 'S':
+                return SeriesForm(props);
+              default:
+                return FondsForm(props);
+            }
           }
         }}
         actions={{

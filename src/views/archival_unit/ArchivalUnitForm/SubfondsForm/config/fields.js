@@ -3,6 +3,11 @@ import archivalUnitTheme from "../../../../../services/controlled_list/ArchivalU
 
 const fields = [
   {
+    name: 'parent',
+    type: 'input',
+    label: 'Parent',
+    hidden: true,
+  }, {
     name: 'fonds',
     span: 4,
     type: 'input',

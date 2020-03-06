@@ -16,6 +16,7 @@ const AccessionForm = (props) => {
         backPath={ACCESSION_LIST}
         recordName={'Accession'}
         validation={validation}
+        info={true}
         {...props}
       />
     </React.Fragment>

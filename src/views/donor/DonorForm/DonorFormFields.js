@@ -13,6 +13,7 @@ const DonorFormFields = (props) => {
       backPath={DONOR_LIST}
       recordName={'Donor'}
       validation={validation}
+      info={true}
       {...props}
     />
   )

@@ -18,6 +18,10 @@ export const ARCHIVAL_UNIT_SUBFONDS = BACKEND_DOMAIN + '/v1/archival_unit/subfon
 export const ARCHIVAL_UNIT_SERIES = BACKEND_DOMAIN + '/v1/archival_unit/series/';
 export const ARCHIVAL_UNIT_SELECT = BACKEND_DOMAIN + '/v1/archival_unit/select/';
 
+// ISAAR endpoints
+export const ISAAR_BASE = BACKEND_DOMAIN + '/v1/isaar/';
+export const ISAAR_SELECT = BACKEND_DOMAIN + '/v1/isaar/select/';
+
 // AUTHORITY LIST endpoints
 // Authority list services
 export const WIKIPEDIA_BASE = BACKEND_DOMAIN + '/v1/authority_list/wikipedia/';

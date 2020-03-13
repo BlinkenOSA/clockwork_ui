@@ -9,7 +9,13 @@ const filters = [
       type: 'select',
       span: 7,
       filterParam: 'transfer_year',
-      data: Array(new Date().getFullYear()+1 - 1995).fill().map((_, idx) => 1995 + idx),
+      filterKey: 'year',
+      filterValue: 'year',
+      data: Array(new Date().getFullYear()+1 - 1995).fill().map((_, idx) => {
+        return {
+          id: 1995+idx, year: 1995 + idx
+        }
+      }),
       placeholder: 'Filter by Transfer Year'
     }, {
       type: 'number',

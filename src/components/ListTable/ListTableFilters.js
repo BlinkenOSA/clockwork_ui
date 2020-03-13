@@ -73,7 +73,7 @@ const ListTableFilters = ({filterConfig, ...props}) => {
               onChange={(value) => { updateField(fieldConfig.filterParam, value) }}
             >
               {fieldConfig.data.map(d => (
-                <Option key={d}>{d}</Option>
+                <Option key={d[fieldConfig.filterKey]}>{d[fieldConfig.filterValue]}</Option>
               ))}
             </Select>
           </Col>

@@ -1,4 +1,4 @@
-import urlRender from "../../../../../utils/urlRender";
+import urlRender from "../../../../../utils/renders/urlRender";
 
 const columns = [
   {

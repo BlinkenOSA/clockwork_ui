@@ -13,6 +13,12 @@ export const DONOR_EDIT = '/donor/edit/:id';
 // Archival Unit
 export const ARCHIVAL_UNIT_LIST = '/archival_unit';
 
+// ISAAR
+export const ISAAR_LIST = '/isaar';
+export const ISAAR_CREATE = '/isaar/create';
+export const ISAAR_VIEW = '/isaar/view/:id';
+export const ISAAR_EDIT = '/isaar/edit/:id';
+
 // Authority List
 export const CORPORATION_LIST = '/authority_list/corporation';
 export const COUNTRY_LIST = '/authority_list/country';

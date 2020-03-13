@@ -8,7 +8,7 @@ import {
   DATE_TYPE_LIST,
   DONOR_LIST,
   EXTENT_UNIT_LIST, GENRE_LIST,
-  GEO_ROLE_LIST,
+  GEO_ROLE_LIST, ISAAR_LIST,
   KEYWORD_LIST, LANGUAGE_LIST,
   LANGUAGE_USAGE_LIST, PERSON_LIST,
   PERSON_ROLE_LIST, PLACE_LIST,
@@ -22,7 +22,7 @@ const configMenu = [
       {name: 'Donors', link: DONOR_LIST},
   ]},
   {name: 'Archival Unit', icon: 'apartment', link: ARCHIVAL_UNIT_LIST},
-  {name: 'ISAAR-CPF', icon: 'user', link: '/'},
+  {name: 'ISAAR-CPF', icon: 'user', link: ISAAR_LIST},
   {name: 'ISAD(G)', icon: 'profile', link: '/'},
   {name: 'Finding Aids', icon: 'file', submenu: [
       {name: 'Folders / Items', link: '/'},

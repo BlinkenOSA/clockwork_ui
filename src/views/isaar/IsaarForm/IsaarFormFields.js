@@ -1,0 +1,26 @@
+import React from "react";
+import FormMaker from "../../../components/FormMaker/FormMaker";
+import isaar from "../../../services/isaar/Isaar";
+import fields from "./config/fields";
+import {ISAAR_LIST} from "../../../config/config-urls";
+import validation from "./config/validation";
+
+const IsaarFormFields = (props) => {
+  return (
+    <FormMaker
+      serviceClass={isaar}
+      fieldConfig={fields}
+      backPath={ISAAR_LIST}
+      recordName={'ISAAR-CPF'}
+      validation={validation}
+      info={true}
+      formData={{
+        institution_identifier: 'HU OSA',
+        status: 'Draft'
+      }}
+      {...props}
+    />
+  )
+};
+
+export default IsaarFormFields;

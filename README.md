@@ -1,2 +1,3 @@
-# clockwork_ui
-Dashbord UI for OSA's Archival Management System
+# Clockwork UI
+
+The administrative interface for Blinken OSA's Archival Management System.

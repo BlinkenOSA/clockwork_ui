@@ -9,7 +9,7 @@ const fields = [
     name: 'seq',
     span: 12,
     type: 'input',
-    label: 'Accession Number',
+    label: 'Accession number',
     disabled: true,
   }, {
     name: 'donor',
@@ -23,6 +23,7 @@ const fields = [
     search: true
   }, {
     name: 'archival_unit',
+    label: 'Archival Unit',
     span: 24,
     type: 'remoteSelect',
     placeholder: '- Select Fonds -',
@@ -34,13 +35,13 @@ const fields = [
     name: 'archival_unit_legacy_number',
     span: 8,
     type: 'input',
-    label: 'Archival Unit Number (Legacy)',
+    label: 'Archival Unit number (legacy)',
     disabled: true,
   }, {
     name: 'archival_unit_legacy_name',
     span: 16,
     type: 'input',
-    label: 'Archival Unit Name (Legacy)',
+    label: 'Archival Unit name (legacy)',
     disabled: true,
   }, {
     name: 'title',
@@ -82,8 +83,8 @@ const fields = [
   }, {
     name: 'items',
     span: 24,
-    label: 'Items',
     type: 'many',
+    label: 'Items',
     elements: [
       {
         name: 'quantity',

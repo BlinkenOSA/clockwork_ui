@@ -1,5 +1,5 @@
 .FormItem {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .Label {
@@ -17,6 +17,10 @@
     margin-bottom: 5px;
 }
 
+.ErrorTab {
+    color: #f5222d;
+}
+
 .ErrorMessage {
     margin-top: 0px;
     font-size: 12px;
@@ -25,8 +29,4 @@
 
 .ErrorAlert {
     margin-bottom: 15px;
-}
-
-.Tab {
-    margin-top: 20px;
 }

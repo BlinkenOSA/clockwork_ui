@@ -1,25 +1,25 @@
-import axios from 'axios';
+import API from '../api.js';
 import {DONOR_BASE, DONOR_SELECT} from '../../config/config-api';
 
 class Donor {
   list = (params, cancelToken) => {
-    return axios.get(DONOR_BASE, {params: params, cancelToken: cancelToken});
+    return API.get(DONOR_BASE, {params: params, cancelToken: cancelToken});
   };
 
   create = (formValues) => {
-    return axios.post(`${DONOR_BASE}`, formValues);
+    return API.post(`${DONOR_BASE}`, formValues);
   };
 
   update = (identifier, formValues) => {
-    return axios.put(`${DONOR_BASE}${identifier}/`, formValues);
+    return API.put(`${DONOR_BASE}${identifier}/`, formValues);
   };
 
   read = (identifier) => {
-    return axios.get(`${DONOR_BASE}${identifier}/`);
+    return API.get(`${DONOR_BASE}${identifier}/`);
   };
 
   select = (params) => {
-    return axios.get(DONOR_SELECT, {params: params});
+    return API.get(DONOR_SELECT, {params: params});
   }
 }
 

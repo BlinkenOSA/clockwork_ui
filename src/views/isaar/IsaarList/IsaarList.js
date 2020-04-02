@@ -15,7 +15,7 @@ const IsaarList = () => {
         columnConfig={columns}
         filterConfig={filters}
         serviceClass={isaar}
-        tableName={'accessionList'}
+        tableName={'isaarList'}
         actions={{
             create: {
               text: 'New ISAAR-CPF',

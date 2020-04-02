@@ -1,29 +1,29 @@
-import axios from 'axios';
+import API from '../api.js';
 import {SUBJECT_BASE, SUBJECT_SELECT} from "../../config/config-api";
 
 class Subject {
   select = (params) => {
-    return axios.get(SUBJECT_SELECT, {params: params});
+    return API.get(SUBJECT_SELECT, {params: params});
   };
 
   list = (params, cancelToken) => {
-    return axios.get(SUBJECT_BASE, {params: params, cancelToken: cancelToken});
+    return API.get(SUBJECT_BASE, {params: params, cancelToken: cancelToken});
   };
 
   create = (formValues) => {
-    return axios.post(`${SUBJECT_BASE}`, formValues);
+    return API.post(`${SUBJECT_BASE}`, formValues);
   };
 
   read = (identifier) => {
-    return axios.get(`${SUBJECT_BASE}${identifier}/`);
+    return API.get(`${SUBJECT_BASE}${identifier}/`);
   };
 
   update = (identifier, formValues) => {
-    return axios.put(`${SUBJECT_BASE}${identifier}/`, formValues);
+    return API.put(`${SUBJECT_BASE}${identifier}/`, formValues);
   };
 
   delete = (identifier) => {
-    return axios.delete(`${SUBJECT_BASE}${identifier}/`);
+    return API.delete(`${SUBJECT_BASE}${identifier}/`);
   };
 }
 

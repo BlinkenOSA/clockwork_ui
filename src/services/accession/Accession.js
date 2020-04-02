@@ -1,29 +1,38 @@
-import axios from 'axios';
-import {ACCESSION_BASE, ACCESSION_COPYRIGHT_STATUS_SELECT, ACCESSION_METHOD_SELECT} from '../../config/config-api';
+import API from '../api';
+import {
+  ACCESSION_BASE,
+  ACCESSION_COPYRIGHT_STATUS_SELECT,
+  ACCESSION_METHOD_SELECT,
+  ACCESSION_PRE_CREATE
+} from '../../config/config-api';
 
 class Accession {
   list = (params, cancelToken) => {
-    return axios.get(ACCESSION_BASE, {params: params, cancelToken: cancelToken});
+    return API.get(ACCESSION_BASE, {params: params, cancelToken: cancelToken});
   };
 
   selectCopyrightStatus = (params) => {
-    return axios.get(ACCESSION_COPYRIGHT_STATUS_SELECT, {params: params});
+    return API.get(ACCESSION_COPYRIGHT_STATUS_SELECT, {params: params});
   };
 
   selectAccessionMethod = (params) => {
-    return axios.get(ACCESSION_METHOD_SELECT, {params: params});
+    return API.get(ACCESSION_METHOD_SELECT, {params: params});
+  };
+
+  preCreate = () => {
+    return API.get(ACCESSION_PRE_CREATE);
   };
 
   create = (formValues) => {
-    return axios.post(`${ACCESSION_BASE}`, formValues);
+    return API.post(`${ACCESSION_BASE}`, formValues);
   };
 
   read = (identifier) => {
-    return axios.get(`${ACCESSION_BASE}${identifier}/`);
+    return API.get(`${ACCESSION_BASE}${identifier}/`);
   };
 
   update = (identifier, formValues) => {
-    return axios.put(`${ACCESSION_BASE}${identifier}/`, formValues);
+    return API.put(`${ACCESSION_BASE}${identifier}/`, formValues);
   }
 }
 

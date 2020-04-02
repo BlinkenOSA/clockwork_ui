@@ -11,7 +11,7 @@ const renderReferenceCode = (text, record, index) => {
 
 const columns = [
   {
-    title: 'Seq. No.',
+    title: 'Seq. no.',
     dataIndex: 'seq',
     key: 'seq',
     width: 100,
@@ -23,7 +23,7 @@ const columns = [
     width: 160,
     sorter: true,
   }, {
-    title: 'Ref. Code',
+    title: 'Ref. code',
     dataIndex: 'archival_unit.reference_code',
     sortKeys: ['archival_unit__fonds', 'archival_unit_legacy_number'],
     key: 'reference_code',

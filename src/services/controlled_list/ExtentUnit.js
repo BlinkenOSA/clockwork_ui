@@ -1,30 +1,30 @@
-import axios from 'axios';
+import API from '../api.js';
 import {EXTENT_UNIT_SELECT} from "../../config/config-api";
 import {EXTENT_UNIT_BASE} from "../../config/config-api";
 
 class ExtentUnit {
   select = (params) => {
-    return axios.get(EXTENT_UNIT_SELECT, {params: params});
+    return API.get(EXTENT_UNIT_SELECT, {params: params});
   };
 
   list = (params, cancelToken) => {
-    return axios.get(EXTENT_UNIT_BASE, {params: params, cancelToken: cancelToken});
+    return API.get(EXTENT_UNIT_BASE, {params: params, cancelToken: cancelToken});
   };
 
   create = (formValues) => {
-    return axios.post(`${EXTENT_UNIT_BASE}`, formValues);
+    return API.post(`${EXTENT_UNIT_BASE}`, formValues);
   };
 
   read = (identifier) => {
-    return axios.get(`${EXTENT_UNIT_BASE}${identifier}/`);
+    return API.get(`${EXTENT_UNIT_BASE}${identifier}/`);
   };
 
   update = (identifier, formValues) => {
-    return axios.put(`${EXTENT_UNIT_BASE}${identifier}/`, formValues);
+    return API.put(`${EXTENT_UNIT_BASE}${identifier}/`, formValues);
   };
 
   delete = (identifier) => {
-    return axios.delete(`${EXTENT_UNIT_BASE}${identifier}/`);
+    return API.delete(`${EXTENT_UNIT_BASE}${identifier}/`);
   }
 }
 

@@ -19,16 +19,19 @@ const FormFooter = ({action, type='simple', backPath, onSubmitClick, values, loa
             </Col>
             <Col span={8} offset={12} className={style.RightButtons}>
               <Link to={backPath}>
-                <Button className={style.CloseButton}>Close</Button>
+                <Button>Close</Button>
               </Link>
-              <Button
-                {...getToggleProps({
-                  onClick: () => setInfoOpen(oldOpen => !oldOpen)
-                })}
-                type={'default'}
-              >
-                { infoIsOpen ? 'Hide Info' : 'Show Info' }
-              </Button>
+              { action !== 'create' &&
+                <Button
+                  className={style.InfoButton}
+                  {...getToggleProps({
+                    onClick: () => setInfoOpen(oldOpen => !oldOpen)
+                  })}
+                  type={'default'}
+                >
+                  {infoIsOpen ? 'Hide Info' : 'Show Info'}
+                </Button>
+              }
             </Col>
           </Row>
         </Card>

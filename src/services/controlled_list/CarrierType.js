@@ -1,30 +1,30 @@
-import axios from 'axios';
+import API from '../api.js';
 import {} from "../../config/config-api";
 import {CARRIER_TYPE_BASE, CARRIER_TYPE_SELECT} from "../../config/config-api";
 
 class CarrierType {
   select = (params) => {
-    return axios.get(CARRIER_TYPE_SELECT, {params: params});
+    return API.get(CARRIER_TYPE_SELECT, {params: params});
   };
 
   list = (params, cancelToken) => {
-    return axios.get(CARRIER_TYPE_BASE, {params: params, cancelToken: cancelToken});
+    return API.get(CARRIER_TYPE_BASE, {params: params, cancelToken: cancelToken});
   };
 
   create = (formValues) => {
-    return axios.post(`${CARRIER_TYPE_BASE}`, formValues);
+    return API.post(`${CARRIER_TYPE_BASE}`, formValues);
   };
 
   read = (identifier) => {
-    return axios.get(`${CARRIER_TYPE_BASE}${identifier}/`);
+    return API.get(`${CARRIER_TYPE_BASE}${identifier}/`);
   };
 
   update = (identifier, formValues) => {
-    return axios.put(`${CARRIER_TYPE_BASE}${identifier}/`, formValues);
+    return API.put(`${CARRIER_TYPE_BASE}${identifier}/`, formValues);
   };
 
   delete = (identifier) => {
-    return axios.delete(`${CARRIER_TYPE_BASE}${identifier}/`);
+    return API.delete(`${CARRIER_TYPE_BASE}${identifier}/`);
   }
 }
 

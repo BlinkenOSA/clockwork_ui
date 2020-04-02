@@ -1,25 +1,25 @@
-import axios from 'axios';
+import API from '../api.js';
 import {ACCESS_RIGHTS_BASE} from "../../config/config-api";
 
 class AccessRights {
   list = (params, cancelToken) => {
-    return axios.get(ACCESS_RIGHTS_BASE, {params: params, cancelToken: cancelToken});
+    return API.get(ACCESS_RIGHTS_BASE, {params: params, cancelToken: cancelToken});
   };
 
   create = (formValues) => {
-    return axios.post(`${ACCESS_RIGHTS_BASE}`, formValues);
+    return API.post(`${ACCESS_RIGHTS_BASE}`, formValues);
   };
 
   read = (identifier) => {
-    return axios.get(`${ACCESS_RIGHTS_BASE}${identifier}/`);
+    return API.get(`${ACCESS_RIGHTS_BASE}${identifier}/`);
   };
 
   update = (identifier, formValues) => {
-    return axios.put(`${ACCESS_RIGHTS_BASE}${identifier}/`, formValues);
+    return API.put(`${ACCESS_RIGHTS_BASE}${identifier}/`, formValues);
   };
 
   delete = (identifier) => {
-    return axios.delete(`${ACCESS_RIGHTS_BASE}${identifier}/`);
+    return API.delete(`${ACCESS_RIGHTS_BASE}${identifier}/`);
   }
 }
 

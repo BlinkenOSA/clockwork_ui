@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import {Col, Icon, Input, Select, Row} from "antd";
+import {Col, Input, Select, Row} from "antd";
 import style from './ListTableFilters.module.css';
 import {connect} from "react-redux";
 import setTableFilter from "./actions/setTableFilter";
-
+import { SearchOutlined } from "@ant-design/icons";
 
 const ListTableFilters = ({filterConfig, ...props}) => {
   const [filterState, setFilterState] = useState({});
@@ -40,7 +40,7 @@ const ListTableFilters = ({filterConfig, ...props}) => {
             <Input
               name={'search'}
               placeholder={fieldConfig.placeholder}
-              addonAfter={<Icon type="search" />}
+              addonAfter={<SearchOutlined />}
               allowClear={true}
               value={filterState.search}
               onChange={(e) => { updateField(e.target.name, e.target.value) }}

@@ -1,3 +1,7 @@
+// Login
+export const LOGIN = '/login';
+export const LOGOUT = '/logout';
+
 // Accession URLs
 export const ACCESSION_LIST = '/accession';
 export const ACCESSION_CREATE = '/accession/create';

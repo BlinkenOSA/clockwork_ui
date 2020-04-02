@@ -1,46 +1,72 @@
 import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import {Button, Card, Col, Icon, Row, Tabs, notification, Alert} from "antd";
-import {Form, FormItem, Input} from "formik-antd";
+import {Button, Card, Col, Row, Tabs, notification, Alert, Spin} from "antd";
+import {Form, FormItem, Input, Select} from "formik-antd";
 import {ErrorMessage, FieldArray, Formik} from "formik";
 import style from "./FormMaker.module.css";
 import getLabel from "../../utils/getLabel";
 import FormFooter from "./FormFooter";
 import RemoteSelect from "./components/RemoteSelect/RemoteSelect";
 import RemoteSelectWithEdit from "./components/RemoteSelectWithEdit/RemoteSelectWithEdit";
-import axios from 'axios';
 import AuthoritySelect from "./components/AuthoritySelect/AuthoritySelect";
+import { CloseOutlined, ExclamationCircleOutlined, LoadingOutlined } from '@ant-design/icons';
+import FormattedTextArea from "./components/FormattedTextArea/FormattedTextArea";
+import CalculatedInput from "./components/CalculatedInput/CalculatedInput";
+import api from "../../services/api";
 
-const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifier, formData, recordName, type='simple', validation, info, ...props}) => {
+
+const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifier, formData, initialValues, recordName, type='simple', validation, info, ...props}) => {
+  const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(false);
   const [initialData, setInitialData] = useState({});
   const [errors, setErrors] = useState([]);
+
 
   const readOnly = action === 'view';
   const { TabPane } = Tabs;
 
   // componentDidMount
   useEffect(() => {
-    const source = axios.CancelToken.source();
+    const source = api.CancelToken.source();
     const recordID = recordIdentifier ? recordIdentifier : props.match.params.id;
 
     switch (action) {
       case 'view':
+        setLoading(true);
         serviceClass.read(recordID, source).then((response) => {
           const initData = processInitialData(response.data);
           setInitialData(initData);
+          setLoading(false)
+        }).catch((error) => {
+          setLoading(true);
         });
         break;
       case 'edit':
+        setLoading(true);
         serviceClass.read(recordID, source).then((response) => {
           const initData = processInitialData(response.data);
           setInitialData(initData);
+          setLoading(false)
+        }).catch((error) => {
+          setLoading(true);
         });
         break;
       case 'create':
-        const initData = processInitialData(formData);
-        setInitialData(initData);
+        if (formData) {
+          setInitialData(processInitialData(generateInitialData(formData)));
+        } else {
+          if (serviceClass.hasOwnProperty('preCreate')) {
+            setLoading(true);
+            serviceClass.preCreate(source).then((response) => {
+              const initData = response.data;
+              setInitialData(processInitialData(generateInitialData(initData)));
+              setLoading(false);
+            }).catch((error) => {
+              setLoading(true);
+            });;
+          }
+        }
         break;
       default:
         break;
@@ -51,6 +77,36 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recordIdentifier, formData]);
+
+  const generateInitialData = (initialData) => {
+    const parentElements = ['tabs', 'tab', 'column'];
+    let init = initialData;
+
+    const collectInitialFields = (fc) => {
+      fc.forEach((f) => {
+        if (parentElements.includes(f.type)) {
+          collectInitialFields(f.elements)
+        } else {
+          if (f.type === 'select' || f.type === 'remoteSelect' || f.type === 'remoteSelectWithEdit') {
+            if (!init.hasOwnProperty(f.name)) {
+              init[f.name] = undefined;
+            }
+          } else if (f.type === 'many') {
+            if (!init.hasOwnProperty(f.name)) {
+              init[f.name] = [];
+            }
+          } else {
+            if (!init.hasOwnProperty(f.name)) {
+              init[f.name] = ""
+            }
+          }
+        }
+      })
+    };
+
+    collectInitialFields(fieldConfig);
+    return init;
+  };
 
   const processInitialData = (initialData) => {
     const parseData = (fieldData, field) => {
@@ -77,6 +133,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
         initialData[field.name] = parseData(fieldData, field);
       }
     });
+
     return initialData
   };
 
@@ -103,6 +160,13 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
               placeholder={fieldConfig.placeholder}
             />
           );
+        case 'calculatedInput':
+          return(
+            <CalculatedInput
+              values={values}
+              fieldConfig={fieldConfig}
+            />
+          );
         case 'textarea':
           return(
             <Input.TextArea
@@ -112,6 +176,29 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
               placeholder={fieldConfig.placeholder}
               rows={fieldConfig.rows ? fieldConfig.rows : 3}
             />
+          );
+        case 'formattedText':
+          return (
+            <FormattedTextArea
+              fieldConfig={fieldConfig}
+              disabled={fieldConfig.disabled ? fieldConfig.disabled : readOnly}
+            />
+          );
+        case 'select':
+          const { Option } = Select;
+
+          return (
+            <Select
+              name={fieldConfig.name}
+              disabled={fieldConfig.disabled ? fieldConfig.disabled : readOnly}
+              placeholder={fieldConfig.placeholder}
+              allowClear={true}
+              style={{ width: '100%' }}
+            >
+              {
+                fieldConfig.data.map((d, idx) => (<Option key={idx} value={d[fieldConfig.valueField]}>{d[fieldConfig.renderField]}</Option>))
+              }
+            </Select>
           );
         case 'remoteSelect':
           return(
@@ -177,6 +264,20 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
     let manyFieldValues = values ? values : [];
     manyFieldValues = manyFieldValues.length === 0 ? [''] : manyFieldValues;
 
+    const getInitialData = () => {
+      let init = {};
+      manyField.elements.forEach((f) => {
+        if (f.type === 'select' || f.type === 'remoteSelect' || f.type === 'remoteSelectWithEdit') {
+          init[f.name] = undefined;
+        } else {
+          init[f.name] = ""
+        }
+      });
+      return init;
+    };
+
+    const init = getInitialData();
+
     return(
       <React.Fragment key={key}>
         <Col span={24}>
@@ -204,7 +305,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
                         onClick={() => arrayHelpers.remove(index)}
                         style={{ background: "#f4f4f4", borderColor: "#ddd" }}
                       >
-                        <Icon type="close" />
+                        <CloseOutlined/>
                       </Button>
                     </Col>
                   </Row>
@@ -215,8 +316,8 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
                   <Button
                     type={'default'}
                     onClick={() => {
-                      if (manyFieldValues[manyFieldValues.length-1] !== '') {
-                        arrayHelpers.insert(manyFieldValues.length, '')
+                      if (JSON.stringify(manyFieldValues[manyFieldValues.length-1]) !== JSON.stringify(init)) {
+                        arrayHelpers.push(init)
                       }
                     }}
                     style={{ background: "#f4f4f4", borderColor: "#ddd" }}
@@ -232,19 +333,58 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
     )
   };
 
-  const renderTab = (fieldConfig, key, values) => {
+  const collectTabFields = () => {
+    const tabFields = {};
+
+    fieldConfig.forEach((f) => {
+      if (f.type === 'tabs') {
+        f.elements.forEach((tab, index) => {
+          let t = [];
+          tab.elements.forEach((field) => {
+            if (field.type !== 'column') {
+              t.push(field.name);
+            } else {
+              field.elements.forEach((fieldInColumns) => {
+                t.push(fieldInColumns.name)
+              })
+            }
+          });
+          tabFields[index] = t;
+        })
+      }
+    });
+
+    return tabFields;
+  };
+
+  const renderTab = (fieldConfig, key, values, errors) => {
+    const tabTitle = (field, idx) => {
+      let hasError = false;
+      if (Object.keys(errors).length !== 0) {
+        const tabFields = collectTabFields();
+        tabFields[idx].forEach((field) => {
+          if (Object.keys(errors).includes(field)) {
+            hasError = true;
+          }
+        })
+      }
+      return hasError ? <span className={style.ErrorTab}>{field.title} <ExclamationCircleOutlined/></span> : field.title;
+    };
+
     return(
       <Col span={24} key={key}>
-        <Tabs type="card" className={style.Tab} defaultActiveKey="0">
+        <Tabs defaultActiveKey="0" style={type === 'simple' ? {marginTop: '-10px'} : undefined}>
           {
             fieldConfig.elements.map((field, idx) => {
               return (
-                <TabPane key={idx} tab={field.title}>
+                <TabPane key={idx} tab={tabTitle(field, idx)}>
+                  <Row gutter={10} style={{margin: 0}}>
                   {
                     field.elements.map((f, k) => {
                       return chooseRender(f, k, values)
                     })
                   }
+                  </Row>
                 </TabPane>
               )
             })
@@ -292,12 +432,12 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
     successAlert();
 
     if (type === 'simple') {
-      setLoading(false);
+      setSaving(false);
       history.push(backPath);
     }
 
     if (type === 'select') {
-      setLoading(false);
+      setSaving(false);
       props.onClose(data)
     }
   };
@@ -312,11 +452,11 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
       if (field_errors) {
         formik.setErrors(field_errors)
       }
-      setLoading(false);
+      setSaving(false);
     };
 
     const recordID = recordIdentifier ? recordIdentifier : props.match.params.id;
-    setLoading(true);
+    setSaving(true);
 
     switch (action) {
       case 'create':
@@ -340,14 +480,14 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
     }
   };
 
-  const chooseRender = (field, key, values) => {
+  const chooseRender = (field, key, values, errors) => {
     switch (field.type) {
       case 'column':
         return renderColumn(field, key, values);
       case 'many':
         return renderMany(field, key, values[field.name]);
       case 'tabs':
-        return renderTab(field, key, values);
+        return renderTab(field, key, values, errors);
       default:
         return renderField(field, key, values);
     }
@@ -361,14 +501,14 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
           <Row gutter={10} type="flex">
             {
               fieldConfig.map((field, key) => {
-                return chooseRender(field, key, props.values)
+                return chooseRender(field, key, props.values, props.errors)
               })
             }
           </Row>
         </Card>
         <FormFooter
           action={action}
-          loading={loading}
+          loading={saving}
           backPath={backPath}
           values={props.values}
           info={info}
@@ -390,7 +530,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
         </Row>
         <FormFooter
           action={action}
-          loading={loading}
+          loading={saving}
           type={type}
           backPath={backPath}
           values={props.values}
@@ -402,24 +542,26 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
   };
 
   return(
-    <Formik
-      enableReinitialize={true}
-      initialValues={initialData}
-      onSubmit={handleSubmit}
-      validateOnBlur={false}
-      validateOnChange={false}
-      validationSchema={validation}
-    >
-      {
-        (props) => {
-          if (type==='simple') {
-            return (renderForm(props))
-          } else {
-            return (renderDrawerForm(props))
+    <Spin spinning={loading} indicator={<LoadingOutlined/>}>
+      <Formik
+        enableReinitialize={true}
+        initialValues={initialData}
+        onSubmit={handleSubmit}
+        validateOnBlur={false}
+        validateOnChange={false}
+        validationSchema={validation}
+      >
+        {
+          (props) => {
+            if (type==='simple') {
+              return (renderForm(props))
+            } else {
+              return (renderDrawerForm(props))
+            }
           }
         }
-      }
-    </Formik>
+      </Formik>
+    </Spin>
   )
 };
 

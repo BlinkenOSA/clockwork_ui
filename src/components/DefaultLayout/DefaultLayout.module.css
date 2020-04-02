@@ -1,6 +1,7 @@
 .Content {
     margin: auto;
-    width: 1200px;
+    max-width: 1200px;
+    overflow: hidden;
 }
 
 @media (max-width: 1530px) {

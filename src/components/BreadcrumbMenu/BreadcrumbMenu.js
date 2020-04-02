@@ -1,8 +1,10 @@
 import React from 'react';
-import {Breadcrumb, Icon} from "antd";
+import {Breadcrumb} from "antd";
 import {Link, withRouter} from "react-router-dom";
 import style from './BreadcrumbMenu.module.css';
 import breadcrumbs from '../../config/config-breadcrumbs'
+import { HomeOutlined } from '@ant-design/icons';
+
 
 const BreadcrumbMenu = (props) => {
   const pathName = props.match.path;
@@ -23,10 +25,10 @@ const BreadcrumbMenu = (props) => {
   }
 
   return(
-    <Breadcrumb className={style.Breadcrumb} align={'right'}>
+    <Breadcrumb className={style.Breadcrumb}>
       <Breadcrumb.Item>
         <Link to={'/'}>
-          <Icon type="home" />
+          <HomeOutlined />
         </Link>
       </Breadcrumb.Item>
       {breadcrumb.map((b, idx) => {

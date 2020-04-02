@@ -1,14 +1,14 @@
-import axios from 'axios';
+import API from '../api.js';
 import {ARCHIVAL_UNIT_BASE, ARCHIVAL_UNIT_SELECT} from '../../config/config-api';
 
 class ArchivalUnitFonds {
   list = (params, cancelToken) => {
-    return axios.get(ARCHIVAL_UNIT_BASE, {params: params, cancelToken: cancelToken});
+    return API.get(ARCHIVAL_UNIT_BASE, {params: params, cancelToken: cancelToken});
   };
 
   selectFonds = (params) => {
     params ? params['level'] = 'F' : params = {level: 'F'};
-    return axios.get(ARCHIVAL_UNIT_SELECT, {params: params});
+    return API.get(ARCHIVAL_UNIT_SELECT, {params: params});
   };
 }
 

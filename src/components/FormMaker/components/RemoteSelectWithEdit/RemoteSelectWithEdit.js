@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Col, Drawer, Icon, Row, Spin} from "antd";
+import {Button, Input, Drawer, Row, Spin} from "antd";
 import style from "./RemoteSelectWithEdit.module.css"
 import {Select} from "formik-antd";
 import {Field} from "formik";
 import getLabel from "../../../../utils/getLabel";
+import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 
 const RemoteSelectWithEdit = ({fieldConfig, disabled, ...props}) => {
-  const ButtonGroup = Button.Group;
   const { Option } = Select;
 
   const {name, selectFunction, renderField, valueField, placeholder, search} = fieldConfig;
@@ -61,50 +61,46 @@ const RemoteSelectWithEdit = ({fieldConfig, disabled, ...props}) => {
           ({field, form, meta}) => {
             return (
               <React.Fragment>
-                <Row gutter={10}>
-                  <Col md={20} xs={24}>
-                    <Select
-                      name={name}
-                      placeholder={placeholder ? placeholder : `- Select ${getLabel(name)} -`}
-                      filterOption={false}
-                      disabled={disabled}
-                      allowClear={true}
-                      labelInValue={false}
-                      notFoundContent={loading ? <Spin size="small" /> : null}
-                      style={{ width: '100%' }}
-                      value={field.value !== 0 ? field.value : undefined}
-                      showSearch={search}
-                      onChange={field.onChange}
-                      onSearch={onSearch}
-                    >
-                      {
-                        data.map(d => (
-                          <Option key={d.value} value={d.value}>{d.text}</Option>
-                        ))
-                      }
-                    </Select>
-                  </Col>
-                  <Col md={4} xs={24}>
-                    <ButtonGroup>
-                      <Button
-                        type={'default'}
-                        onClick={() => openForm('edit', field.value)}
-                        className={style.Button}
-                        disabled={!field.value || disabled}
-                      >
-                        <Icon type={'edit'}/>
-                      </Button>
-                      <Button
-                        type={'default'}
-                        onClick={() => openForm('create', 0)}
-                        className={style.Button}
-                        disabled={disabled}
-                      >
-                        <Icon type={'plus'}/>
-                      </Button>
-                    </ButtonGroup>
-                  </Col>
-                </Row>
+                <Input.Group compact>
+                  <Select
+                    style={{ width: '60%' }}
+                    name={name}
+                    placeholder={placeholder ? placeholder : `- Select ${getLabel(name)} -`}
+                    filterOption={false}
+                    disabled={disabled}
+                    allowClear={true}
+                    labelInValue={false}
+                    notFoundContent={loading ? <Spin size="small" /> : null}
+                    value={field.value !== "" ? field.value : undefined}
+                    showSearch={search ? search : false}
+                    onChange={(value) => {
+                      field.onChange(value ? value : "")
+                    }}
+                    onSearch={onSearch}
+                  >
+                    {
+                      data.map(d => (
+                        <Option key={d.value} value={d.value}>{d.text}</Option>
+                      ))
+                    }
+                  </Select>
+                  <Button
+                    type={'default'}
+                    onClick={() => openForm('edit', field.value)}
+                    className={style.Button}
+                    disabled={!field.value || disabled}
+                  >
+                    <EditOutlined/>
+                  </Button>
+                  <Button
+                    type={'default'}
+                    onClick={() => openForm('create', 0)}
+                    className={style.Button}
+                    disabled={disabled}
+                  >
+                    <PlusOutlined/>
+                  </Button>
+                </Input.Group>
                 <Row>
                   <Drawer
                     title={action.charAt(0).toUpperCase() + action.slice(1)}
@@ -113,10 +109,10 @@ const RemoteSelectWithEdit = ({fieldConfig, disabled, ...props}) => {
                     visible={drawerShown}
                   >
                     { props.render({
-                        action: action,
-                        recordIdentifier: selectedRecord,
-                        onClose: (value) => onClose(form, value),
-                        type: 'select'
+                      action: action,
+                      recordIdentifier: selectedRecord,
+                      onClose: (value) => onClose(form, value),
+                      type: 'select'
                     })}
                   </Drawer>
                 </Row>

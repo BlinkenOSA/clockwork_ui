@@ -1,4 +1,4 @@
-import axios from 'axios';
+import API from '../api.js';
 import {
   PERSON_BASE,
   PERSON_SELECT
@@ -6,27 +6,27 @@ import {
 
 class Person {
   select = (params) => {
-    return axios.get(PERSON_SELECT, {params: params});
+    return API.get(PERSON_SELECT, {params: params});
   };
 
   list = (params, cancelToken) => {
-    return axios.get(PERSON_BASE, {params: params, cancelToken: cancelToken});
+    return API.get(PERSON_BASE, {params: params, cancelToken: cancelToken});
   };
 
   create = (formValues) => {
-    return axios.post(`${PERSON_BASE}`, formValues);
+    return API.post(`${PERSON_BASE}`, formValues);
   };
 
   read = (identifier) => {
-    return axios.get(`${PERSON_BASE}${identifier}/`);
+    return API.get(`${PERSON_BASE}${identifier}/`);
   };
 
   update = (identifier, formValues) => {
-    return axios.put(`${PERSON_BASE}${identifier}/`, formValues);
+    return API.put(`${PERSON_BASE}${identifier}/`, formValues);
   };
 
   delete = (identifier) => {
-    return axios.delete(`${PERSON_BASE}${identifier}/`);
+    return API.delete(`${PERSON_BASE}${identifier}/`);
   };
 }
 

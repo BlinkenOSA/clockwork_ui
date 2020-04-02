@@ -1,11 +1,17 @@
 .Button {
     background: #f4f4f4;
     border-color: #ddd;
-    padding-left: 13px;
-    padding-right: 13px;
 }
 
 .Button:hover {
     background: #f0f0f0;
     border-color: #ddd;
+}
+
+.ButtonGroup {
+    margin-bottom: 0 !important;
+}
+
+.SelectWrapper {
+    margin-bottom: 0 !important;
 }

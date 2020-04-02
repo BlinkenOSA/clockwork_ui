@@ -1,4 +1,3 @@
-import React from "react";
 import typeRender from "../../../../utils/renders/typeRender";
 import statusRender from "../../../../utils/renders/statusRender";
 import style from "../../../../utils/renders/statusRender.module.css";

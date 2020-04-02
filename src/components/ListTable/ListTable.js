@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import {Button, Card, Col, Drawer, Icon, Modal, notification, Row, Table, Tooltip} from "antd";
+import {Button, Card, Col, Drawer, Modal, notification, Row, Table, Tooltip} from "antd";
 import setTablePagination from './actions/setTablePagination';
 import setTableTotal from './actions/setTableTotal';
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
@@ -9,10 +9,10 @@ import ListTableFilters from "./ListTableFilters";
 import useCollapse from 'react-collapsed';
 import style from './ListTable.module.css';
 import { Link } from 'react-router-dom'
-import axios from "axios";
 import addTableExpandedRow from "./actions/addTableExpandedRow";
 import setTableExpandedRow from "./actions/setTableExpandedRow";
-
+import { EyeOutlined, EditOutlined, PlusOutlined, DeleteOutlined, LoadingOutlined } from "@ant-design/icons";
+import API from "../../services/api";
 
 const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searchable, actions, dependentAddButtons, tableType='simple', formOpen='simple', ...props}) => {
   const [data, setData] = useState([]);
@@ -27,6 +27,7 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
   const [action, setAction] = useState('create');
   const [initialData, setInitialData] = useState({});
   const [selectedRecord, setSelectedRecord] = useState({});
+  const [loading, setLoading] = useState(false);
 
   // Redux Hooks
   const tableProps = useSelector(state => state.tableSettings[tableName], shallowEqual);
@@ -34,7 +35,7 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
 
   // componentDidMount
   useEffect(() => {
-    const source = axios.CancelToken.source();
+    const source = API.CancelToken.source();
 
     if (tableProps) {
       fetchData(loadParamsFromRedux(tableProps), source.token);
@@ -68,7 +69,7 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
   };
 
   useEffect(() => {
-    const source = axios.CancelToken.source();
+    const source = API.CancelToken.source();
 
     if (Object.entries(params).length !== 0) {
       fetchData(params, source.token);
@@ -100,7 +101,7 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
 
   const loadSorter = (sorter) => {
     const {columnKey, order, column} = sorter;
-    if (columnKey) {
+    if (columnKey && column) {
       if (column.hasOwnProperty('sortKeys')) {
         return {ordering: order === 'ascend' ? `${column.sortKeys.join(',')}` : `-${column.sortKeys.join(',')}`}
       } else {
@@ -201,7 +202,7 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
           actions.hasOwnProperty(prop) ?
             <Tooltip title={tooltipText}>
               <Link to={getLink()} className={'ant-btn ant-btn-sm ant-btn-icon-only'}>
-                <Icon type={icon}/>
+                {icon}
               </Link>
             </Tooltip> :
             null
@@ -273,7 +274,7 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
 
       return (
         <Tooltip title={tooltipText}>
-          <Button size="small" icon={'plus'} onClick={() => openArchivalUnitForm('create', data)}/>
+          <Button size="small" icon={<PlusOutlined/>} onClick={() => openArchivalUnitForm('create', data)}/>
         </Tooltip>
       )
     };
@@ -289,7 +290,7 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
       if (data.is_removable) {
         return(
           <Tooltip title={'Delete'}>
-            <Button size="small" icon={'delete'} onClick={() => showDeleteConfirm(data.id)}/>
+            <Button size="small" icon={<DeleteOutlined/>} onClick={() => showDeleteConfirm(data.id)}/>
           </Tooltip>
         )
       }
@@ -299,8 +300,8 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
       return(
         <Button.Group>
           { tableType === 'tree' && renderAddButton() }
-          {renderButton('view', actions.view && actions.view.text ? actions.view.text : 'View', 'eye')}
-          {renderButton('edit', actions.edit && actions.edit.text ? actions.edit.text : 'Edit', 'edit')}
+          {renderButton('view', actions.view && actions.view.text ? actions.view.text : 'View', <EyeOutlined/>)}
+          {renderButton('edit', actions.edit && actions.edit.text ? actions.edit.text : 'Edit', <EditOutlined/>)}
           {renderDeleteButton()}
         </Button.Group>
       );
@@ -308,10 +309,14 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
   };
 
   const fetchData = (params, cancelToken) => {
+    setLoading(true);
     serviceClass.list(params, cancelToken).then((response) => {
       dispatch(setTableTotal(response.data.count, tableName));
       setData(response.data.results);
-    }).catch((error) => {});
+      setLoading(false);
+    }).catch((error) => {
+      setLoading(false);
+    });
   };
 
   const handleExpand = (expanded, record) => {
@@ -365,7 +370,7 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
   const getCreateButton = () => {
     if (formOpen === 'simple') {
       return (
-        <Link to={actions.create}>
+        <Link to={actions.create.link}>
           <Button type={'primary'}>
             {actions.create && actions.create.text ? actions.create.text : 'Create'}
           </Button>
@@ -424,6 +429,10 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
         size={'middle'}
         expandedRowKeys={tableProps ? tableProps['expandedRowKeys'] : []}
         pagination={tableProps ? tableProps['pagination'] : {}}
+        loading={{
+            spinning: loading,
+            indicator: <LoadingOutlined/>,
+        }}
         onChange={handleTableChange}
         onExpand={handleExpand}
         footer={() => getFooter()}

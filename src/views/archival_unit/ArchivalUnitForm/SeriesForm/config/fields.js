@@ -3,11 +3,6 @@ import archivalUnitTheme from "../../../../../services/controlled_list/ArchivalU
 
 const fields = [
   {
-    name: 'parent',
-    type: 'input',
-    label: 'Parent',
-    hidden: true,
-  }, {
     name: 'fonds',
     span: 4,
     type: 'input',
@@ -88,7 +83,12 @@ const fields = [
     valueField: 'id',
     renderField: 'theme',
     mode: 'multiple'
-  }
+  }, {
+    name: 'parent',
+    type: 'input',
+    label: 'disabled',
+    hidden: true,
+  },
 ];
 
 export default fields;

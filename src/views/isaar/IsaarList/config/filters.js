@@ -1,6 +1,7 @@
 const types = [
   { id: 'P', type: 'Personal'},
-  { id: 'C', type: 'Corporate Body'}
+  { id: 'C', type: 'Corporate Body'},
+  { id: 'F', type: 'Family'}
 ];
 
 const statuses = [

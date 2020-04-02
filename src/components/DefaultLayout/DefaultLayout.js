@@ -20,10 +20,17 @@ const DefaultLayout = () => {
         collapsed={collapsed}
         onCollapse={() => setCollapsed(!collapsed)}
         width={300}
+        style={{
+          overflow: 'auto',
+          height: '100vh',
+          position: 'sticky',
+          top: 0,
+          left: 0,
+        }}
       >
         <SideMenu collapsed={collapsed} />
       </Sider>
-      <Layout>
+      <Layout className="site-layout">
         <TopHeader />
         <Content className={style.Content}>
           <Suspense fallback={loading()}>

@@ -33,7 +33,7 @@ const AuthoritySelect = ({fieldConfig, readOnly, values, ...props}) => {
             return (
               <React.Fragment>
                 <Row gutter={10}>
-                  <Col span={22}>
+                  <Col span={20}>
                     <Input
                       value={field.value}
                       name={fieldConfig.name}
@@ -41,13 +41,14 @@ const AuthoritySelect = ({fieldConfig, readOnly, values, ...props}) => {
                       placeholder={fieldConfig.placeholder}
                     />
                   </Col>
-                  <Col span={2}>
+                  <Col span={4}>
                     <Button
-                      icon="search"
                       loading={loading}
                       className={style.SearchButton}
                       onClick={() => {onSearch(form.values[fieldConfig.searchValue], fieldConfig.searchParam)}}
-                    />
+                    >
+                      Search
+                    </Button>
                   </Col>
                 </Row>
                 <Row>

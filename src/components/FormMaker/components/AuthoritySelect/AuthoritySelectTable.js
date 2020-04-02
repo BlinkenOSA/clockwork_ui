@@ -1,19 +1,22 @@
 import React from 'react';
 import {Button, Table, Tooltip} from "antd";
 import style from "./AuthoritySelect.module.css";
+import { SelectOutlined } from '@ant-design/icons';
 
 const AuthoritySelectTable = ({tableColumnTitle, tableColumnField, dataSource, ...props}) => {
   const renderSelectButton = (data) => {
     return(
       <Tooltip title={'Select entry'}>
-        <Button size="small" icon={'select'} onClick={() => props.onSelect(data[tableColumnField])}/>
+        <Button size="small" onClick={() => props.onSelect(data[tableColumnField])}>
+          <SelectOutlined/>
+        </Button>
       </Tooltip>
     )
   };
 
   const renderTitle = (data) => {
     return(
-      <a href={data} target={'_blank'}>{data}</a>
+      <a href={data} target={'_blank'} rel="noopener noreferrer">{data}</a>
     )
   };
 

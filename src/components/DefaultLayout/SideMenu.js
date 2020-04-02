@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Icon, Menu} from "antd";
+import {Menu} from "antd";
 import style from './SideMenu.module.css';
 import configMenu from '../../config/config-menu';
 import {Link, withRouter} from "react-router-dom";
@@ -52,7 +52,7 @@ const SideMenu = ({collapsed, location, ...props}) => {
         key={menu.name}
         title={
           <span>
-            {menu.icon ? <Icon type={menu.icon} /> : null}
+            {menu.icon}
             <span>{menu.name}</span>
           </span>
         }
@@ -65,7 +65,7 @@ const SideMenu = ({collapsed, location, ...props}) => {
           } else {
             return(
               <Menu.Item key={submenu.name}>
-                {submenu.icon ? <Icon type={submenu.icon} /> : null}
+                {submenu.icon}
                 <span>{submenu.name}</span>
                 {submenu.link ? <Link to={submenu.link} /> : null}
               </Menu.Item>
@@ -106,7 +106,7 @@ const SideMenu = ({collapsed, location, ...props}) => {
             } else {
               return(
                 <Menu.Item key={menu.name}>
-                  <Icon type={menu.icon} />
+                  {menu.icon}
                   <span>{menu.name}</span>
                   {menu.link ? <Link to={menu.link} /> : null}
                 </Menu.Item>

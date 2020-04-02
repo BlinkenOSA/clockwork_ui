@@ -360,13 +360,15 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
   const renderTab = (fieldConfig, key, values, errors) => {
     const tabTitle = (field, idx) => {
       let hasError = false;
-      if (Object.keys(errors).length !== 0) {
-        const tabFields = collectTabFields();
-        tabFields[idx].forEach((field) => {
-          if (Object.keys(errors).includes(field)) {
-            hasError = true;
-          }
-        })
+      if (errors) {
+        if (Object.keys(errors).length !== 0) {
+          const tabFields = collectTabFields();
+          tabFields[idx].forEach((field) => {
+            if (Object.keys(errors).includes(field)) {
+              hasError = true;
+            }
+          })
+        }
       }
       return hasError ? <span className={style.ErrorTab}>{field.title} <ExclamationCircleOutlined/></span> : field.title;
     };

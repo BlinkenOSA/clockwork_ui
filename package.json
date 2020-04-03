@@ -16,6 +16,8 @@
     "history": "^4.9.0",
     "jodit": "^3.3.24",
     "jodit-react": "^1.0.42",
+    "less": "^3.11.1",
+    "less-loader": "^5.0.0",
     "node-sass": "^4.13.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.0",
@@ -52,9 +54,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "less": "^3.11.1",
-    "less-loader": "^5.0.0"
   }
 }

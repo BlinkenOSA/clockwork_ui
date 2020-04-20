@@ -4,7 +4,6 @@ import {withRouter} from "react-router-dom";
 import {Button, Card, Col, Row, Tabs, notification, Alert, Spin} from "antd";
 import {Form, FormItem, Input, Select} from "formik-antd";
 import {ErrorMessage, FieldArray, Formik} from "formik";
-import style from "./FormMaker.module.css";
 import getLabel from "../../utils/getLabel";
 import FormFooter from "./FormFooter";
 import RemoteSelect from "./components/RemoteSelect/RemoteSelect";
@@ -15,6 +14,7 @@ import FormattedTextArea from "./components/FormattedTextArea/FormattedTextArea"
 import CalculatedInput from "./components/CalculatedInput/CalculatedInput";
 import api from "../../services/api";
 
+import style from "./FormMaker.module.css";
 
 const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifier, formData, initialValues, recordName, type='simple', validation, info, ...props}) => {
   const [saving, setSaving] = useState(false);

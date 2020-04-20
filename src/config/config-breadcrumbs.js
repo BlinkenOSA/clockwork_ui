@@ -4,6 +4,7 @@ import controlledListBreadcrumbs from "./breadcrumbs/controlled_list/controlledL
 import authorityListBreadcrumbs from "./breadcrumbs/authority_list/authorityListBreadcrumbs";
 import archivalUnitBreadcrumbs from "./breadcrumbs/archival_unit/archivalUnitBreadcrumbs";
 import isaarBreadcrumbs from "./breadcrumbs/isaar/isaarBreadcrumbs";
+import userBreadcrumbs from "./breadcrumbs/user/userBreadcrumbs";
 
 const breadcrumbs = [
   ...accessionBreadcrumbs(),
@@ -11,7 +12,8 @@ const breadcrumbs = [
   ...archivalUnitBreadcrumbs(),
   ...isaarBreadcrumbs(),
   ...authorityListBreadcrumbs(),
-  ...controlledListBreadcrumbs()
+  ...controlledListBreadcrumbs(),
+  ...userBreadcrumbs()
 ];
 
 export default breadcrumbs;

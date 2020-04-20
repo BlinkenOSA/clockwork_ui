@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Col, Row} from "antd";
 import {Input} from "formik-antd";
-import style from './AuthoritySelect.module.css';
 import AuthoritySelectTable from "./AuthoritySelectTable";
 import {Field} from "formik";
+
+import style from './AuthoritySelect.module.css';
 
 const AuthoritySelect = ({fieldConfig, readOnly, values, ...props}) => {
   const [loading, setLoading] = useState(false);

@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import {Col, Input, Select, Row} from "antd";
-import style from './ListTableFilters.module.css';
+import {Col, Input, Row, Select} from "antd";
 import {connect} from "react-redux";
 import setTableFilter from "./actions/setTableFilter";
 import { SearchOutlined } from "@ant-design/icons";
+
+import style from './ListTableFilters.module.css';
 
 const ListTableFilters = ({filterConfig, ...props}) => {
   const [filterState, setFilterState] = useState({});

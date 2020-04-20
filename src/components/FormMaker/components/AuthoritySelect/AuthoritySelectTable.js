@@ -1,7 +1,8 @@
 import React from 'react';
 import {Button, Table, Tooltip} from "antd";
-import style from "./AuthoritySelect.module.css";
 import { SelectOutlined } from '@ant-design/icons';
+
+import style from "./AuthoritySelect.module.css";
 
 const AuthoritySelectTable = ({tableColumnTitle, tableColumnField, dataSource, ...props}) => {
   const renderSelectButton = (data) => {

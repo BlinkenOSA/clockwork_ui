@@ -1,31 +1,27 @@
 import React from "react";
 import {Avatar, Dropdown, Menu} from "antd";
 import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
-import style from "./UserProfileMenu.module.css";
 import {clearAuthTokens} from "axios-jwt";
 import { useHistory } from "react-router-dom";
 
+import style from "./UserProfileMenu.module.css";
+import UserAvatar from "../../../User/UserAvatar/UserAvatar";
+import {LOGIN, PROFILE} from "../../../../config/config-urls";
 
 const UserProfileMenu = (props) => {
   let history = useHistory();
 
-  const getUser = (user) => {
-    if (user.length > 5) {
-      const names = user.split('.');
-      return `${names[0][0]}${names[1][0]}`
-    } else {
-      return user
-    }
-  };
-
-  const getColor = () => {
-    return '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6)
-  };
-
   const menuClick = ({ key }) => {
-    if (key === 'logout') {
-      clearAuthTokens();
-      history.push("/home");
+    switch (key) {
+      case 'logout':
+        clearAuthTokens();
+        history.push(LOGIN);
+        break;
+      case 'profile':
+        history.push(PROFILE);
+        break;
+      default:
+        break;
     }
   };
 
@@ -49,14 +45,9 @@ const UserProfileMenu = (props) => {
       trigger={['click']}
     >
       <div className={style.Profile}>
-        <Avatar
-          style={{backgroundColor: getColor()}}
-          size="default"
-          color={getColor()}
-        >
-          { getUser('Ams.Test') }
-        </Avatar>
-        <span className={style.ProfileText}>AMS Test User</span>
+        <UserAvatar
+          displayUsername={true}
+        />
       </div>
     </Dropdown>
   )

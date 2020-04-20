@@ -4,16 +4,18 @@ import {Form, FormItem, Input, SubmitButton} from "formik-antd";
 import validation from './config/validation';
 import style from "./Login.module.css";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import {GET_TOKEN} from "../../../config/config-api";
-import API from "../../../services/api";
+import auth from "../../../services/auth/Auth";
 import {setAuthTokens} from "axios-jwt";
 import { useHistory } from "react-router-dom";
 import {Alert} from "antd";
+import {useDispatch} from "react-redux";
+import setUser from "../UserAvatar/actions/setUser";
 
 const LoginForm = () => {
   let history = useHistory();
   const [loading, setLoading] = useState(false);
   const [loginError, setLoginError] = useState(false);
+  const dispatch = useDispatch();
 
   const authResponseToAuthTokens = (response) => {
     return {
@@ -24,11 +26,15 @@ const LoginForm = () => {
 
   const handleSubmit = (values, actions) => {
     setLoading(true);
-    API.post(GET_TOKEN, values).then((response) => {
+    auth.getToken(values).then((response) => {
       setLoading(false);
       setLoginError(false);
       setAuthTokens(authResponseToAuthTokens(response));
-      history.push("/");
+    }).then(() => {
+      auth.getUser().then((response) => {
+        history.push("/");
+        dispatch(setUser(response.data));
+      })
     }).catch((error) => {
       setLoading(false);
       setLoginError(true);

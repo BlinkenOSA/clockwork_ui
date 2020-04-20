@@ -1,7 +1,8 @@
 import React from 'react';
 import {Layout} from 'antd';
+import UserProfileMenu from "./header/UserProfileMenu/UserProfileMenu";
+
 import style from './TopHeader.module.css';
-import UserProfileMenu from "../UserProfile/UserProfileMenu";
 
 const { Header } = Layout;
 

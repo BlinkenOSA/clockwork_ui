@@ -1,9 +1,10 @@
 import React, {useState} from "react";
 import {Button, Card, Col, Row} from "antd";
-import style from './FormFooter.module.css';
 import useCollapse from "react-collapsed";
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
+
+import style from './FormFooter.module.css';
 
 const FormFooter = ({action, type='simple', backPath, onSubmitClick, values, loading, info, ...props}) => {
   const [infoIsOpen, setInfoOpen] = useState(false);
@@ -60,6 +61,20 @@ const FormFooter = ({action, type='simple', backPath, onSubmitClick, values, loa
     )
   };
 
+  const renderSubmitOnlyFooter = () => {
+    return (
+      <React.Fragment>
+        <Card size={'small'} className={style.Footer}>
+          <Row gutter={10} type="flex">
+            <Col span={4}>
+              <Button type={'primary'} htmlType={'submit'} loading={loading}>Submit</Button>
+            </Col>
+          </Row>
+        </Card>
+      </React.Fragment>
+    )
+  };
+
   const renderDrawerFooter = () => {
     return (
       <React.Fragment>
@@ -92,10 +107,15 @@ const FormFooter = ({action, type='simple', backPath, onSubmitClick, values, loa
     )
   };
 
-  if (type === 'simple') {
-    return(renderFooter())
-  } else {
-    return(renderDrawerFooter())
+  switch (type) {
+    case 'simple':
+      return (renderFooter());
+    case 'drawer':
+      return (renderDrawerFooter());
+    case 'submitOnly':
+      return (renderSubmitOnlyFooter());
+    default:
+      break;
   }
 };
 

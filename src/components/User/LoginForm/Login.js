@@ -1,9 +1,9 @@
 import React from 'react';
-import {Card, Col, Divider, Layout, Row} from "antd";
-import { Typography } from 'antd';
-import style from './Login.module.css';
+import {Card, Col, Divider, Layout, Row, Typography} from "antd";
 import logo from '../../../images/osa_logo.png';
 import LoginForm from "./LoginForm";
+
+import style from './Login.module.css';
 
 const { Text, Title } = Typography;
 

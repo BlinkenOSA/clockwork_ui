@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Input, Drawer, Row, Spin} from "antd";
-import style from "./RemoteSelectWithEdit.module.css"
+import {Button, Drawer, Input, Row, Spin} from "antd";
 import {Select} from "formik-antd";
 import {Field} from "formik";
 import getLabel from "../../../../utils/getLabel";
 import { EditOutlined, PlusOutlined } from '@ant-design/icons';
+
+import style from "./RemoteSelectWithEdit.module.css"
 
 const RemoteSelectWithEdit = ({fieldConfig, disabled, ...props}) => {
   const { Option } = Select;

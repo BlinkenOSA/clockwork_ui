@@ -1,6 +1,8 @@
 // AUTHENTICATION
-export const GET_TOKEN = '/auth/token/';
-export const REFRESH_TOKEN = '/auth/token/refresh';
+export const ACTIVE_USER = '/auth/users/me/';
+export const CHANGE_PASSWORD = '/auth/users/set_password/';
+export const CREATE_TOKEN = '/auth/jwt/create/';
+export const REFRESH_TOKEN = '/auth/jwt/refresh/';
 
 // Accession endpoints
 export const ACCESSION_BASE = '/v1/accession/';

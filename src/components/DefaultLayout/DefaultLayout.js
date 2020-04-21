@@ -6,6 +6,7 @@ import {Route, Switch} from "react-router-dom";
 import routes from '../../config/config-routes';
 import style from './DefaultLayout.module.css';
 
+
 const { Content, Sider } = Layout;
 
 const DefaultLayout = () => {

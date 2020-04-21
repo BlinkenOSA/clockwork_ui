@@ -1,10 +1,10 @@
 import React from 'react';
 import {Breadcrumb} from "antd";
 import {Link, withRouter} from "react-router-dom";
-import style from './BreadcrumbMenu.module.css';
 import breadcrumbs from '../../config/config-breadcrumbs'
 import { HomeOutlined } from '@ant-design/icons';
 
+import style from './BreadcrumbMenu.module.css';
 
 const BreadcrumbMenu = (props) => {
   const pathName = props.match.path;

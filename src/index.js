@@ -9,7 +9,7 @@ import { LOGIN } from "./config/config-urls";
 import "antd/dist/antd.less";
 
 import DefaultLayout from "./components/DefaultLayout/DefaultLayout";
-import Login from "./components/Login/LoginForm/Login";
+import Login from "./components/User/LoginForm/Login";
 
 const history = createBrowserHistory();
 const rootElement = document.getElementById('root');

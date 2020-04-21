@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {Menu} from "antd";
-import style from './SideMenu.module.css';
 import configMenu from '../../config/config-menu';
 import {Link, withRouter} from "react-router-dom";
+
+import style from './SideMenu.module.css';
 
 const { SubMenu } = Menu;
 

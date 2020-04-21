@@ -7,12 +7,13 @@ import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import setTableSorter from "./actions/setTableSorter";
 import ListTableFilters from "./ListTableFilters";
 import useCollapse from 'react-collapsed';
-import style from './ListTable.module.css';
 import { Link } from 'react-router-dom'
 import addTableExpandedRow from "./actions/addTableExpandedRow";
 import setTableExpandedRow from "./actions/setTableExpandedRow";
 import { EyeOutlined, EditOutlined, PlusOutlined, DeleteOutlined, LoadingOutlined } from "@ant-design/icons";
 import API from "../../services/api";
+
+import style from './ListTable.module.css';
 
 const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searchable, actions, dependentAddButtons, tableType='simple', formOpen='simple', ...props}) => {
   const [data, setData] = useState([]);

@@ -1,7 +1,11 @@
 import API from '../api.js';
-import {ACCESS_RIGHTS_BASE} from "../../config/config-api";
+import {ACCESS_RIGHTS_BASE, ACCESS_RIGHTS_SELECT} from "../../config/config-api";
 
 class AccessRights {
+  select = (params) => {
+    return API.get(ACCESS_RIGHTS_SELECT, {params: params});
+  };
+
   list = (params, cancelToken) => {
     return API.get(ACCESS_RIGHTS_BASE, {params: params, cancelToken: cancelToken});
   };

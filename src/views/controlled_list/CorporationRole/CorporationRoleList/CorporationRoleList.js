@@ -1,20 +1,19 @@
 import React from 'react';
-import ListTable from "../../../../components/ListTable/ListTable";
 import BreadcrumbMenu from "../../../../components/BreadcrumbMenu/BreadcrumbMenu";
 
 import columns from './config/columns';
 import CorporationRoleForm from "../CorporationRoleForm/CorporationRoleForm";
 import corporation_role from "../../../../services/controlled_list/CorporationRole";
+import ListTableWithDrawer from "../../../../components/ListTable/ListTableWithDrawer";
 
 const CorporationRoleList = () => {
   return(
     <React.Fragment>
       <BreadcrumbMenu />
-      <ListTable
+      <ListTableWithDrawer
         columnConfig={columns}
         serviceClass={corporation_role}
         tableName={'corporationRole'}
-        formOpen={'drawer'}
         formRender={(props) => (CorporationRoleForm(props))}
         actions={{edit: {}}}
       />

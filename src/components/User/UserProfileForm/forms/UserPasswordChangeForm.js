@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import {Formik} from "formik";
 import {Form, FormItem, Input} from "formik-antd";
 import {Card, Col, notification, Row, Spin} from "antd";
@@ -16,7 +16,6 @@ const UserPasswordChangeForm = () => {
   };
 
   const [loading, setLoading] = useState(false);
-  const [formLoading, setFormLoading] = useState(false);
 
   const successAlert = () => {
     notification.success({
@@ -46,7 +45,7 @@ const UserPasswordChangeForm = () => {
   };
 
   return (
-    <Spin spinning={formLoading} indicator={<LoadingOutlined/>}>
+    <Spin spinning={loading} indicator={<LoadingOutlined/>}>
       <Formik
         enableReinitialize={true}
         initialValues={init}

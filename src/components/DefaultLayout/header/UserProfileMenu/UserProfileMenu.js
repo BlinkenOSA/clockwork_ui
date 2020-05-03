@@ -1,5 +1,5 @@
 import React from "react";
-import {Avatar, Dropdown, Menu} from "antd";
+import {Dropdown, Menu} from "antd";
 import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import {clearAuthTokens} from "axios-jwt";
 import { useHistory } from "react-router-dom";

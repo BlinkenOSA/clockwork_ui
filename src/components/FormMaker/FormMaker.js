@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {Button, Card, Col, Row, Tabs, notification, Alert, Spin} from "antd";
-import {Form, FormItem, Input, Select} from "formik-antd";
+import {Checkbox, Form, FormItem, Input, Select} from "formik-antd";
 import {ErrorMessage, FieldArray, Formik} from "formik";
 import getLabel from "../../utils/getLabel";
 import FormFooter from "./FormFooter";
@@ -16,12 +16,12 @@ import api from "../../services/api";
 
 import style from "./FormMaker.module.css";
 
-const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifier, formData, initialValues, recordName, type='simple', validation, info, ...props}) => {
+const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifier, initialValues,
+                    recordName, type='simple', validation, info, ...props}) => {
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(false);
   const [initialData, setInitialData] = useState({});
   const [errors, setErrors] = useState([]);
-
 
   const readOnly = action === 'view';
   const { TabPane } = Tabs;
@@ -35,8 +35,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
       case 'view':
         setLoading(true);
         serviceClass.read(recordID, source).then((response) => {
-          const initData = processInitialData(response.data);
-          setInitialData(initData);
+          setInitialData(response.data);
           setLoading(false)
         }).catch((error) => {
           setLoading(true);
@@ -45,26 +44,27 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
       case 'edit':
         setLoading(true);
         serviceClass.read(recordID, source).then((response) => {
-          const initData = processInitialData(response.data);
-          setInitialData(initData);
+          setInitialData(response.data);
           setLoading(false)
         }).catch((error) => {
           setLoading(true);
         });
         break;
       case 'create':
-        if (formData) {
-          setInitialData(processInitialData(generateInitialData(formData)));
-        } else {
-          if (serviceClass.hasOwnProperty('preCreate')) {
+        if (serviceClass.hasOwnProperty('preCreate')) {
+          setLoading(true);
+          serviceClass.preCreate(recordID).then((response) => {
+            const initData = response.data;
+            setInitialData(generateInitialData(initData));
+            setLoading(false);
+          }).catch((error) => {
             setLoading(true);
-            serviceClass.preCreate(source).then((response) => {
-              const initData = response.data;
-              setInitialData(processInitialData(generateInitialData(initData)));
-              setLoading(false);
-            }).catch((error) => {
-              setLoading(true);
-            });;
+          });
+        } else {
+          if (initialValues) {
+            setInitialData(initialValues);
+          } else {
+            setInitialData(generateInitialData({}));
           }
         }
         break;
@@ -76,7 +76,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
       source.cancel();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [recordIdentifier, formData]);
+  }, []);
 
   const generateInitialData = (initialData) => {
     const parentElements = ['tabs', 'tab', 'column'];
@@ -108,42 +108,22 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
     return init;
   };
 
-  const processInitialData = (initialData) => {
-    const parseData = (fieldData, field) => {
-      if (field.type === 'remoteSelect' || field.type === 'remoteSelectWithEdit') {
-        if (fieldData) {
-          if (field.mode === 'multiple') {
-            return fieldData.map((data) => data[field.valueField]);
-          } else {
-            return fieldData[field.valueField];
-          }
-        }
-      }
-      return fieldData ? fieldData : undefined;
-    };
-
-    fieldConfig.forEach((field) => {
-      if (field.type === 'column') {
-        field.elements.forEach((columnField) => {
-          const fieldData = initialData[columnField.name];
-          initialData[columnField.name] = parseData(fieldData, columnField)
-        })
-      } else {
-        const fieldData = initialData[field.name];
-        initialData[field.name] = parseData(fieldData, field);
-      }
-    });
-
-    return initialData
-  };
-
   const renderField = (fieldConfig, key, values) => {
     const renderFormLabel = () => {
       if (fieldConfig.label) {
         if (fieldConfig.label === 'disabled') {
           return undefined;
         }
-        return fieldConfig.label
+        if (fieldConfig.localeLabel && values[fieldConfig.localeLabel]) {
+          const flagCode = values[fieldConfig.localeLabel].toLowerCase();
+          return (
+            <span>
+              {fieldConfig.label} <img alt={flagCode} className={style.LabelFlag} src={`/images/flag_${flagCode}.png` } />
+            </span>
+          )
+        } else {
+          return fieldConfig.label
+        }
       } else {
         return getLabel(fieldConfig.name);
       }
@@ -186,7 +166,6 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
           );
         case 'select':
           const { Option } = Select;
-
           return (
             <Select
               name={fieldConfig.name}
@@ -223,6 +202,15 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
               readOnly={readOnly}
             />
           );
+        case 'checkbox':
+          return(
+            <Checkbox
+              style={{marginLeft: '20px'}}
+              name={fieldConfig.name}
+            >
+              {fieldConfig.caption}
+            </Checkbox>
+          );
         default:
           break;
       }
@@ -252,7 +240,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
         <Row gutter={10} type="flex">
           {
             field.elements.map((f, key) => {
-              return(renderField(f, key, values))
+              return(chooseRender(f, key, values))
             })
           }
         </Row>
@@ -433,14 +421,21 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
     const { history } = props;
     successAlert();
 
-    if (type === 'simple') {
-      setSaving(false);
-      history.push(backPath);
-    }
-
-    if (type === 'select') {
-      setSaving(false);
-      props.onClose(data)
+    switch (type) {
+      case 'simple':
+        setSaving(false);
+        history.push(backPath);
+        break;
+      case 'select':
+        setSaving(false);
+        props.onClose(data);
+        break;
+      case 'drawer':
+        setSaving(false);
+        props.onClose();
+        break;
+      default:
+        break;
     }
   };
 
@@ -463,7 +458,6 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
     switch (action) {
       case 'create':
         serviceClass.create(formValues).then((response) => {
-          formik.resetForm();
           afterSubmit(response.data)
         }).catch(error => {
           handleError(error);
@@ -471,7 +465,6 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
         break;
       case 'edit':
         serviceClass.update(recordID, formValues).then((response) => {
-          formik.resetForm();
           afterSubmit(response.data)
         }).catch(error => {
           handleError(error)

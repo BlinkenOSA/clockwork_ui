@@ -5,3 +5,7 @@
 .TableCard ul {
     margin-bottom: 6px !important;
 }
+
+:global .ant-table-column-sorters {
+    padding: 0;
+}

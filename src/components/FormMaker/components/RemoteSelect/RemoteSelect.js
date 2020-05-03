@@ -49,7 +49,7 @@ const RemoteSelect = ({fieldConfig, disabled, ...props}) => {
               allowClear={true}
               notFoundContent={loading ? <Spin size="small" /> : null}
               style={{ width: '100%' }}
-              value={field.value === "" ? undefined : field.value}
+              value={field.value ? field.value : undefined}
               showSearch={search ? search : false}
               onChange={(value) => {
                 form.setFieldValue(name, value ? value : "");

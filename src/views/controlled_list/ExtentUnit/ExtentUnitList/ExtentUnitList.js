@@ -1,20 +1,19 @@
 import React from 'react';
-import ListTable from "../../../../components/ListTable/ListTable";
 import BreadcrumbMenu from "../../../../components/BreadcrumbMenu/BreadcrumbMenu";
 
 import columns from './config/columns';
 import extent_unit from "../../../../services/controlled_list/ExtentUnit";
 import ExtentUnitForm from "../ExtentUnitForm/ExtentUnitForm";
+import ListTableWithDrawer from "../../../../components/ListTable/ListTableWithDrawer";
 
 const ExtentUnitList = () => {
   return(
     <React.Fragment>
       <BreadcrumbMenu />
-      <ListTable
+      <ListTableWithDrawer
         columnConfig={columns}
         serviceClass={extent_unit}
         tableName={'extentUnit'}
-        formOpen={'drawer'}
         formRender={(props) => (ExtentUnitForm(props))}
         actions={{edit: {}}}
       />

@@ -1,20 +1,19 @@
 import React from 'react';
 import accessRights from '../../../../services/controlled_list/AccessRights';
-import ListTable from "../../../../components/ListTable/ListTable";
 import BreadcrumbMenu from "../../../../components/BreadcrumbMenu/BreadcrumbMenu";
 
 import columns from './config/columns';
 import AccessRightsForm from "../AccessRightsForm/AccessRightsForm";
+import ListTableWithDrawer from "../../../../components/ListTable/ListTableWithDrawer";
 
 const AccessRightsList = () => {
   return(
     <React.Fragment>
       <BreadcrumbMenu />
-      <ListTable
+      <ListTableWithDrawer
         columnConfig={columns}
         serviceClass={accessRights}
         tableName={'accessRights'}
-        formOpen={'drawer'}
         formRender={(props) => (AccessRightsForm(props))}
         actions={{edit: {}}}
       />

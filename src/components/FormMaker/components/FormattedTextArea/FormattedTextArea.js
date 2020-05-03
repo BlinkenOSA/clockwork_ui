@@ -6,7 +6,7 @@ import style from './FormattedTextArea.module.css';
 
 
 const FormattedTextArea = ({fieldConfig, disabled, ...props}) => {
-  const {name, height} = fieldConfig;
+  const {name} = fieldConfig;
 
   const options = {
     buttonList: [

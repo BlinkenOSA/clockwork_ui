@@ -30,3 +30,9 @@
 .ErrorAlert {
     margin-bottom: 15px;
 }
+
+.LabelFlag {
+    width: 20px;
+    margin-left: 5px;
+    border: 1px solid #d9d9d9;
+}

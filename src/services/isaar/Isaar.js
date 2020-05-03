@@ -1,5 +1,5 @@
 import API from '../api.js';
-import {ISAAR_BASE} from '../../config/config-api';
+import {ISAAR_BASE, ISAAR_SELECT} from '../../config/config-api';
 
 class Isaar {
   list = (params, cancelToken) => {
@@ -21,6 +21,10 @@ class Isaar {
   delete = (identifier) => {
     return API.delete(`${ISAAR_BASE}${identifier}/`);
   };
+
+  select = (params) => {
+    return API.get(ISAAR_SELECT, {params: params});
+  }
 }
 
 const isaar = new Isaar();

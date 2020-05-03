@@ -25,12 +25,12 @@ const fields = [
     label: 'disabled',
     hidden: true
   }, {
-    name: 'original_title',
+    name: 'title_original',
     span: 12,
     type: 'input',
     label: 'Original Title',
   }, {
-    name: 'locale',
+    name: 'original_locale',
     span: 8,
     type: 'remoteSelect',
     placeholder: '- Select Locale -',

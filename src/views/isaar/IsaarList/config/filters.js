@@ -5,8 +5,8 @@ const types = [
 ];
 
 const statuses = [
-  { id: '1', status: 'Draft'},
-  { id: '2', status: 'Final'}
+  { id: '1', status: 'draft'},
+  { id: '2', status: 'final'}
 ];
 
 const filters = [

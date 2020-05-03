@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import {Button, Card, Col, Drawer, Modal, notification, Row, Table, Tooltip} from "antd";
+import {Button, Card, Col, Modal, notification, Row, Table, Tooltip} from "antd";
 import setTablePagination from './actions/setTablePagination';
 import setTableTotal from './actions/setTableTotal';
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
@@ -8,27 +8,22 @@ import setTableSorter from "./actions/setTableSorter";
 import ListTableFilters from "./ListTableFilters";
 import useCollapse from 'react-collapsed';
 import { Link } from 'react-router-dom'
-import addTableExpandedRow from "./actions/addTableExpandedRow";
 import setTableExpandedRow from "./actions/setTableExpandedRow";
-import { EyeOutlined, EditOutlined, PlusOutlined, DeleteOutlined, LoadingOutlined } from "@ant-design/icons";
+import { EyeOutlined, EditOutlined, DeleteOutlined, LoadingOutlined } from "@ant-design/icons";
 import API from "../../services/api";
 
 import style from './ListTable.module.css';
 
-const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searchable, actions, dependentAddButtons, tableType='simple', formOpen='simple', ...props}) => {
+const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searchable, actions,
+                    tableType='simple', reRender=false, drawer=false, onOpenForm,
+                    renderCustomAddButton, renderCustomViewButton, renderCustomEditButton, ...props}) => {
   const [data, setData] = useState([]);
-  const [params, setParams] = useState({});
+  const [params, setParams] = useState(undefined);
   const [columns, setColumnConfig] = useState([]);
   const [filterIsOpen, setFilterOpen] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const {getCollapseProps, getToggleProps} = useCollapse({defaultOpen: true});
-
-  // Drawer form states
-  const [drawerShown, setDrawerShown] = useState(false);
-  const [action, setAction] = useState('create');
-  const [initialData, setInitialData] = useState({});
-  const [selectedRecord, setSelectedRecord] = useState({});
-  const [loading, setLoading] = useState(false);
 
   // Redux Hooks
   const tableProps = useSelector(state => state.tableSettings[tableName], shallowEqual);
@@ -36,23 +31,36 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
 
   // componentDidMount
   useEffect(() => {
-    const source = API.CancelToken.source();
-
     if (tableProps) {
-      fetchData(loadParamsFromRedux(tableProps), source.token);
+      setParams(loadParamsFromRedux(tableProps));
     } else {
       dispatch(setTableSorter({}, tableName));
       dispatch(setTablePagination(initPagination(), tableName));
       dispatch(setTableExpandedRow([], tableName));
-      setColumnConfig(loadActionColumns(columnConfig));
-      fetchData({}, source.token);
+      setParams({});
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
+  // Reload columnconfig, when data changes
+  useEffect(() => {
+    setColumnConfig(loadActionColumns(columnConfig));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
+  useEffect(() => {
+    reRender && fetchData(params);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[reRender]);
+
+  useEffect(() => {
+    const source = API.CancelToken.source();
+    fetchData(params, source.token);
     return () => {
       source.cancel();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [params]);
 
   const loadParamsFromRedux = (tableProps) => {
     let paginationParams, sorterParams;
@@ -68,19 +76,6 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
     const filterParams = tableProps['filter'];
     return Object.assign({}, filterParams, paginationParams, sorterParams);
   };
-
-  useEffect(() => {
-    const source = API.CancelToken.source();
-
-    if (Object.entries(params).length !== 0) {
-      fetchData(params, source.token);
-    }
-
-    return () => {
-      source.cancel();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params]);
 
   const initPagination = () => {
     return {
@@ -149,30 +144,25 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
     return c
   };
 
-  const onClose = (isSubmit=false) => {
-    if (isSubmit) {
-      fetchData(params);
-    }
-    setDrawerShown(false);
-  };
-
-  const openForm = (action, data) => {
-    setAction(action);
-    setSelectedRecord(data);
-    setDrawerShown(true);
-
-    // Custom code
-    if (tableName==='archivalUnit') {
-      setInitialData({level: 'F'})
-    }
-  };
-
   const deleteAlert = () => {
     notification.warning({
       duration: 3,
       message: 'Removed!',
       description: `Record was removed!`,
     });
+  };
+
+  const handleDelete = () => {
+    if(data.length === 1) {
+      const pagination = tableProps['pagination'];
+      pagination['current'] = pagination['current'] - 1;
+      dispatch(setTablePagination(pagination, tableName));
+
+      const paginationParams = loadPagination(pagination);
+      setParams(Object.assign({}, params, paginationParams));
+    } else {
+      fetchData(params);
+    }
   };
 
   const showDeleteConfirm = (id) => {
@@ -185,20 +175,20 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
       cancelText: 'No',
       onOk() {
         serviceClass.delete(id).then(() => {
-          onClose(true);
+          handleDelete();
           deleteAlert();
         })
-      },
+      }
     });
   };
 
-  const renderActionButtons = (data) => {
+  const renderActionButtons = (record) => {
     const renderButton = (prop, tooltipText, icon) => {
       const getLink = () => {
-        return actions[prop]['link'].replace(':id', data.id);
+        return actions[prop]['link'].replace(':id', record.id);
       };
 
-      if (formOpen === 'simple') {
+      if (!drawer) {
         return (
           actions.hasOwnProperty(prop) ?
             <Tooltip title={tooltipText}>
@@ -212,86 +202,18 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
          return (
            actions.hasOwnProperty(prop) ?
              <Tooltip title={tooltipText}>
-               <Button size="small" icon={icon} onClick={() => openForm(prop, data)}/>
+               <Button size="small" icon={icon} onClick={() => onOpenForm(prop, record)}/>
              </Tooltip> :
              null
          )
       }
     };
 
-    // CUSTOM CODE START
-    const openArchivalUnitForm = (action, data) => {
-      setAction(action);
-      dispatch(addTableExpandedRow(data.id, tableName));
-
-      if (action === 'create') {
-        serviceClass.read(data.id).then((response) => {
-          let initialData = {};
-
-          switch (data.level) {
-            case 'F':
-              initialData['parent'] = data.id;
-              initialData['level'] = 'SF';
-              initialData['fonds'] = response.data['fonds'];
-              initialData['fonds_title'] = response.data['title'];
-              initialData['fonds_acronym'] = response.data['acronym'];
-              break;
-            case 'SF':
-              initialData['parent'] = data.id;
-              initialData['level'] = 'S';
-              initialData['fonds'] = response.data['fonds'];
-              initialData['fonds_title'] = response.data['fonds_title'];
-              initialData['fonds_acronym'] = response.data['fonds_acronym'];
-              initialData['subfonds'] = response.data['subfonds'];
-              initialData['subfonds_title'] = response.data['title'];
-              initialData['subfonds_acronym'] = response.data['acronym'];
-              break;
-            default:
-              initialData['level'] = 'F';
-              break;
-          }
-
-          setInitialData(initialData);
-          setDrawerShown(true);
-        });
-      } else {
-        setSelectedRecord(data);
-        setDrawerShown(true);
-      }
-    };
-
-    const renderArchivalUnitAddButtons = () => {
-      let tooltipText;
-      switch (data.level) {
-        case 'F':
-          tooltipText = 'Add Subfonds';
-          break;
-        case 'SF':
-          tooltipText = 'Add Series';
-          break;
-        default:
-          return undefined;
-      }
-
-      return (
-        <Tooltip title={tooltipText}>
-          <Button size="small" icon={<PlusOutlined/>} onClick={() => openArchivalUnitForm('create', data)}/>
-        </Tooltip>
-      )
-    };
-
-    const renderAddButton = () => {
-      if (tableName==='archivalUnit') {
-        return renderArchivalUnitAddButtons()
-      }
-    };
-    // CUSTOM CODE END
-
     const renderDeleteButton = () => {
-      if (data.is_removable) {
+      if (record.is_removable) {
         return(
           <Tooltip title={'Delete'}>
-            <Button size="small" icon={<DeleteOutlined/>} onClick={() => showDeleteConfirm(data.id)}/>
+            <Button size="small" icon={<DeleteOutlined/>} onClick={() => showDeleteConfirm(record.id)}/>
           </Tooltip>
         )
       }
@@ -300,9 +222,17 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
     if (actions) {
       return(
         <Button.Group>
-          { tableType === 'tree' && renderAddButton() }
-          {renderButton('view', actions.view && actions.view.text ? actions.view.text : 'View', <EyeOutlined/>)}
-          {renderButton('edit', actions.edit && actions.edit.text ? actions.edit.text : 'Edit', <EditOutlined/>)}
+          {
+            renderCustomAddButton && renderCustomAddButton(record)
+          }
+          {
+            renderCustomViewButton ? renderCustomViewButton(record) :
+            renderButton('view', actions.view && actions.view.text ? actions.view.text : 'View', <EyeOutlined/>)
+          }
+          {
+            renderCustomEditButton ? renderCustomEditButton(record) :
+            renderButton('edit', actions.edit && actions.edit.text ? actions.edit.text : 'Edit', <EditOutlined/>)
+          }
           {renderDeleteButton()}
         </Button.Group>
       );
@@ -369,7 +299,7 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
   };
 
   const getCreateButton = () => {
-    if (formOpen === 'simple') {
+    if (!drawer) {
       return (
         <Link to={actions.create.link}>
           <Button type={'primary'}>
@@ -379,7 +309,7 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
       )
     } else {
       return (
-        <Button type={'primary'} onClick={() => openForm('create', {})}>
+        <Button type={'primary'} onClick={() => onOpenForm('create', {})}>
           {actions.create && actions.create.text ? actions.create.text : 'Create'}
         </Button>
       )
@@ -390,7 +320,7 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
     return(
       <Row>
         <Col span={8}>
-          {getCreateButton()}
+          {actions.create && getCreateButton()}
         </Col>
         {
           filterConfig &&
@@ -438,25 +368,6 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
         onExpand={handleExpand}
         footer={() => getFooter()}
       />
-      { formOpen === 'drawer' &&
-        <Row>
-          <Drawer
-            title={action.charAt(0).toUpperCase() + action.slice(1)}
-            width={'50%'}
-            onClose={(e) => onClose()}
-            visible={drawerShown}
-          >
-            {props.formRender({
-              action: action,
-              formData: initialData,
-              selectedRecord: selectedRecord,
-              recordIdentifier: selectedRecord.id,
-              onClose: (e) => onClose(true),
-              type: 'select'
-            })}
-          </Drawer>
-        </Row>
-      }
     </Card>
   )
 };
@@ -467,7 +378,7 @@ ListTable.propTypes = {
   serviceClass: PropTypes.object.isRequired,
   tableName: PropTypes.string.isRequired,
   tableType: PropTypes.string,
-  formOpen: PropTypes.string,
+  drawer: PropTypes.bool,
   actions: PropTypes.object
 };
 

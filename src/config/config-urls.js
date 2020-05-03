@@ -24,6 +24,12 @@ export const ISAAR_CREATE = '/isaar/create';
 export const ISAAR_VIEW = '/isaar/view/:id';
 export const ISAAR_EDIT = '/isaar/edit/:id';
 
+// ISAD
+export const ISAD_LIST = '/isad';
+export const ISAD_CREATE = '/isad/create/:id';
+export const ISAD_VIEW = '/isad/view/:id';
+export const ISAD_EDIT = '/isad/edit/:id';
+
 // Authority List
 export const CORPORATION_LIST = '/authority_list/corporation';
 export const COUNTRY_LIST = '/authority_list/country';

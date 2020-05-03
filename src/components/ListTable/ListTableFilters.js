@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import {Col, Input, Row, Select} from "antd";
 import {connect} from "react-redux";
 import setTableFilter from "./actions/setTableFilter";
-import { SearchOutlined } from "@ant-design/icons";
 
 import style from './ListTableFilters.module.css';
+const {Search} = Input;
 
 const ListTableFilters = ({filterConfig, ...props}) => {
+  const [searchValue, setSearchValue] = useState('');
   const [filterState, setFilterState] = useState({});
 
   const updateField = (field, value) => {
@@ -22,6 +23,7 @@ const ListTableFilters = ({filterConfig, ...props}) => {
     if (props.tableProps) {
       const filter = props.tableProps['filter'];
       setFilterState(filter);
+      setSearchValue(filter['search']);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -38,13 +40,15 @@ const ListTableFilters = ({filterConfig, ...props}) => {
       case 'search':
         return(
           <Col span={fieldConfig.span} key={key}>
-            <Input
+            <Search
+              className={style.Search}
               name={'search'}
               placeholder={fieldConfig.placeholder}
-              addonAfter={<SearchOutlined />}
               allowClear={true}
-              value={filterState.search}
-              onChange={(e) => { updateField(e.target.name, e.target.value) }}
+              value={searchValue}
+              onChange={(e) => {setSearchValue(e.target.value)}}
+              onSearch={(value) => updateField('search', value)}
+              enterButton
             />
           </Col>
         );

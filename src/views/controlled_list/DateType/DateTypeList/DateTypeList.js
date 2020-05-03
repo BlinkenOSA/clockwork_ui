@@ -1,20 +1,19 @@
 import React from 'react';
-import ListTable from "../../../../components/ListTable/ListTable";
 import BreadcrumbMenu from "../../../../components/BreadcrumbMenu/BreadcrumbMenu";
 
 import columns from './config/columns';
 import date_type from "../../../../services/controlled_list/DateType";
 import DateTypeForm from "../DateTypeForm/DateTypeForm";
+import ListTableWithDrawer from "../../../../components/ListTable/ListTableWithDrawer";
 
 const DateTypeList = () => {
   return(
     <React.Fragment>
       <BreadcrumbMenu />
-      <ListTable
+      <ListTableWithDrawer
         columnConfig={columns}
         serviceClass={date_type}
         tableName={'dateTypes'}
-        formOpen={'drawer'}
         formRender={(props) => (DateTypeForm(props))}
         actions={{edit: {}}}
       />

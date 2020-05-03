@@ -108,6 +108,7 @@ const RemoteSelectWithEdit = ({fieldConfig, disabled, ...props}) => {
                     width={'50%'}
                     onClose={(e) => onClose()}
                     visible={drawerShown}
+                    destroyOnClose={true}
                   >
                     { props.render({
                       action: action,

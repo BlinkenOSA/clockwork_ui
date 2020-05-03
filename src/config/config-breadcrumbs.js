@@ -5,12 +5,14 @@ import authorityListBreadcrumbs from "./breadcrumbs/authority_list/authorityList
 import archivalUnitBreadcrumbs from "./breadcrumbs/archival_unit/archivalUnitBreadcrumbs";
 import isaarBreadcrumbs from "./breadcrumbs/isaar/isaarBreadcrumbs";
 import userBreadcrumbs from "./breadcrumbs/user/userBreadcrumbs";
+import isadBreadcrumbs from "./breadcrumbs/isad/isadBreadcrumbs";
 
 const breadcrumbs = [
   ...accessionBreadcrumbs(),
   ...donorBreadcrumbs(),
   ...archivalUnitBreadcrumbs(),
   ...isaarBreadcrumbs(),
+  ...isadBreadcrumbs(),
   ...authorityListBreadcrumbs(),
   ...controlledListBreadcrumbs(),
   ...userBreadcrumbs()

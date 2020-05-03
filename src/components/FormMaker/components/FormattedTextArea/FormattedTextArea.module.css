@@ -58,6 +58,10 @@
     height: 12px;
 }
 
+.FormattedTextArea :global .sun-editor .sun-editor-editable {
+    padding: 10px;
+}
+
 .FormattedTextArea :global .sun-editor .sun-editor-editable p {
     margin: 0;
 }

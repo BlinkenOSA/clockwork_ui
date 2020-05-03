@@ -112,6 +112,8 @@ const FormFooter = ({action, type='simple', backPath, onSubmitClick, values, loa
       return (renderFooter());
     case 'drawer':
       return (renderDrawerFooter());
+    case 'select':
+      return (renderDrawerFooter());
     case 'submitOnly':
       return (renderSubmitOnlyFooter());
     default:

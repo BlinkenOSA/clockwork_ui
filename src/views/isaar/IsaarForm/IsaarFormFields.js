@@ -14,9 +14,10 @@ const IsaarFormFields = (props) => {
       recordName={'ISAAR-CPF'}
       validation={validation}
       info={true}
-      formData={{
+      initialValues={{
         institution_identifier: 'HU OSA',
-        status: 'Draft'
+        status: 'Draft',
+        level_of_detail: 'Minimal'
       }}
       {...props}
     />

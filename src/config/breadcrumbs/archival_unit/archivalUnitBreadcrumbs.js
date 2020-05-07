@@ -7,7 +7,7 @@ const archivalUnitBreadcrumbs = () => {
   return [{
     path: ARCHIVAL_UNIT_LIST,
     breadcrumbs: [
-      { text: singularText, icon: 'apartment' }
+      { text: singularText }
     ]
   }];
 };

@@ -6,6 +6,7 @@ import authorityListRoutes from "./routes/authority_list/authorityListRoutes";
 import archivalUnitRoutes from "./routes/archival_unit/archivalUnitRoutes";
 import isaarRoutes from "./routes/isaar/isaarRoutes";
 import isadRoutes from "./routes/isad/isadRoutes";
+import findingAidsRoutes from "./routes/finding_aids/findingAidsRoutes";
 
 const routes = [
   ...userRoutes(),
@@ -15,7 +16,8 @@ const routes = [
   ...isaarRoutes(),
   ...isadRoutes(),
   ...authorityListRoutes(),
-  ...controlledListRoutes()
+  ...controlledListRoutes(),
+  ...findingAidsRoutes()
 ];
 
 export default routes;

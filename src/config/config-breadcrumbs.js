@@ -6,6 +6,7 @@ import archivalUnitBreadcrumbs from "./breadcrumbs/archival_unit/archivalUnitBre
 import isaarBreadcrumbs from "./breadcrumbs/isaar/isaarBreadcrumbs";
 import userBreadcrumbs from "./breadcrumbs/user/userBreadcrumbs";
 import isadBreadcrumbs from "./breadcrumbs/isad/isadBreadcrumbs";
+import findingAidsBreadcrumbs from "./breadcrumbs/finding_aids/findingAidsBreadcrumbs";
 
 const breadcrumbs = [
   ...accessionBreadcrumbs(),
@@ -15,6 +16,7 @@ const breadcrumbs = [
   ...isadBreadcrumbs(),
   ...authorityListBreadcrumbs(),
   ...controlledListBreadcrumbs(),
+  ...findingAidsBreadcrumbs(),
   ...userBreadcrumbs()
 ];
 

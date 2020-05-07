@@ -8,7 +8,7 @@ import {
   CORPORATION_ROLE_LIST, COUNTRY_LIST,
   DATE_TYPE_LIST,
   DONOR_LIST,
-  EXTENT_UNIT_LIST, GENRE_LIST,
+  EXTENT_UNIT_LIST, FINDING_AIDS, GENRE_LIST,
   GEO_ROLE_LIST, ISAAR_LIST, ISAD_LIST,
   KEYWORD_LIST, LANGUAGE_LIST,
   LANGUAGE_USAGE_LIST, PERSON_LIST,
@@ -31,7 +31,7 @@ const configMenu = [
   {name: 'ISAAR-CPF', icon: <UserOutlined/>, link: ISAAR_LIST},
   {name: 'ISAD(G)', icon: <ProfileOutlined/>, link: ISAD_LIST},
   {name: 'Finding Aids', icon: <FileOutlined/>, submenu: [
-      {name: 'Folders / Items', link: '/'},
+      {name: 'Folders / Items', link: FINDING_AIDS},
       {name: 'Organizer', link: '/'},
   ]},
   {name: 'Lists', icon: <UnorderedListOutlined/>, submenu: [

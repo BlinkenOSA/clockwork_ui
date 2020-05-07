@@ -36,6 +36,18 @@ class ArchivalUnit {
     params ? params['level'] = 'F' : params = {level: 'F'};
     return API.get(ARCHIVAL_UNIT_SELECT, {params: params});
   };
+
+  selectSubFonds = (parent_id, params) => {
+    params ? params['level'] = 'SF' : params = {level: 'SF'};
+    params['parent'] = parent_id;
+    return API.get(ARCHIVAL_UNIT_SELECT, {params: params});
+  };
+
+  selectSeries = (parent_id, params) => {
+    params ? params['level'] = 'S' : params = {level: 'S'};
+    params['parent'] = parent_id;
+    return API.get(ARCHIVAL_UNIT_SELECT, {params: params});
+  };
 }
 
 const archival_unit = new ArchivalUnit();

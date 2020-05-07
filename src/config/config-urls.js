@@ -30,6 +30,9 @@ export const ISAD_CREATE = '/isad/create/:id';
 export const ISAD_VIEW = '/isad/view/:id';
 export const ISAD_EDIT = '/isad/edit/:id';
 
+// Finding Aids
+export const FINDING_AIDS = '/finding_aids';
+
 // Authority List
 export const CORPORATION_LIST = '/authority_list/corporation';
 export const COUNTRY_LIST = '/authority_list/country';

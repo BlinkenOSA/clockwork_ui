@@ -4,27 +4,34 @@ import getLabel from "../../../../utils/getLabel";
 import {Select} from "formik-antd";
 import {Spin} from "antd";
 
-const RemoteSelect = ({fieldConfig, disabled, ...props}) => {
+const RemoteSelectDependent = ({fieldConfig, setFieldValue, dependentValue, disabled, ...props}) => {
   const {name, selectFunction, renderFunction, renderField, valueField, placeholder, search, mode} = fieldConfig;
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [value, setValue] = useState(undefined);
 
   const { Option } = Select;
 
   // componentDidMount
   useEffect(() => {
-    fetchValues();
+    if (dependentValue) {
+      fetchValues(dependentValue);
+    } else {
+      setData([]);
+    }
+    setFieldValue(name, "");
+    setValue(undefined);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dependentValue]);
 
   const onSearch = (value) => {
-    fetchValues({search: value})
+    fetchValues(dependentValue, {search: value})
   };
 
-  const fetchValues = (params) => {
+  const fetchValues = (dependentValue, params) => {
     setLoading(true);
-    selectFunction(params).then((response) => {
+    selectFunction(dependentValue, params).then((response) => {
       const apiData = response.data.map(value => ({
         text: renderFunction ? renderFunction(value) : value[renderField],
         value: value[valueField],
@@ -49,11 +56,12 @@ const RemoteSelect = ({fieldConfig, disabled, ...props}) => {
               allowClear={true}
               notFoundContent={loading ? <Spin size="small" /> : null}
               style={{ width: '100%' }}
-              value={field.value ? field.value : undefined}
+              value={value}
               showSearch={search ? search : false}
               onChange={(value) => {
-                fetchValues();
-                form.setFieldValue(name, value ? value : "");
+                setValue(value);
+                setFieldValue(name, value ? value : "");
+                fetchValues(dependentValue);
               }}
               onSearch={search ? onSearch : undefined}
             >
@@ -70,4 +78,4 @@ const RemoteSelect = ({fieldConfig, disabled, ...props}) => {
   )
 };
 
-export default RemoteSelect;
+export default RemoteSelectDependent;

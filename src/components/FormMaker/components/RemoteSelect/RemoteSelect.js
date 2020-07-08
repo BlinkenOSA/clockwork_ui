@@ -4,7 +4,7 @@ import getLabel from "../../../../utils/getLabel";
 import {Select} from "formik-antd";
 import {Spin} from "antd";
 
-const RemoteSelect = ({fieldConfig, disabled, ...props}) => {
+const RemoteSelect = ({fieldConfig, disabled, onChange, ...props}) => {
   const {name, selectFunction, renderFunction, renderField, valueField, placeholder, search, mode} = fieldConfig;
 
   const [data, setData] = useState([]);
@@ -52,6 +52,7 @@ const RemoteSelect = ({fieldConfig, disabled, ...props}) => {
               value={field.value ? field.value : undefined}
               showSearch={search ? search : false}
               onChange={(value) => {
+                onChange && onChange(value);
                 fetchValues();
                 form.setFieldValue(name, value ? value : "");
               }}

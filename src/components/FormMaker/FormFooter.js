@@ -22,7 +22,7 @@ const FormFooter = ({action, type='simple', backPath, onSubmitClick, values, loa
               <Link to={backPath}>
                 <Button>Close</Button>
               </Link>
-              { action !== 'create' &&
+              { action !== 'create' && info &&
                 <Button
                   className={style.InfoButton}
                   {...getToggleProps({
@@ -71,6 +71,7 @@ const FormFooter = ({action, type='simple', backPath, onSubmitClick, values, loa
             </Col>
           </Row>
         </Card>
+        <div className={style.FooterMargin}/>
       </React.Fragment>
     )
   };

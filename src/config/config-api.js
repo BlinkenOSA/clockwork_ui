@@ -6,7 +6,6 @@ export const REFRESH_TOKEN = '/auth/jwt/refresh/';
 
 // Accession endpoints
 export const ACCESSION_BASE = '/v1/accession/';
-export const ACCESSION_SELECT = '/v1/accession/select/';
 export const ACCESSION_PRE_CREATE = '/v1/accession/create/';
 
 export const ACCESSION_COPYRIGHT_STATUS_SELECT = '/v1/accession/select/accession_copyright_status/';
@@ -19,9 +18,6 @@ export const DONOR_SELECT = '/v1/donor/select/';
 // Archival Unit endpoints
 export const ARCHIVAL_UNIT_BASE = '/v1/archival_unit/';
 export const ARCHIVAL_UNIT_PRE_CREATE = '/v1/archival_unit/create/';
-export const ARCHIVAL_UNIT_FONDS = '/v1/archival_unit/fonds/';
-export const ARCHIVAL_UNIT_SUBFONDS = '/v1/archival_unit/subfonds/';
-export const ARCHIVAL_UNIT_SERIES = '/v1/archival_unit/series/';
 export const ARCHIVAL_UNIT_SELECT = '/v1/archival_unit/select/';
 
 // ISAAR endpoints
@@ -30,8 +26,13 @@ export const ISAAR_SELECT = '/v1/isaar/select/';
 
 // ISAD endpoints
 export const ISAD_BASE = '/v1/isad/';
-export const ISAD_SELECT = '/v1/isad/select/';
 export const ISAD_PRE_CREATE = '/v1/isad/create/';
+
+// Finding Aids endpoints
+export const CONTAINER_BASE = '/v1/container/';
+export const CONTAINER_CREATE = '/v1/container/create/';
+export const CONTAINER_PRE_CREATE = '/v1/container/precreate/';
+export const FINDING_AIDS_BASE = '/v1/finding_aids/';
 
 // AUTHORITY LIST endpoints
 // Authority list services

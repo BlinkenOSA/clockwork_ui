@@ -17,7 +17,7 @@ import api from "../../services/api";
 import style from "./FormMaker.module.css";
 
 const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifier, initialValues,
-                    recordName, type='simple', validation, info, ...props}) => {
+                    recordName, type='simple', validation, info, title, ...props}) => {
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(false);
   const [initialData, setInitialData] = useState({});
@@ -62,7 +62,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
           });
         } else {
           if (initialValues) {
-            setInitialData(initialValues);
+            setInitialData(generateInitialData(initialValues));
           } else {
             setInitialData(generateInitialData({}));
           }
@@ -428,11 +428,15 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
         break;
       case 'select':
         setSaving(false);
-        props.onClose(data);
+        props.onClose && props.onClose(data);
         break;
       case 'drawer':
         setSaving(false);
-        props.onClose();
+        props.onClose && props.onClose();
+        break;
+      case 'submitOnly':
+        setSaving(false);
+        props.onClose && props.onClose(data);
         break;
       default:
         break;
@@ -492,7 +496,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
     return (
       <Form layout={'vertical'}>
         {renderErrors()}
-        <Card size={'small'}>
+        <Card size={'small'} title={title}>
           <Row gutter={10} type="flex">
             {
               fieldConfig.map((field, key) => {
@@ -506,6 +510,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
           loading={saving}
           backPath={backPath}
           values={props.values}
+          type={type}
           info={info}
         />
       </Form>
@@ -548,10 +553,15 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
       >
         {
           (props) => {
-            if (type==='simple') {
-              return (renderForm(props))
-            } else {
-              return (renderDrawerForm(props))
+            switch(type) {
+              case 'simple':
+                return (renderForm(props));
+              case 'submitOnly':
+                return (renderForm(props));
+              case 'drawer':
+                return (renderDrawerForm(props));
+              default:
+                return (renderDrawerForm(props));
             }
           }
         }

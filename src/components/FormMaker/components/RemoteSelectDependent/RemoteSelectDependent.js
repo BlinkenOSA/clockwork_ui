@@ -4,7 +4,7 @@ import getLabel from "../../../../utils/getLabel";
 import {Select} from "formik-antd";
 import {Spin} from "antd";
 
-const RemoteSelectDependent = ({fieldConfig, setFieldValue, dependentValue, disabled, ...props}) => {
+const RemoteSelectDependent = ({fieldConfig, setFieldValue, dependentValue, onChange, disabled, ...props}) => {
   const {name, selectFunction, renderFunction, renderField, valueField, placeholder, search, mode} = fieldConfig;
 
   const [data, setData] = useState([]);
@@ -20,8 +20,10 @@ const RemoteSelectDependent = ({fieldConfig, setFieldValue, dependentValue, disa
     } else {
       setData([]);
     }
-    setFieldValue(name, "");
+
+    setFieldValue(name, undefined);
     setValue(undefined);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dependentValue]);
 
@@ -59,6 +61,7 @@ const RemoteSelectDependent = ({fieldConfig, setFieldValue, dependentValue, disa
               value={value}
               showSearch={search ? search : false}
               onChange={(value) => {
+                onChange && onChange(value);
                 setValue(value);
                 setFieldValue(name, value ? value : "");
                 fetchValues(dependentValue);

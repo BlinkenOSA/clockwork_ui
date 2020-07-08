@@ -2,6 +2,7 @@ import {
   ADD_TABLE_EXPANDED_ROW,
   SET_TABLE_EXPANDED_ROW,
   SET_TABLE_FILTER,
+  SET_TABLE_ID,
   SET_TABLE_PAGINATION,
   SET_TABLE_SORTER,
   SET_TABLE_TOTAL
@@ -66,6 +67,15 @@ function tableReducer(state = initialState, action) {
           ...state[action.payload.tableName],
           pagination: newState
         }
+      }
+    }
+    case SET_TABLE_ID: {
+      const newState = Object.assign({}, state[action.payload.tableName], {
+        id: action.payload.id
+      });
+      return {
+        ...state,
+        [action.payload.tableName]: newState
       }
     }
     default: {

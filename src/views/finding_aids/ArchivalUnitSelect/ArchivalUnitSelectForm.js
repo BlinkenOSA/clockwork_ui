@@ -9,7 +9,7 @@ import RemoteSelect from "../../../components/FormMaker/components/RemoteSelect/
 import style from "./ArchivalUnitSelectForm.module.css";
 import { ContainerOutlined, CopyOutlined, TableOutlined } from '@ant-design/icons';
 import {Link} from "react-router-dom";
-import {ISAD_CREATE} from "../../../config/config-urls";
+import {CONTAINER_LIST} from "../../../config/config-urls";
 
 const renderArchivalUnit = (data) => {
   return `${data.reference_code} ${data.title}`
@@ -73,7 +73,6 @@ const ArchivalUnitSelectForm = (props) => {
       onSubmit={undefined}
       validateOnBlur={false}
       validateOnChange={false}
-
     >
       {
         ({values, setFieldValue}) => (
@@ -154,7 +153,7 @@ const ArchivalUnitSelectForm = (props) => {
             <Card size={'small'} className={style.Footer}>
               <Row gutter={10} type="flex">
                 <Col span={24}>
-                  <Link to={ISAD_CREATE.replace(':id', values['series'])}>
+                  <Link to={CONTAINER_LIST.replace(':archival_unit_id', values['series'])}>
                     <Button
                       type={'secondary'}
                       disabled={!values['series']}

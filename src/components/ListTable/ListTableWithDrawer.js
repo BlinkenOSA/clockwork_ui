@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Drawer, Row} from "antd";
 import ListTable from "./ListTable";
 
-const ListTableWithDrawer = ({columnConfig, tableName, serviceClass, actions, actionProps, selectedRecordProps={}, ...props}) => {
+const ListTableWithDrawer = ({actionProps, selectedRecordProps={}, formRender, ...props}) => {
   const [drawerShown, setDrawerShown] = useState(false);
   const [action, setAction] = useState('create');
   const [selectedRecord, setSelectedRecord] = useState({});
@@ -31,13 +31,9 @@ const ListTableWithDrawer = ({columnConfig, tableName, serviceClass, actions, ac
   return (
     <React.Fragment>
       <ListTable
-        columnConfig={columnConfig}
-        tableName={tableName}
-        serviceClass={serviceClass}
         drawer={true}
         reRender={tableReRender}
         onOpenForm={openForm}
-        actions={actions}
         {...props}
       />
       <Row>
@@ -48,7 +44,7 @@ const ListTableWithDrawer = ({columnConfig, tableName, serviceClass, actions, ac
           visible={drawerShown}
           destroyOnClose={true}
         >
-          {props.formRender({
+          {formRender({
             action: action,
             recordIdentifier: selectedRecord.id,
             selectedRecord: selectedRecord,

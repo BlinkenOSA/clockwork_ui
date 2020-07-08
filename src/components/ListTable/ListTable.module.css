@@ -9,3 +9,13 @@
 :global .ant-table-column-sorters {
     padding: 0;
 }
+
+.ButtonAllPublished {
+    color: #FFFFFF !important;
+    background-color: #295211 !important;
+}
+
+.ButtonNotPublished {
+    color: #FFFFFF !important;
+    background-color: #ba3300 !important;
+}

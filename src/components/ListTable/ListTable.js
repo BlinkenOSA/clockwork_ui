@@ -7,16 +7,17 @@ import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import setTableSorter from "./actions/setTableSorter";
 import ListTableFilters from "./ListTableFilters";
 import useCollapse from 'react-collapsed';
-import { Link } from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import setTableExpandedRow from "./actions/setTableExpandedRow";
 import { EyeOutlined, EditOutlined, DeleteOutlined, LoadingOutlined } from "@ant-design/icons";
 import API from "../../services/api";
 
 import style from './ListTable.module.css';
 
-const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searchable, actions,
-                    tableType='simple', reRender=false, drawer=false, onOpenForm,
-                    renderCustomAddButton, renderCustomViewButton, renderCustomEditButton, ...props}) => {
+const ListTable = ({columnConfig, filterConfig, serviceClass, listIdentifier, listIdentifierParam,
+                    tableName, searchable, actions, tableType='simple', reRender=false, drawer=false,
+                    onOpenForm, renderCustomAddButton, renderCustomViewButton, renderCustomEditButton, expandable,
+                    ...props}) => {
   const [data, setData] = useState([]);
   const [params, setParams] = useState(undefined);
   const [columns, setColumnConfig] = useState([]);
@@ -241,6 +242,13 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
 
   const fetchData = (params, cancelToken) => {
     setLoading(true);
+    if (listIdentifier) {
+      if (params) {
+        params[listIdentifierParam] = listIdentifier
+      } else {
+        params = {[listIdentifierParam]: listIdentifier}
+      }
+    }
     serviceClass.list(params, cancelToken).then((response) => {
       dispatch(setTableTotal(response.data.count, tableName));
       setData(response.data.results);
@@ -357,7 +365,7 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
         rowKey={record => record.id}
         dataSource={data}
         columns={columns}
-        size={'middle'}
+        size={'small'}
         expandedRowKeys={tableProps ? tableProps['expandedRowKeys'] : []}
         pagination={tableProps ? tableProps['pagination'] : {}}
         loading={{
@@ -367,6 +375,7 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, tableName, searcha
         onChange={handleTableChange}
         onExpand={handleExpand}
         footer={() => getFooter()}
+        expandable={expandable}
       />
     </Card>
   )

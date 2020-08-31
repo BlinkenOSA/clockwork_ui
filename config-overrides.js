@@ -9,7 +9,10 @@ module.exports = override(
   }),
   addLessLoader({
     javascriptEnabled: true,
-    modifyVars: { '@form-vertical-label-padding': '0px' },
+    modifyVars: {
+      '@form-vertical-label-padding': '0px',
+      '@table-expanded-row-bg': '#FFF;'
+    },
   }),
   addWebpackPlugin(
     new AntdDayjsWebpackPlugin()

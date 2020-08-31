@@ -409,6 +409,20 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
     }
   };
 
+  const getBackPath = () => {
+    if (backPath.includes(":")) {
+      const paths = backPath.split(":");
+      const variable = paths.pop();
+      if (initialData.hasOwnProperty(variable)) {
+        return `${paths.join()}${initialData[variable]}`
+      } else {
+        return backPath
+      }
+    } else {
+      return backPath
+    }
+  };
+
   const successAlert = () => {
     notification.success({
       duration: 3,
@@ -424,7 +438,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
     switch (type) {
       case 'simple':
         setSaving(false);
-        history.push(backPath);
+        history.push(getBackPath());
         break;
       case 'select':
         setSaving(false);
@@ -508,7 +522,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
         <FormFooter
           action={action}
           loading={saving}
-          backPath={backPath}
+          backPath={getBackPath()}
           values={props.values}
           type={type}
           info={info}
@@ -532,7 +546,7 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
           action={action}
           loading={saving}
           type={type}
-          backPath={backPath}
+          backPath={getBackPath()}
           values={props.values}
           info={info}
           onSubmitClick={props.submitForm}

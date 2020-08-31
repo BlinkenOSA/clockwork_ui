@@ -32,7 +32,9 @@ export const ISAD_PRE_CREATE = '/v1/isad/create/';
 export const CONTAINER_BASE = '/v1/container/';
 export const CONTAINER_CREATE = '/v1/container/create/';
 export const CONTAINER_PRE_CREATE = '/v1/container/precreate/';
+
 export const FINDING_AIDS_BASE = '/v1/finding_aids/';
+export const FINDING_AIDS_CLONE = '/v1/finding_aids/clone/';
 
 // AUTHORITY LIST endpoints
 // Authority list services

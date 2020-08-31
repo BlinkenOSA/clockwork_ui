@@ -10,12 +10,12 @@ class Donor {
     return API.post(`${DONOR_BASE}`, formValues);
   };
 
-  update = (identifier, formValues) => {
-    return API.put(`${DONOR_BASE}${identifier}/`, formValues);
-  };
-
   read = (identifier) => {
     return API.get(`${DONOR_BASE}${identifier}/`);
+  };
+
+  update = (identifier, formValues) => {
+    return API.put(`${DONOR_BASE}${identifier}/`, formValues);
   };
 
   select = (params) => {

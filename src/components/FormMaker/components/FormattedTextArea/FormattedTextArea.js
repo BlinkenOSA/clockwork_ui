@@ -27,7 +27,7 @@ const FormattedTextArea = ({fieldConfig, disabled, ...props}) => {
           return (
             <div className={`${style.FormattedTextArea} ${meta.error ? style.Error : ''}`}>
               <SunEditor
-                setContents={field.value}
+                setContents={field.value !== null ? field.value : ''}
                 onChange={(content) => {
                   form.setFieldValue(name, content);
                 }}

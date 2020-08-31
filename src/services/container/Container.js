@@ -32,6 +32,14 @@ class Container {
     return API.delete(`${CONTAINER_BASE}${identifier}/`);
   };
 
+  publishAll = (params) => {
+    return API.put(`${CONTAINER_BASE}publish/all/`, {},{params: params});
+  };
+
+  unpublishAll = (params) => {
+    return API.put(`${CONTAINER_BASE}unpublish/all/`, {},{params: params});
+  };
+
   publish = (identifier) => {
     return API.put(`${CONTAINER_BASE}publish/${identifier}/`);
   };

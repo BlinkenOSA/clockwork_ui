@@ -56,7 +56,7 @@ const requiredValuesTab = [
     disabled: true,
     valueField: 'id',
     renderField: 'level',
-  },{
+  }, {
     name: 'original_locale',
     span: 8,
     type: 'remoteSelect',

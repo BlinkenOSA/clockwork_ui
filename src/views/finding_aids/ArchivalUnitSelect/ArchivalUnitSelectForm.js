@@ -153,7 +153,7 @@ const ArchivalUnitSelectForm = (props) => {
             <Card size={'small'} className={style.Footer}>
               <Row gutter={10} type="flex">
                 <Col span={24}>
-                  <Link to={CONTAINER_LIST.replace(':archival_unit_id', values['series'])}>
+                  <Link to={CONTAINER_LIST.replace(':archival_unit', values['series'])}>
                     <Button
                       type={'secondary'}
                       disabled={!values['series']}

@@ -9,6 +9,7 @@ import {Button, Card, Col, Drawer, Modal, notification, Row, Table, Tooltip} fro
 import API from "../../../services/api";
 import container from "../../../services/container/Container";
 import style from "../../../components/ListTable/ListTable.module.css";
+import containerListStyle from "./ContainerList.module.css";
 import useCollapse from "react-collapsed";
 import ContainerCreateForm from "../ContainerForm/ContainerCreateForm";
 import {FINDING_AIDS} from "../../../config/config-urls";
@@ -30,15 +31,18 @@ const paginationInit = {
 };
 
 const ContainerList = (props) => {
-  const archivalUnitID = props.match.params.archival_unit_id;
+  const archivalUnitID = props.match.params.archival_unit;
 
   const [loading, setLoading] = useState(false);
+  const [publishing, setPublishing] = useState(false);
+  const [unpublishing, setUnpublishing] = useState(false);
   const [createFormIsOpen, setCreateFormIsOpen] = useState(false);
   const [data, setData] = useState([]);
   const [params, setParams] = useState({archival_unit: archivalUnitID});
   const [selectedRecord, setSelectedRecord] = useState({});
   const [formType, setFormType] = useState('container');
   const [drawerShown, setDrawerShown] = useState(false);
+  const [reRenderFA, setReRenderFA] = useState(false);
 
   const [archivalUnit, setArchivalUnit] = useState({});
 
@@ -166,12 +170,18 @@ const ContainerList = (props) => {
             container.publish(id).then(() => {
               publishAlert();
               fetchData();
+              setReRenderFA(true)
+            }).then(() => {
+              setReRenderFA(false);
             });
             break;
           case 'unpublish':
             container.unpublish(id).then(() => {
               publishAlert();
               fetchData();
+              setReRenderFA(true);
+            }).then(() => {
+              setReRenderFA(false);
             });
             break;
           default:
@@ -261,13 +271,13 @@ const ContainerList = (props) => {
 
   const expandedRowRender = (record, index) => {
     return (
-      <span>
-        <FindingAidsEntityList
-          expandedRowKeys={tableProps ? tableProps['expandedRowKeys'] : []}
-          containerNo={record.container_no}
-          containerID={record.id}
-        />
-      </span>
+      <FindingAidsEntityList
+        expandedRowKeys={tableProps ? tableProps['expandedRowKeys'] : []}
+        containerReferenceCode={record.reference_code}
+        containerID={record.id}
+        reRender={reRenderFA}
+        onAction={() => {fetchData()}}
+      />
     )
   };
 
@@ -292,10 +302,26 @@ const ContainerList = (props) => {
     setParams(Object.assign({}, params, loadPaginationParams(pagination)))
   };
 
+  const onPublishAllClick = (action) => {
+    if (action === 'publish') {
+      setPublishing(true);
+      container.publishAll({archival_unit: archivalUnitID}).then((response) => {
+        setPublishing(false);
+        fetchData();
+      })
+    } else {
+      setUnpublishing(true);
+      container.unpublishAll({archival_unit: archivalUnitID}).then((response) => {
+        fetchData();
+        setUnpublishing(false);
+      });
+    }
+  };
+
   const getFooter = () => {
     return(
       <Row>
-        <Col span={8}>
+        <Col span={12}>
           <Button
             {...getToggleProps({
               onClick: () => setCreateFormIsOpen(oldOpen => !oldOpen),
@@ -307,6 +333,14 @@ const ContainerList = (props) => {
           <Link to={FINDING_AIDS}>
             <Button type={'default'} style={{marginLeft: '10px'}}>Back</Button>
           </Link>
+        </Col>
+        <Col span={12} style={{textAlign: 'right'}}>
+          <Button type={'default'} style={{marginLeft: '10px'}} icon={<CloudUploadOutlined/>} loading={publishing} onClick={() => onPublishAllClick('publish')}>
+            Publish All
+          </Button>
+          <Button type={'default'} style={{marginLeft: '10px'}} icon={<CloudDownloadOutlined/>} loading={unpublishing} onClick={() => onPublishAllClick('unpublish')}>
+            Unpublish All
+          </Button>
         </Col>
       </Row>
     )
@@ -346,6 +380,7 @@ const ContainerList = (props) => {
       </section>
       <Card size="small" style={{marginBottom: 20}}>
         <Table
+          className={containerListStyle.Table}
           bordered={true}
           rowKey={record => record.id}
           dataSource={data}

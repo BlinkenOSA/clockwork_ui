@@ -32,7 +32,9 @@ export const ISAD_EDIT = '/isad/edit/:id';
 
 // Finding Aids
 export const FINDING_AIDS = '/finding_aids';
-export const CONTAINER_LIST = '/container/:archival_unit_id';
+export const CONTAINER_LIST = '/container/:archival_unit';
+export const FINDING_AIDS_VIEW = '/finding_aids/view/:id';
+export const FINDING_AIDS_EDIT = '/finding_aids/edit/:id';
 
 // Authority List
 export const CORPORATION_LIST = '/authority_list/corporation';

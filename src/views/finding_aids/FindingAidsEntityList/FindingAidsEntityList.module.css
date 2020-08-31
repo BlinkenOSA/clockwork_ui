@@ -6,4 +6,43 @@
     border-top: 1px solid #f0f0f0 !important;
 }
 
-.ActionColumn
+.ActionColumn {
+    text-align: center !important;
+}
+
+.TableTitle {
+    margin-left: 10px;
+    font-weight: 600;
+}
+
+.ButtonUnpublish {
+    background-color: #36771a;
+    color: #FFFFFF;
+}
+
+.ButtonUnpublish:hover, .ButtonUnpublish:focus {
+    background-color: #295211;
+    color: #FFFFFF;
+    border-color: rgb(217, 217, 217);
+}
+
+.ButtonPublish {
+    background-color: #ba3300;
+    color: #FFFFFF;
+}
+
+.ButtonPublish:hover, .ButtonPublish:focus {
+    background-color: #6e2100;
+    color: #FFFFFF;
+    border-color: rgb(217, 217, 217);
+}
+
+.ButtonConfidential {
+    background-color: #ffeb37;
+}
+
+.ButtonConfidential:hover, .ButtonConfidential:focus {
+    background-color: #ffe335;
+    color: #000000;
+    border-color: rgb(217, 217, 217);
+}

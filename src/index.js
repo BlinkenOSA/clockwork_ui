@@ -6,12 +6,12 @@ import store from "./store/store";
 import {Router, Route, Switch, Redirect} from 'react-router-dom';
 import { isLoggedIn } from "axios-jwt";
 import { LOGIN } from "./config/config-urls";
+import history from './utils/history';
 import "antd/dist/antd.less";
 
 import DefaultLayout from "./components/DefaultLayout/DefaultLayout";
 import Login from "./components/User/LoginForm/Login";
 
-const history = createBrowserHistory();
 const rootElement = document.getElementById('root');
 
 const PrivateRoute = ({ component: Component, ...rest }) => (

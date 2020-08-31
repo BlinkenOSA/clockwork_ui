@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {useAuthTokenInterceptor} from 'axios-jwt';
+import history from '../utils/history'
 import {REFRESH_TOKEN} from "../config/config-api";
 
 const baseURL = process.env.REACT_APP_BACKEND_API;
@@ -17,7 +18,10 @@ const requestRefresh = (refresh) => {
       refresh
     }).then(response => {
       resolve(response.data.access);
-    }, reject);
+    }, reject).catch((error) => {
+      history.push('/login');
+      reject();
+    });
   });
 };
 useAuthTokenInterceptor(api, { requestRefresh });

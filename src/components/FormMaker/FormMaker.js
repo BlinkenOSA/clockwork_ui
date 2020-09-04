@@ -546,7 +546,6 @@ const FormMaker = ({fieldConfig, serviceClass, backPath, action, recordIdentifie
           action={action}
           loading={saving}
           type={type}
-          backPath={getBackPath()}
           values={props.values}
           info={info}
           onSubmitClick={props.submitForm}

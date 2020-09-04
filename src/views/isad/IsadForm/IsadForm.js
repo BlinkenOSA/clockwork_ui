@@ -7,9 +7,17 @@ import validation from "./config/validation";
 import BreadcrumbMenu from "../../../components/BreadcrumbMenu/BreadcrumbMenu";
 
 const IsadForm = (props) => {
+  const breadcrumbRender = (data) => {
+    return data['title_full'];
+  };
+
   return (
     <React.Fragment>
-      <BreadcrumbMenu />
+      <BreadcrumbMenu
+        serviceClass={isad}
+        breadcrumbRender={breadcrumbRender}
+        {...props}
+      />
       <FormMaker
         serviceClass={isad}
         fieldConfig={fields}

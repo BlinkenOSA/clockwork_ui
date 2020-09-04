@@ -20,13 +20,11 @@ const accessionBreadcrumbs = () => {
     path: ACCESSION_VIEW,
     breadcrumbs: [
       { text: `${singularText}s`, link: ACCESSION_LIST },
-      { text: `View ${singularText}`}
     ]
   }, {
     path: ACCESSION_EDIT,
     breadcrumbs: [
       { text: `${singularText}s`, link: ACCESSION_LIST },
-      { text: `Edit ${singularText}`}
     ]
   }];
 };

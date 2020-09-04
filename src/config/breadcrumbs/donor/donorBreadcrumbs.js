@@ -19,13 +19,11 @@ const donorBreadcrumbs = () => {
     path: DONOR_VIEW,
     breadcrumbs: [
       { text: `${singularText}s`, link: DONOR_LIST, icon: 'swap' },
-      { text: `View ${singularText}`}
     ]
   }, {
     path: DONOR_EDIT,
     breadcrumbs: [
       { text: `${singularText}s`, link: DONOR_LIST, icon: 'swap' },
-      { text: `Edit ${singularText}`}
     ]
   }];
 };

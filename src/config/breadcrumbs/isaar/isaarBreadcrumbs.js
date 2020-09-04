@@ -7,7 +7,7 @@ const isaarBreadcrumbs = () => {
   return [{
     path: ISAAR_LIST,
     breadcrumbs: [
-      { text: singularText, icon: 'swap' }
+      { text: `${singularText}s`, icon: 'swap' }
     ]
   }, {
     path: ISAAR_CREATE,
@@ -19,13 +19,11 @@ const isaarBreadcrumbs = () => {
     path: ISAAR_VIEW,
     breadcrumbs: [
       { text: `${singularText}s`, link: ISAAR_LIST, icon: 'swap' },
-      { text: `View ${singularText}`}
     ]
   }, {
     path: ISAAR_EDIT,
     breadcrumbs: [
       { text: `${singularText}s`, link: ISAAR_LIST, icon: 'swap' },
-      { text: `Edit ${singularText}`}
     ]
   }];
 };

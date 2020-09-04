@@ -18,14 +18,12 @@ const isadBreadcrumbs = () => {
   }, {
     path: ISAD_VIEW,
     breadcrumbs: [
-      { text: `${singularText}s`, link: ISAD_LIST, icon: 'swap' },
-      { text: `View ${singularText}`}
+      { text: `${singularText}s`, link: ISAD_LIST, icon: 'swap' }
     ]
   }, {
     path: ISAD_EDIT,
     breadcrumbs: [
-      { text: `${singularText}s`, link: ISAD_LIST, icon: 'swap' },
-      { text: `Edit ${singularText}`}
+      { text: `${singularText}s`, link: ISAD_LIST, icon: 'swap' }
     ]
   }];
 };

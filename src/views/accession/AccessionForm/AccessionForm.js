@@ -7,9 +7,17 @@ import {ACCESSION_LIST} from "../../../config/config-urls";
 import validation from "./config/validation";
 
 const AccessionForm = (props) => {
+  const breadcrumbRender = (data) => {
+    return `${data['seq']} (Accession Record)`;
+  };
+
   return(
     <React.Fragment>
-      <BreadcrumbMenu />
+      <BreadcrumbMenu
+        serviceClass={accession}
+        breadcrumbRender={breadcrumbRender}
+        {...props}
+      />
       <FormMaker
         serviceClass={accession}
         fieldConfig={fields}

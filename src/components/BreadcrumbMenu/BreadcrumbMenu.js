@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Breadcrumb} from "antd";
 import {Link, withRouter} from "react-router-dom";
 import breadcrumbs from '../../config/config-breadcrumbs'
@@ -6,25 +6,36 @@ import { HomeOutlined } from '@ant-design/icons';
 
 import style from './BreadcrumbMenu.module.css';
 
-const BreadcrumbMenu = (props) => {
-  const pathName = props.match.path;
-  let breadcrumb = breadcrumbs.filter(b => pathName === b.path);
+const BreadcrumbMenu = ({serviceClass, breadcrumbRender, action, match, ...props}) => {
+  const [breadcrumb, setBreadcrumb] = useState([]);
 
-  if (breadcrumb.length > 0) {
-    breadcrumb = breadcrumb[0].breadcrumbs
-  } else {
-    return null;
-  }
+  // componentDidMount
+  useEffect(() => {
+    const recordID = match.params.id;
+    let bc = breadcrumbs.filter(b => match.path === b.path);
 
-  if (props.match.params.hasOwnProperty('action')) {
-    let lastBreadcrumb = breadcrumb.pop();
-    lastBreadcrumb['text'] = props.match.params.action === 'view' ?
-      `View ${lastBreadcrumb['text']}` :
-      `Edit ${lastBreadcrumb['text']}`;
-    breadcrumb.push(lastBreadcrumb);
-  }
+    if (bc.length > 0) {
+      bc = [...bc[0]['breadcrumbs']];
+    } else {
+      bc = [];
+    }
 
-  return(
+    if (serviceClass && breadcrumbRender && recordID) {
+      serviceClass.read(recordID).then((response) => {
+        const txt = action === 'view' ?
+          `View: ${breadcrumbRender(response.data)}` :
+          `Edit: ${breadcrumbRender(response.data)}`;
+        bc.push({text: txt});
+        setBreadcrumb(bc);
+      });
+    } else {
+      setBreadcrumb(bc);
+    }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
     <Breadcrumb className={style.Breadcrumb}>
       <Breadcrumb.Item>
         <Link to={'/'}>

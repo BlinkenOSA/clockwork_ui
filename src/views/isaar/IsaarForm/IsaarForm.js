@@ -1,11 +1,20 @@
 import React from 'react';
 import BreadcrumbMenu from "../../../components/BreadcrumbMenu/BreadcrumbMenu";
 import IsaarFormFields from "./IsaarFormFields";
+import isaar from "../../../services/isaar/Isaar";
 
 const IsaarForm = (props) => {
+  const breadcrumbRender = (data) => {
+    return `${data['name']} (${data['type']})`;
+  };
+
   return(
     <React.Fragment>
-      <BreadcrumbMenu />
+      <BreadcrumbMenu
+        serviceClass={isaar}
+        breadcrumbRender={breadcrumbRender}
+        {...props}
+      />
       <IsaarFormFields {...props}/>
     </React.Fragment>
   )

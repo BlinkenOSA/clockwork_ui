@@ -13,6 +13,12 @@ import CorporationForm from "../../../authority_list/Corporation/CorporationForm
 import corporation from "../../../../services/authority_list/Corporation";
 import corporation_role from "../../../../services/controlled_list/CorporationRole";
 import CorporationRoleForm from "../../../controlled_list/CorporationRole/CorporationRoleForm/CorporationRoleForm";
+import place from "../../../../services/authority_list/Place";
+import geo_role from "../../../../services/controlled_list/GeoRole";
+import PlaceForm from "../../../authority_list/Place/PlaceForm/PlaceForm";
+import GeoRoleForm from "../../../controlled_list/GeoRole/GeoRoleForm/GeoRoleForm";
+import country from "../../../../services/authority_list/Country";
+import CountryForm from "../../../authority_list/Country/CountryForm/CountryForm";
 
 const description_levels = [
   { id: 'L1', level: 'Level 1'},
@@ -331,6 +337,106 @@ const contributorsTab = [
         placeholder: '- Select Role -',
       }
     ]
+  }, {
+    name: 'associated_places',
+    type: 'many',
+    label: 'Additional Places',
+    elements: [
+      {
+        name: 'associated_place',
+        label: 'disabled',
+        type: 'remoteSelectWithEdit',
+        span: 12,
+        selectFunction: place.select,
+        formFields: PlaceForm,
+        valueField: 'id',
+        renderField: 'place',
+        placeholder: '- Select Place -',
+      }, {
+        name: 'role',
+        label: 'disabled',
+        type: 'remoteSelectWithEdit',
+        span: 10,
+        selectFunction: geo_role.select,
+        formFields: GeoRoleForm,
+        valueField: 'id',
+        renderField: 'role',
+        placeholder: '- Select Role -',
+      }
+    ]
+  }, {
+    name: 'associated_countries',
+    type: 'many',
+    label: 'Additional Country',
+    elements: [
+      {
+        name: 'associated_country',
+        label: 'disabled',
+        type: 'remoteSelectWithEdit',
+        span: 12,
+        selectFunction: country.select,
+        formFields: CountryForm,
+        valueField: 'id',
+        renderField: 'country',
+        placeholder: '- Select Country -',
+      }, {
+        name: 'role',
+        label: 'disabled',
+        type: 'remoteSelectWithEdit',
+        span: 10,
+        selectFunction: geo_role.select,
+        formFields: GeoRoleForm,
+        valueField: 'id',
+        renderField: 'role',
+        placeholder: '- Select Role -',
+      }
+    ]
+  }
+];
+
+const subjectsTab = [
+  {
+    name: 'spatial_coverage_country',
+    type: 'remoteSelect',
+    label: 'Spatial Coverage (Countries)',
+    selectFunction: country.select,
+    valueField: 'id',
+    renderField: 'country',
+    span: 12,
+    placeholder: '- Select Country -',
+    mode: 'multiple',
+  }, {
+    name: 'spatial_coverage_place',
+    type: 'remoteSelect',
+    label: 'Spatial Coverage (Places)',
+    selectFunction: place.select,
+    valueField: 'id',
+    renderField: 'place',
+    span: 12,
+    placeholder: '- Select Place -',
+    mode: 'multiple',
+  }, {
+    name: 'subject_people',
+    label: 'Subject (People)',
+    type: 'remoteSelect',
+    span: 12,
+    selectFunction: person.select,
+    formFields: PersonForm,
+    valueField: 'id',
+    renderField: 'name',
+    placeholder: '- Select Person -',
+    mode: 'multiple',
+  }, {
+    name: 'subject_corporation',
+    label: 'Subject (Corporations)',
+    type: 'remoteSelect',
+    span: 12,
+    selectFunction: corporation.select,
+    formFields: CorporationForm,
+    valueField: 'id',
+    renderField: 'name',
+    placeholder: '- Select Corporation -',
+    mode: 'multiple',
   }
 ];
 
@@ -353,7 +459,7 @@ const fields = [
       },  {
         title: 'Subjects',
         type: 'tab',
-        elements: []
+        elements: subjectsTab
       }, {
         title: 'Notes',
         type: 'tab',

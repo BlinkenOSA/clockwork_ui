@@ -5,7 +5,7 @@ import isaar from "../../../services/isaar/Isaar";
 
 const IsaarForm = (props) => {
   const breadcrumbRender = (data) => {
-    return `${data['name']} (${data['type']})`;
+    return [{text: `${data['name']} (${data['type']})`}];
   };
 
   return(

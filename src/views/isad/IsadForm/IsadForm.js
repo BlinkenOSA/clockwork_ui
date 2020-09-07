@@ -8,7 +8,7 @@ import BreadcrumbMenu from "../../../components/BreadcrumbMenu/BreadcrumbMenu";
 
 const IsadForm = (props) => {
   const breadcrumbRender = (data) => {
-    return data['title_full'];
+    return [{text: data['title_full']}];
   };
 
   return (

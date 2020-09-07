@@ -64,7 +64,7 @@ const RemoteSelectWithEdit = ({fieldConfig, disabled, ...props}) => {
               <React.Fragment>
                 <Input.Group compact>
                   <Select
-                    style={{ width: '60%' }}
+                    style={{width: 'calc(100% - 100px)'}}
                     name={name}
                     placeholder={placeholder ? placeholder : `- Select ${getLabel(name)} -`}
                     filterOption={false}
@@ -75,7 +75,7 @@ const RemoteSelectWithEdit = ({fieldConfig, disabled, ...props}) => {
                     value={field.value !== "" ? field.value : undefined}
                     showSearch={search ? search : false}
                     onChange={(value) => {
-                      field.onChange(value ? value : "")
+                      form.setFieldValue(name, value ? value : "");
                     }}
                     onSearch={onSearch}
                   >

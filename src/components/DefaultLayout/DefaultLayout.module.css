@@ -1,13 +1,7 @@
 .Content {
-    margin: auto;
+    margin: 0 15px;
     overflow: hidden;
-}
-
-@media (max-width: 1530px) {
-    .Content {
-        margin: 0 15px;
-        width: unset;
-    }
+    width: unset;
 }
 
 .Footer {

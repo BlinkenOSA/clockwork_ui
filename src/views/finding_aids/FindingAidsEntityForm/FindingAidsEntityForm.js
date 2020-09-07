@@ -7,9 +7,21 @@ import validation from "./config/validation";
 import {CONTAINER_LIST} from "../../../config/config-urls";
 
 const FindingAidsEntityForm = (props) => {
+  const breadcrumbRender = (data) => {
+    return [
+      {text: data['archival_unit_title'], link: CONTAINER_LIST.replace(':archival_unit', data.archival_unit)},
+      {text: data['container_title']},
+      {text: data['title']}
+    ]
+  };
+
   return(
     <React.Fragment>
-      <BreadcrumbMenu />
+      <BreadcrumbMenu
+        serviceClass={finding_aids}
+        breadcrumbRender={breadcrumbRender}
+        {...props}
+      />
       <FormMaker
         serviceClass={finding_aids}
         fieldConfig={fields}

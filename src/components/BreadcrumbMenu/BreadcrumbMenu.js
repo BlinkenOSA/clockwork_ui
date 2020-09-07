@@ -22,10 +22,10 @@ const BreadcrumbMenu = ({serviceClass, breadcrumbRender, action, match, ...props
 
     if (serviceClass && breadcrumbRender && recordID) {
       serviceClass.read(recordID).then((response) => {
-        const txt = action === 'view' ?
-          `View: ${breadcrumbRender(response.data)}` :
-          `Edit: ${breadcrumbRender(response.data)}`;
-        bc.push({text: txt});
+        const bcs = breadcrumbRender(response.data);
+        const precedingText = action === 'view' ? 'View' : 'Edit';
+        bcs[bcs.length - 1]['text'] = `${precedingText}: ${bcs[bcs.length - 1]['text']}`;
+        bc.push(...bcs);
         setBreadcrumb(bc);
       });
     } else {

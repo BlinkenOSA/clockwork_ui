@@ -5,7 +5,7 @@ import donor from "../../../services/donor/Donor";
 
 const DonorForm = (props) => {
   const breadcrumbRender = (data) => {
-    return data['name'];
+    return [{text: data['name']}];
   };
 
   return(

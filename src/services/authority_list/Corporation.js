@@ -1,7 +1,11 @@
 import API from '../api.js';
-import {CORPORATION_BASE} from "../../config/config-api";
+import {CORPORATION_BASE, CORPORATION_SELECT} from "../../config/config-api";
 
 class Corporation {
+  select = (params) => {
+    return API.get(CORPORATION_SELECT, {params: params});
+  };
+
   list = (params, cancelToken) => {
     return API.get(CORPORATION_BASE, {params: params, cancelToken: cancelToken});
   };

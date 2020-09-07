@@ -8,7 +8,7 @@ import validation from "./config/validation";
 
 const AccessionForm = (props) => {
   const breadcrumbRender = (data) => {
-    return `${data['seq']} (Accession Record)`;
+    return [{text: `${data['seq']} (Accession Record)`}];
   };
 
   return(

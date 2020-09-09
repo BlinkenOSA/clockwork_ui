@@ -417,26 +417,21 @@ const subjectsTab = [
     mode: 'multiple',
   }, {
     name: 'subject_people',
+    type: 'many',
     label: 'Subject (People)',
-    type: 'remoteSelect',
-    span: 12,
-    selectFunction: person.select,
-    formFields: PersonForm,
-    valueField: 'id',
-    renderField: 'name',
-    placeholder: '- Select Person -',
-    mode: 'multiple',
-  }, {
-    name: 'subject_corporation',
-    label: 'Subject (Corporations)',
-    type: 'remoteSelect',
-    span: 12,
-    selectFunction: corporation.select,
-    formFields: CorporationForm,
-    valueField: 'id',
-    renderField: 'name',
-    placeholder: '- Select Corporation -',
-    mode: 'multiple',
+    elements: [
+      {
+        name: 'id',
+        label: 'disabled',
+        type: 'remoteSelectWithEdit',
+        span: 12,
+        selectFunction: person.select,
+        formFields: PersonForm,
+        valueField: 'id',
+        renderField: 'name',
+        placeholder: '- Select Person -',
+      }
+    ]
   }
 ];
 

@@ -10,6 +10,9 @@ import finding_aids from "../../../services/finding_aids/FindingAids";
 import {useDidMountEffect} from "../../../utils/hooks/useDidMountEffect";
 import {Link} from "react-router-dom";
 import {FINDING_AIDS_EDIT} from '../../../config/config-urls';
+import {shallowEqual, useDispatch, useSelector} from "react-redux";
+import setTableID from "../../../components/ListTable/actions/setTableID";
+import setTablePagination from "../../../components/ListTable/actions/setTablePagination";
 
 const paginationInit = {
   showQuickJumper: true,
@@ -25,10 +28,26 @@ const FindingAidsEntityList = ({containerID, containerReferenceCode, expandedRow
   const [data, setData] = useState([]);
   const [params, setParams] = useState({});
 
+  // Redux Hooks
+  const tableProps = useSelector(state => state.tableSettings['findingAids'], shallowEqual);
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    if(expandedRowKeys.length > 0) {
+    if (expandedRowKeys.length > 0) {
       if (expandedRowKeys[0] === containerID) {
-        setParams({ container: containerID })
+        if (tableProps) {
+          if (tableProps['id'] === containerID) {
+            setParams(loadParamsFromRedux(tableProps));
+          } else {
+            setParams({ container: containerID });
+            dispatch(setTableID(containerID, 'findingAids'));
+            dispatch(setTablePagination(paginationInit, 'findingAids'));
+          }
+        } else {
+          setParams({ container: containerID });
+          dispatch(setTableID(containerID, 'findingAids'));
+          dispatch(setTablePagination(paginationInit, 'findingAids'));
+        }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -45,6 +64,23 @@ const FindingAidsEntityList = ({containerID, containerReferenceCode, expandedRow
     fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
+
+  const loadPagination = (pagination) => {
+    const {pageSize, current} = pagination;
+    return {
+      limit: pageSize,
+      offset: (current - 1) * pageSize
+    }
+  };
+
+  const loadParamsFromRedux = (tableProps) => {
+    let paginationParams;
+
+    // Load pagination from redux
+    paginationParams = loadPagination(tableProps['pagination']);
+
+    return Object.assign({container: containerID}, paginationParams);
+  };
 
   const renderActionButtons = (record) => {
     const renderDeleteButton = () => {
@@ -91,6 +127,7 @@ const FindingAidsEntityList = ({containerID, containerReferenceCode, expandedRow
   };
 
   const handleTableChange = (pagination, filters, sorter) => {
+    dispatch(setTablePagination(pagination, 'findingAids'));
     setParams(Object.assign({}, params, loadPaginationParams(pagination)))
   };
 
@@ -235,8 +272,15 @@ const FindingAidsEntityList = ({containerID, containerReferenceCode, expandedRow
     const { confirm } = Modal;
 
     const handleDelete = () => {
-      fetchData();
-      onAction();
+      if(data.length === 1) {
+        const {pagination} = tableProps;
+        pagination['current'] = pagination['current'] - 1;
+        dispatch(setTablePagination(pagination, 'findingAids'));
+        setParams(Object.assign({}, params, loadPaginationParams(pagination)))
+      } else {
+        fetchData();
+        onAction();
+      }
     };
 
     const deleteAlert = () => {
@@ -301,7 +345,7 @@ const FindingAidsEntityList = ({containerID, containerReferenceCode, expandedRow
       dataSource={data}
       columns={columns}
       size={'small'}
-      pagination={pagination}
+      pagination={tableProps && (tableProps['id'] === containerID) ? tableProps['pagination'] : paginationInit}
       onChange={handleTableChange}
       loading={{
         spinning: loading,

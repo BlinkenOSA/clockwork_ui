@@ -1,9 +1,5 @@
-import style from "../../FindingAidsEntityList/FindingAidsEntityList.module.css";
 import React from "react";
-import { LoadingOutlined, EditOutlined, CloudDownloadOutlined, CloudUploadOutlined,
-  DeleteOutlined, FolderOpenOutlined, FileOutlined, CopyOutlined, GlobalOutlined,
-  WarningOutlined
-} from "@ant-design/icons";
+import { FolderOpenOutlined, FileOutlined } from "@ant-design/icons";
 
 const archivalReferenceCodeRender = (text, record) => {
   if (record.level === 'F') {

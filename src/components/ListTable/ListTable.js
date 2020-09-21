@@ -15,7 +15,7 @@ import API from "../../services/api";
 import style from './ListTable.module.css';
 
 const ListTable = ({columnConfig, filterConfig, serviceClass, listIdentifier, listIdentifierParam,
-                    tableName, searchable, actions, tableType='simple', reRender=false, drawer=false,
+                    tableName, searchable, actions, tableType='simple', reRender=false, drawer=false, noCard=false,
                     onOpenForm, renderCustomAddButton, renderCustomViewButton, renderCustomEditButton, expandable,
                     ...props}) => {
   const [data, setData] = useState([]);
@@ -350,34 +350,45 @@ const ListTable = ({columnConfig, filterConfig, serviceClass, listIdentifier, li
 
   // const windowSize = useWindowSize();
 
-  return(
-    <Card size="small" style={{marginBottom: 20}} className={style.TableCard}>
-      {filterConfig ?
-        <section {...getCollapseProps()}>
-          <ListTableFilters
-            tableName={tableName}
-            filterConfig={filterConfig}
-            onFilterChange={handleFilterChange}
-          />
-        </section> : null}
+  const renderTable = () => {
+    return (
       <Table
         bordered={true}
         rowKey={record => record.id}
         dataSource={data}
         columns={columns}
         size={'small'}
+        className={noCard ? style.NoCardTable : ''}
         expandedRowKeys={tableProps ? tableProps['expandedRowKeys'] : []}
         pagination={tableProps ? tableProps['pagination'] : {}}
         loading={{
-            spinning: loading,
-            indicator: <LoadingOutlined/>,
+          spinning: loading,
+          indicator: <LoadingOutlined/>,
         }}
         onChange={handleTableChange}
         onExpand={handleExpand}
         footer={() => getFooter()}
         expandable={expandable}
       />
-    </Card>
+    )
+  };
+
+  return (
+    <React.Fragment>
+      {noCard ? renderTable() :
+        <Card size="small" style={{marginBottom: 20}} className={style.TableCard}>
+          {filterConfig ?
+            <section {...getCollapseProps()}>
+              <ListTableFilters
+                tableName={tableName}
+                filterConfig={filterConfig}
+                onFilterChange={handleFilterChange}
+              />
+            </section> : null}
+          {renderTable()}
+        </Card>
+      }
+    </React.Fragment>
   )
 };
 

@@ -77,7 +77,7 @@ const RemoteSelectWithEdit = ({fieldConfig, disabled, ...props}) => {
                     onChange={(value) => {
                       form.setFieldValue(name, value ? value : "");
                     }}
-                    onSearch={onSearch}
+                    onSearch={search ? onSearch : undefined}
                   >
                     {
                       data.map(d => (
